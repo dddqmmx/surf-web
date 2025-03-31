@@ -1,0 +1,24 @@
+<div class="contact-list">
+    <div class="sidebar">
+        <div class="search-bar">
+            <input type="text" placeholder="搜索联系人..." class="search-input">
+        </div>
+        <div class="action-buttons">
+            <button class="btn add-contact" (click)="viewSearchUser()" >添加联系人</button>
+            <button class="btn friend-requests" (click)="viewFriendRequests()">好友申请列表</button>
+        </div>
+        <div class="contact-items">
+            <div class="contact-item" (click)="viewContacts()">
+                <img ngSrc="/images/avatar/default-avatar.png" height="32" width="32" class="avatar">
+                <span class="contact-name">林忆宁</span>
+            </div>
+            <div class="contact-item">
+                <img ngSrc="/images/avatar/default-avatar.png" height="32" width="32" class="avatar">
+                <span class="contact-name">清水みき</span>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <router-outlet></router-outlet>
+    </div>
+</div>

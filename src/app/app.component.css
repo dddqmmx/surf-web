@@ -1,0 +1,45 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+.loading-background{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 子元素不再拉伸 */
+  flex-direction: column;
+  background-position: center center;
+  background-size: cover;
+  background-image: url('/images/background/user_info.jpg');
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: darken;
+}
+.loading-icon{
+  border: 2px solid black;
+  width: 10%;
+  border-radius: 50%;
+}
+
+.loading-text{
+  color: white;
+  margin-top: 20px;
+  font-size: 50px;
+  text-shadow: #000 2px 0 0, #000 0 2px 0, #000 -2px 0 0, #000 0 -2px 0;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* 让 app-container 占满整个视窗高度 */
+}
+
+app-title-bar {
+    flex-shrink: 0; /* 固定标题栏大小 */
+}
+
+.content {
+    flex-grow: 1; /* 占据剩余的高度 */
+    overflow-y: auto; /* 当内容过多时允许滚动 */
+}

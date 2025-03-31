@@ -1,0 +1,51 @@
+<div class="session-list">
+  <ng-container *ngIf="!serverInfo">
+    <div (click)="getServerChannels(serverId)" *ngFor="let serverId of commonDataService['servers']"
+         class="session">
+      <img alt="" class="session-icon" src="/images/avatar/default-avatar.png">
+      <span>{{ commonDataService.getServerInfoById(serverId)?.name || 'loading' }}</span>
+    </div>
+  </ng-container>
+  <div *ngIf="serverInfo">
+    <div class="channel-title">
+      <img (click)="backToSessionList()" alt="back" height="24" ngSrc="/images/icon/arrow_back.svg" width="24">
+      <span class="server-name" (click)="toggleMenu($event)">{{ serverInfo['name'] }}</span>
+      <!-- 菜单容器 -->
+      <div class="context-menu" [class.show]="isMenuOpen">
+        <div class="menu-item" (click)="handleMenuClick('settings')">
+          <span>服务器设置</span>
+          <i class="icon-cog"></i>
+        </div>
+        <div class="menu-item" (click)="handleMenuClick('invite')">
+          <span>邀请用户</span>
+          <i class="icon-user-plus"></i>
+        </div>
+        <div class="menu-divider"></div>
+        <div class="menu-item danger" (click)="handleMenuClick('leave')">
+          <span>离开服务器</span>
+          <i class="icon-exit"></i>
+        </div>
+      </div>
+    </div>
+    <div class="channel-list">
+      <div *ngFor="let group of serverInfo['channels']" class="channel-group">
+        <h3 class="channel-group-title">{{ group['group_name'] }}</h3>
+        <ul class="channel-group-list">
+          <ng-container *ngFor="let channel of group['channels']">
+            <!-- 频道条目 -->
+            <li (click)="toChat(channel['channel_id'], channel['channel_type'])" class="channel">
+              {{ channel['channel_name'] }} - {{ channel['channel_type'] }}
+            </li>
+            <!-- 如果是语音频道，则显示成员列表，放在频道下方 -->
+            <ul *ngIf="channel['channel_type'] === 'voice'" class="voice-user-list">
+              <li *ngFor="let user of membersFromChannels[channel['channel_id']]" class="voice-user">
+                <img src="/images/avatar/default-avatar.png" alt="user-avatar" class="user-avatar">
+                <span>{{ commonDataService.userInfoIndexById[user].data["nickname"]}}</span>
+              </li>
+            </ul>
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

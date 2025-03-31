@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="sidebar">
+        <div
+                *ngFor="let item of sidebarItems; let i = index"
+                [ngClass]="{'selected': selectedIndex === i}"
+                (click)="selectItem(i)">
+            <img alt="" [src]="item.icon">
+            <span>{{ item.label }}</span>
+        </div>
+    </div>
+    <div class="content">
+        <router-outlet></router-outlet>
+    </div>
+</div>

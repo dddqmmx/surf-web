@@ -1,0 +1,52 @@
+.container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar {
+    display: flex;
+}
+
+.avatar {
+  width: 48px;
+    border-radius: 10px;
+}
+
+.icon {
+    margin-top: 1rem;
+    background: #3b96ff;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+/* 为选中的图标添加样式 */
+.selected {
+    background-color: rgba(255, 255, 255, 0.5);  /* 背景色稍微改变，增加选中的视觉反馈 */
+    transform: scale(1.1);
+}
+
+.user-options {
+    overflow-y: scroll;
+    padding: 0.5rem;
+    background-color: #007bff;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-options::-webkit-scrollbar {
+    display: none;
+}
+
+
+.content {
+    background: white;
+    flex: 1;
+    display: flex; /* 可选 */
+}
+
+
+.channel:hover {
+    background-color: #E65C00;
+}

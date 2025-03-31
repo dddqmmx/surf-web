@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="header">
+        <span>你的用户列表</span>
+        <div class="actions">
+            <button id="importBtn">导入</button>
+            <button id="newBtn">新建</button>
+            <button id="back" (click)="goBack()">返回</button>
+        </div>
+    </div>
+    <div class="user-list">
+        <div (click)="toShowEditUserModal(i)" *ngFor="let user of users; let i = index" class="user"  [ngClass]="{'selected': i==automaticLogin}">
+            <span>{{user.name}}</span>
+            <span>{{user.file}}</span>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showEditUserModal" class="modal" id="editModal">
+    <div class="modal-content">
+        <h2>编辑用户</h2>
+        <label for="userName">名称</label>
+        <input type="text" id="userName" [value]="editUser?.name" placeholder="输入名称">
+        <label for="fileLocation">文件位置</label>
+        <label for="fileLocation">{{editUser?.file}}</label>
+        <button id="fileLocation">选择文件</button>
+        <div>
+            <button class="confirm">确定</button>
+            <button class="cancel" id="cancelBtn" (click)="showEditUserModal=false">取消</button>
+        </div>
+    </div>
+</div>

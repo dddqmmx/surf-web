@@ -1,0 +1,64 @@
+:host {
+  display: flex; /* 或 flex */
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+  background-color: #3b96ff;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  border-right: 0.1rem solid #1781ff;
+
+}
+
+.sidebar div {
+  background-color: #5fa7ff;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.sidebar div:hover {
+  background-color: #1781ff;
+}
+
+.sidebar div.selected {
+  background-color: #1781ff; /* 或者其他你喜欢的选中效果 */
+  font-weight: bold;
+}
+
+.sidebar img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.sidebar span {
+  font-size: 16px;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+/* 主内容区域样式 */
+.content {
+  flex-grow: 1; /* 内容区域占满剩余空间 */
+  background-color: white;
+
+  overflow-y: auto;
+}

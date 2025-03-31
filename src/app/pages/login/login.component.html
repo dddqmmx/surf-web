@@ -1,0 +1,48 @@
+<!-- HTML 结构 -->
+<div class="container">
+<!--    <div class="info-panel">-->
+<!--        <div class="info-content">-->
+<!--            <h2>服务器信息</h2>-->
+<!--            <div class="server-info">-->
+<!--                <p>服务器状态：正常运行</p>-->
+<!--                <p>当前连接数：156</p>-->
+<!--                <p>系统负载：低</p>-->
+<!--            </div>-->
+<!--            <h2>最新公告</h2>-->
+<!--            <div class="announcement-list">-->
+<!--                <div class="announcement-item">-->
+<!--                    <h3>系统更新通知</h3>-->
+<!--                    <p>版本 114514 已发布，修复了若干已知问题</p>-->
+<!--                    <span class="date">2024-12-12</span>-->
+<!--                </div>-->
+<!--                <div class="announcement-item">-->
+<!--                    <h3>安全提醒</h3>-->
+<!--                    <p>请及时更新密码，保护账号安全</p>-->
+<!--                    <span class="date">2024-12-12</span>-->
+<!--                </div>-->
+<!--                <div class="announcement-item">-->
+<!--                    <h3>安全提醒</h3>-->
+<!--                    <p>请及时更新密码，保护账号安全</p>-->
+<!--                    <span class="date">2024-12-12</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div class="login-tabs">
+      <span class="login-title">欢迎登录Surf-KIWAMI</span>
+      <img class="user-avatar" alt="" src="/images/avatar/default-avatar.png">
+      <div class="input-container">
+        <span>账号</span>
+        <input class="input" [(ngModel)]="account" type="text">
+        <span>密码 </span>
+        <input class="input" [(ngModel)]="password" type="password">
+        <label style="vertical-align: middle;">
+          <input type="checkbox" [(ngModel)]="rememberMe" style="vertical-align: middle;" />
+          自动登录
+        </label>
+      </div>
+      <button class="login-button" (click)="login()">登录</button>
+      <a class="to_user_manager" (click)="this.router.navigate(['register']).then()" >没有账号?点击注册</a>
+    </div>
+</div>
