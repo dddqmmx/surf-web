@@ -15,14 +15,12 @@ import {SearchUserComponent} from "./pages/main/contacts/search-user/search-user
 import {ChannelsComponent} from "./pages/main/channels/channels.component";
 import {GroupsComponent} from "./pages/main/groups/groups.component";
 import {ErrorComponent} from "./pages/error/error.component";
-import {mainInitializedGuard} from "./router-guards/session-guard";
-
 export const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
-  {path: 'login', component: LoginComponent, canActivate: [mainInitializedGuard]},
-  {path: "register", component: RegisterComponent, canActivate: [mainInitializedGuard]},
+  {path: 'login', component: LoginComponent},
+  {path: "register", component: RegisterComponent},
   {
-    path: 'main', component: MainComponent, canActivate: [mainInitializedGuard], children: [
+    path: 'main', component: MainComponent, children: [
       {
         path: "session", component: SessionComponent, children:
           [

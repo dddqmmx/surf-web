@@ -7,6 +7,7 @@ import {Subscription} from "rxjs";
 import {VoiceChatService} from "../../services/voice-chat.service";
 import {RequestService} from "../../services/request.service";
 import {ChatComponent} from "../chat/chat.component";
+import {FileService, FileType} from "../../services/file.service";
 
 @Component({
   selector: 'app-main',
@@ -24,12 +25,14 @@ import {ChatComponent} from "../chat/chat.component";
 })
 export class MainComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
+  userAvatarId: string = "";
 
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
   constructor(
+    protected file: FileService,
     protected request: RequestService,
     private router: Router,
     private socketService: SocketService,
@@ -77,9 +80,11 @@ export class MainComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.request.getUserInfo([this.commonData.clientUserId]).then(() => {
       const avatar = this.commonData.getUserInfo(this.commonData.clientUserId)['avatar']
+      this.userAvatarId = avatar;
       this.request.getUserAvatars([avatar])
     })
   }
 
 
+  protected readonly FileType = FileType;
 }

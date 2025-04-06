@@ -7,6 +7,7 @@ import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
 import {SessionListComponent} from "../../components/session-list/session-list.component";
 import {FormsModule} from "@angular/forms";
+import {FileService, FileType} from "../../services/file.service";
 
 @Component({
   selector: 'app-chat',
@@ -35,7 +36,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   scrollToBottomFlag: boolean = false;
   messageInputValue = "";
 
-  constructor(private requestService: RequestService, private socketService: SocketService, protected commonDataService: CommonDataService, private route: ActivatedRoute) {
+  constructor(protected file: FileService,private requestService: RequestService, private socketService: SocketService, protected commonDataService: CommonDataService, private route: ActivatedRoute) {
   }
 
   async ngOnInit() {
@@ -136,4 +137,5 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
 
+  protected readonly FileType = FileType;
 }

@@ -19,7 +19,7 @@
           <img *ngIf="message['type'] == 'img'" class="message" src="/images/src/majima-yakuza.gif" alt=""/>
         </div>
         <img *ngIf="message['user_id'] == commonDataService.clientUserId" alt="user avatar" class="avatar"
-             height="40" ngSrc="/images/avatar/default-avatar.png"
+             height="40"  [src]="file.completedFiles[FileType.AVATAR][commonDataService.userInfoIndexById[message['user_id']]?.data?.avatar]?.url || '/images/avatar/default-avatar.png'"
              width="40">
       </div>
     </div>

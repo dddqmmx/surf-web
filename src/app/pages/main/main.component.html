@@ -1,7 +1,7 @@
 <div class="container">
     <div class="sidebar">
         <div class="user-options">
-          <img class="avatar" src="/images/avatar/default-avatar.png">
+          <img class="avatar" [src]="file.completedFiles[FileType.AVATAR][userAvatarId]?.url || '/images/avatar/default-avatar.png'">
             <ng-container *ngFor="let option of options">
                 <img (click)="onSelect(option)"
                      [ngClass]="{'selected': selectedOption === option.name}"

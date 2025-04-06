@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Subscription } from "rxjs";
+import { Subscription, BehaviorSubject } from "rxjs";
 import { SocketService } from "./socket.service";
 
 export enum FileType {
@@ -7,18 +7,34 @@ export enum FileType {
   IMAGE = 'IMAGE'
 }
 
+interface FileEntry {
+  chunks: Uint8Array[];
+  total: number;
+  received: number;
+  timestamp: number;
+}
+
+interface CompletedFile {
+  data: Uint8Array;
+  timestamp: number;
+  url?: string; // 存储创建的对象URL
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class FileService implements OnDestroy {
+  private caches: Record<FileType, Map<string, FileEntry>>;
+  public completedFiles: Record<FileType, Record<string, CompletedFile>>;
 
-  private caches: Record<FileType, Map<string, { chunks: string[]; total: number; received: number; timestamp: number }>>;
-  private completedFiles: Record<FileType, Map<string, { data: string; timestamp: number }>>;
+  // 用于通知文件状态变化的主题
+  private fileStatusSubjects: Record<FileType, Record<string, BehaviorSubject<string>>> = {
+    [FileType.AVATAR]: {},
+    [FileType.IMAGE]: {}
+  };
+
   private readonly cleanupInterval: ReturnType<typeof setInterval>;
   private subscriptions: Subscription[] = [];
-
-  public onAvatarReady?: (avatar_id: string, imgSrc: string) => void;
-  public onImageReady?: (image_id: string, imgSrc: string) => void;
 
   constructor(private socket: SocketService) {
     this.caches = {
@@ -27,101 +43,239 @@ export class FileService implements OnDestroy {
     };
 
     this.completedFiles = {
-      [FileType.AVATAR]: new Map(),
-      [FileType.IMAGE]: new Map()
+      [FileType.AVATAR]: {},
+      [FileType.IMAGE]: {}
     };
 
-    // 定期清理超时数据
+    // 每 30 秒清理一次旧数据
     this.cleanupInterval = setInterval(() => this.cleanupOldEntries(), 30000);
 
     // 订阅头像数据
     this.subscriptions.push(
       this.socket.getMessageSubject("user", "get_user_avatars").subscribe(
-        (message) => this.receiveChunk(message["avatar_id"], FileType.AVATAR, message["index"], message["chunk"], message["total"])
+        (message) => {
+          this.receiveChunk(
+            message["avatar_id"],
+            FileType.AVATAR,
+            message["index"],
+            message["chunk"],
+            message["total"]
+          );
+        }
       )
     );
 
-    // 订阅图片数据（如果未来扩展）
+    // 订阅图片数据
     this.subscriptions.push(
       this.socket.getMessageSubject("file", "get_image").subscribe(
-        (message) => this.receiveChunk(message["image_id"], FileType.IMAGE, message["index"], message["chunk"], message["total"])
+        (message) => {
+          this.receiveChunk(
+            message["image_id"],
+            FileType.IMAGE,
+            message["index"],
+            message["chunk"],
+            message["total"]
+          );
+        }
       )
     );
   }
 
+  /** 接收并处理文件分片 */
   private receiveChunk(id: string, type: FileType, index: number, chunk: string, total: number) {
-    if (!this.caches[type]) return;
-
     const cache = this.caches[type];
-
     if (!cache.has(id)) {
-      cache.set(id, { chunks: Array.from({ length: total }, () => ""), total, received: 0, timestamp: Date.now() });
+      if (total === undefined) {
+        console.error(`[${type}:${id}] 收到非首分片但缓存未初始化`);
+        return; // 丢弃或暂存分片
+      }
+      cache.set(id, {
+        chunks: Array(total).fill(null),
+        total,
+        received: 0,
+        timestamp: Date.now()
+      });
+    }
+    const fileEntry = cache.get(id)!;
+
+    try {
+      // 解码 Base64 并转换为 Uint8Array
+      const decodedString = atob(chunk);
+      const decodedChunk = new Uint8Array(decodedString.length);
+      for (let i = 0; i < decodedString.length; i++) {
+        decodedChunk[i] = decodedString.charCodeAt(i);
+      }
+      console.log(`[${type}:${id}] index: ${index}: ${decodedChunk.length}`);
+      fileEntry.chunks[index] = decodedChunk;
+    } catch (error) {
+      console.error(`[${type}:${id}] 分片 ${index} 的 Base64 解码失败`, error);
+      return;
     }
 
-    const fileEntry = cache.get(id)!;
-    fileEntry.chunks[index] = chunk;
     fileEntry.received++;
     fileEntry.timestamp = Date.now();
 
-    // 当所有分片接收完毕，进行重建
+    // 如果所有分片都已接收，则重建文件
     if (fileEntry.received === fileEntry.total) {
+      console.log(`[${type}:${id}] 全部 ${fileEntry.total} 个分片已接收，开始合并...`);
       this.reconstructFile(id, type);
     }
   }
 
+  /** 合并分片并存储二进制数据 */
   private reconstructFile(id: string, type: FileType) {
     const cache = this.caches[type];
     if (!cache.has(id)) return;
 
     const fileEntry = cache.get(id)!;
-    const fullBase64 = fileEntry.chunks.join("");
 
-    // 拼接 MIME 头部，方便前端 img 直接使用
-    const base64Src = `data:image/png;base64,${fullBase64}`;
-
-    // 存入完整图片信息
-    this.completedFiles[type].set(id, { data: base64Src, timestamp: Date.now() });
-
-    // 触发回调
-    if (type === FileType.AVATAR) {
-      this.onAvatarReady?.(id, base64Src);
-    } else if (type === FileType.IMAGE) {
-      this.onImageReady?.(id, base64Src);
+    // 检查是否有缺失的分片
+    if (fileEntry.chunks.some(chunk => chunk === null)) {
+      console.error(`[${type}:${id}] 检测到缺失的分片`);
+      cache.delete(id);
+      return;
     }
 
-    cache.delete(id);
+    try {
+      // 计算总长度
+      const totalLength = fileEntry.chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+      const completeData = new Uint8Array(totalLength);
+      let offset = 0;
+
+      // 合并所有分片
+      for (const chunk of fileEntry.chunks) {
+        completeData.set(chunk, offset);
+        offset += chunk.length;
+      }
+
+      // 存储完整的二进制数据
+      this.completedFiles[type][id] = { data: completeData, timestamp: Date.now() };
+      console.log(`[${type}:${id}] 文件合并成功，数据长度: ${completeData.length}`);
+
+      // 创建URL并更新
+      this.createFileUrl(type, id);
+
+      // 清理缓存
+      cache.delete(id);
+    } catch (error) {
+      console.error(`[${type}:${id}] 文件合并失败`, error);
+      cache.delete(id);
+    }
   }
 
-  public getCompletedFile(id: string, type: FileType): string | null {
-    return this.completedFiles[type].get(id)?.data ?? null;
+  /** 创建文件URL（使用 Blob 而不是 data URI） */
+  private createFileUrl(type: FileType, id: string) {
+    const file = this.completedFiles[type][id];
+    if (!file || !file.data) return;
+
+    // 根据文件类型设置适当的 MIME 类型
+    let mimeType = 'image/jpeg'; // 默认
+    if (type === FileType.AVATAR) {
+      mimeType = 'image/png';
+    }
+
+    // 创建 Blob 对象
+    const blob = new Blob([file.data], { type: mimeType });
+    // this.downloadBlob(blob, 'debug-user-avatar.png');
+
+    // 生成 Blob URL
+    file.url = URL.createObjectURL(blob);
+
+    // 通知订阅者 URL 已更新
+    if (this.fileStatusSubjects[type][id]) {
+      this.fileStatusSubjects[type][id].next(file.url);
+    }
   }
 
+  downloadBlob(blob: Blob, filename: string): void {
+    try {
+      // 创建 Blob URL
+      const url = URL.createObjectURL(blob);
+
+      // 创建临时下载链接
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;  // 设置下载文件的文件名
+
+      // 触发点击事件下载文件
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // 清理 URL 对象
+      URL.revokeObjectURL(url);
+      console.log('下载开始');
+    } catch (error) {
+      console.error('下载失败:', error);
+    }
+  }
+
+
+  /** 清理超时数据 */
   private cleanupOldEntries() {
     const now = Date.now();
 
-    // 清理分片缓存
+    // 清理未完成的分片（超时 60 秒）
     Object.values(this.caches).forEach((cache) => {
       for (const [id, entry] of cache.entries()) {
         if (now - entry.timestamp > 60000) {
           cache.delete(id);
-          console.warn(`File ${id} discarded due to timeout.`);
+          console.warn(`文件 ${id} 因超时未完成分片而被丢弃。`);
         }
       }
     });
 
-    // 清理完整文件缓存
-    Object.values(this.completedFiles).forEach((cache) => {
-      for (const [id, entry] of cache.entries()) {
-        if (now - entry.timestamp > 300000) { // 5分钟
-          cache.delete(id);
-          console.warn(`Completed file ${id} removed from cache due to timeout.`);
-        }
-      }
-    });
+    // // 清理已完成的文件（超时 5 分钟）
+    // Object.keys(this.completedFiles).forEach((typeKey) => {
+    //   const type = typeKey as FileType;
+    //   const files = this.completedFiles[type];
+    //   for (const id in files) {
+    //     if (now - files[id].timestamp > 300000) {
+    //       // 释放创建的URL
+    //       if (files[id].url) {
+    //         // URL.revokeObjectURL(files[id].url);
+    //       }
+    //
+    //       // 删除文件数据
+    //       delete files[id];
+    //
+    //       // 清理订阅主题
+    //       if (this.fileStatusSubjects[type][id]) {
+    //         this.fileStatusSubjects[type][id].complete();
+    //         delete this.fileStatusSubjects[type][id];
+    //       }
+    //
+    //       console.warn(`已完成文件 ${id} 因超时而被移除。`);
+    //     }
+    //   }
+    // });
+  }
+
+  public getFileData(type: FileType, id: string): Uint8Array | undefined {
+    const file = this.completedFiles[type][id];
+    return file ? file.data : undefined;
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
     clearInterval(this.cleanupInterval);
+
+    // 释放所有URL资源
+    Object.keys(this.completedFiles).forEach((typeKey) => {
+      const type = typeKey as FileType;
+      Object.values(this.completedFiles[type]).forEach(file => {
+        if (file.url) {
+          URL.revokeObjectURL(file.url);
+        }
+      });
+    });
+
+    // 完成所有主题
+    Object.keys(this.fileStatusSubjects).forEach((typeKey) => {
+      const type = typeKey as FileType;
+      Object.values(this.fileStatusSubjects[type]).forEach(subject => {
+        subject.complete();
+      });
+    });
   }
 }

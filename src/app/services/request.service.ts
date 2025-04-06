@@ -90,12 +90,15 @@ export class RequestService {
     });
   }
 
-  public async getMessage(channelId: string | null, lastMsg?: string): Promise<any[]>{
+  public async getMessage(channelId: string | null, lastMsg?: any): Promise<any[]>{
     const data: any = {
       "channel_id": channelId,
     };
     if (lastMsg) {
-      data["last_msg"] = lastMsg;
+      data["last_msg"] = {
+        "id" :lastMsg["_id"]["$oid"],
+        "time": lastMsg["chat_time"]["$date"]["$numberLong"]
+      };
     }
     const response = await this.socket.request("chat", "get_message", data);
     return response["messages"];
