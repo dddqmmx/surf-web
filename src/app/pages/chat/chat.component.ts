@@ -115,9 +115,10 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   sendMessage() {
-    if (this.messageInputValue.trim() != "") {
-      this.requestService.sendMessage(this.sessionId, this.messageInputValue)
-      this.messageInputValue = ""
+    const trimmedMessage = this.messageInputValue.trim(); // 去掉前后空格和换行
+    if (trimmedMessage !== "") {
+      this.requestService.sendMessage(this.sessionId, trimmedMessage);
+      this.messageInputValue = "";
       this.scrollToBottomFlag = true;
     }
   }

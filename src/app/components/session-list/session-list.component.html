@@ -39,7 +39,7 @@
             <!-- 如果是语音频道，则显示成员列表，放在频道下方 -->
             <ul *ngIf="channel['channel_type'] === 'voice'" class="voice-user-list">
               <li *ngFor="let user of membersFromChannels[channel['channel_id']]" class="voice-user">
-                <img src="/images/avatar/default-avatar.png" alt="user-avatar" class="user-avatar">
+                <img [src]="file.completedFiles[FileType.AVATAR][commonDataService.userInfoIndexById[user].data['avatar']]?.url || '/images/avatar/default-avatar.png'" alt="user-avatar" class="user-avatar">
                 <span>{{ commonDataService.userInfoIndexById[user].data["nickname"]}}</span>
               </li>
             </ul>

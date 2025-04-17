@@ -22,6 +22,9 @@ export const routes: Routes = [
   {
     path: 'main', component: MainComponent, children: [
       {
+        path: "user_info", component: UserInfoComponent, children: []
+      },
+      {
         path: "session", component: SessionComponent, children:
           [
             {path: "chat", component: ChatComponent},

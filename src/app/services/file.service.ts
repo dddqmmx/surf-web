@@ -168,14 +168,8 @@ export class FileService implements OnDestroy {
     const file = this.completedFiles[type][id];
     if (!file || !file.data) return;
 
-    // 根据文件类型设置适当的 MIME 类型
-    let mimeType = 'image/jpeg'; // 默认
-    if (type === FileType.AVATAR) {
-      mimeType = 'image/png';
-    }
-
     // 创建 Blob 对象
-    const blob = new Blob([file.data], { type: mimeType });
+    const blob = new Blob([file.data]);
     // this.downloadBlob(blob, 'debug-user-avatar.png');
 
     // 生成 Blob URL

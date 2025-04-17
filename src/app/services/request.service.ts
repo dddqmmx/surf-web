@@ -2,6 +2,7 @@
 import {Injectable} from '@angular/core';
 import {SocketService} from './socket.service'; // 假设您的 SocketService 是这个路径
 import {CommonDataService} from './common-data.service';
+import CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,8 @@ export class RequestService {
 
   sendMessage(sessionId: any, massageInputValue: any) {
     this.socket.send("chat", "send_message", {
-      "message": {
-        "channel_id": sessionId,
-        "content": massageInputValue,
-      }
+      "channel_id": sessionId,
+      "content": massageInputValue,
     })
   }
 
@@ -129,7 +128,8 @@ export class RequestService {
       if (!account || !password) {
         throw new Error('Account and password are required');
       }
-
+      password = CryptoJS.MD5(password).toString()
+      console.log("password", password);
       const response = await this.socket.request('user', 'login', {
         account: account,
         password: password
@@ -141,6 +141,24 @@ export class RequestService {
       }
 
       return false;
+    } catch (error) {
+      console.error('Login request failed:', error);
+      return false;
+    }
+  }
+
+  public async requestRegister(account: string | undefined, password: string | undefined): Promise<boolean> {
+    try {
+      if (!account || !password) {
+        throw new Error('Account and password are required');
+      }
+
+      const response = await this.socket.request('user', 'register', {
+        account: account,
+        password: password
+      });
+
+      return !!response;
     } catch (error) {
       console.error('Login request failed:', error);
       return false;

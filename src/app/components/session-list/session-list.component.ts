@@ -6,6 +6,7 @@ import {CommonDataService} from "../../services/common-data.service";
 import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {SocketService} from "../../services/socket.service";
 import {Subscription} from "rxjs";
+import {FileService, FileType} from "../../services/file.service";
 
 @Component({
   selector: 'app-session-list',
@@ -27,7 +28,7 @@ export class SessionListComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
 
-  constructor(private socket: SocketService, protected commonDataService: CommonDataService, private requestService: RequestService, private router: Router, private voiceChatService: VoiceChatService) {
+  constructor(protected file: FileService, private socket: SocketService, protected commonDataService: CommonDataService, private requestService: RequestService, private router: Router, private voiceChatService: VoiceChatService) {
   }
 
   ngOnInit(): void {
@@ -129,4 +130,5 @@ export class SessionListComponent implements OnInit, OnDestroy {
   }
 
 
+  protected readonly FileType = FileType;
 }
