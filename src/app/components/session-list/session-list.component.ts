@@ -125,6 +125,9 @@ export class SessionListComponent implements OnInit, OnDestroy {
 
   handleMenuClick(action: string) {
     this.isMenuOpen = false;
+    if (action == "invite"){
+
+    }
     // 处理不同菜单操作
     console.log('Selected action:', action);
   }

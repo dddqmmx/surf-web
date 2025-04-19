@@ -4,15 +4,15 @@
     <span class="login-title">注册一个Surf账号</span>
     <div class="form-input">
       <span>账号 </span>
-      <input type="text">
+      <input [(ngModel)]="username" type="text">
     </div>
     <div class="form-input">
       <span>密码 </span>
-      <input type="password">
+      <input [(ngModel)]="password" type="password">
     </div>
     <div class="form-input">
       <span>重复密码 </span>
-      <input type="password">
+      <input [(ngModel)]="confirmPassword" type="password">
     </div>
     <button class="login-button" (click)="register()" >注册</button>
     <a class="to_user_manager" (click)="this.router.navigate(['login']).then()">已有账号?点击登录</a>

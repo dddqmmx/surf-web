@@ -8,13 +8,9 @@
             <button class="btn friend-requests" (click)="viewFriendRequests()">好友申请列表</button>
         </div>
         <div class="contact-items">
-            <div class="contact-item" (click)="viewContacts()">
+            <div *ngFor="let friendId of commonData.friends" class="contact-item" (click)="viewContacts(friendId)">
                 <img ngSrc="/images/avatar/default-avatar.png" height="32" width="32" class="avatar">
-                <span class="contact-name">林忆宁</span>
-            </div>
-            <div class="contact-item">
-                <img ngSrc="/images/avatar/default-avatar.png" height="32" width="32" class="avatar">
-                <span class="contact-name">清水みき</span>
+                <span class="contact-name">{{ commonData.userInfoIndexById[friendId]?.data?.nickname || friendId }}</span>
             </div>
         </div>
     </div>

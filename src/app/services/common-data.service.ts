@@ -17,6 +17,7 @@ export class CommonDataService {
 
   clientUserId: string = "";
   servers: any[] = []
+  friends: any[] = []
   // key:id,content:serverInfo
   serverIndexById: Map<string, any> = new Map()
   // key: channelId, content: channelInfo

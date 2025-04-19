@@ -153,6 +153,7 @@ export class RequestService {
         throw new Error('Account and password are required');
       }
 
+      password = CryptoJS.MD5(password).toString()
       const response = await this.socket.request('user', 'register', {
         account: account,
         password: password
@@ -215,6 +216,12 @@ export class RequestService {
 
   public getUserAvatars(ids: string[]): any {
     this.socket.send("user", "get_user_avatars", {"avatar_ids": ids})
+  }
+
+  public async getUserFriends(): Promise<string[]>{
+    const response =  await this.socket.request("user", "get_user_friends")
+    this.commonData.friends = response['user_ids'];
+    return response['user_ids'];
   }
 
 }
