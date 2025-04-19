@@ -16,7 +16,7 @@
               </span>
           </ng-container>
           <pre *ngIf="message['type'] == 'text'" class="message">{{ message['content'] }}</pre>
-          <img *ngIf="message['type'] == 'img'" class="message" src="/images/src/majima-yakuza.gif" alt=""/>
+          <img [ngStyle]="{ 'width': message['w']+'px', 'height': message['h']+'px' }" *ngIf="message['type'] == 'img'" class="message"  src="/images/src/majima-yakuza.gif" alt=""/>
         </div>
         <img *ngIf="message['user_id'] == commonDataService.clientUserId" alt="user avatar" class="avatar"
              height="40"  [src]="file.completedFiles[FileType.AVATAR][commonDataService.userInfoIndexById[message['user_id']]?.data?.avatar]?.url || '/images/avatar/default-avatar.png'"

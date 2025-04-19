@@ -1,5 +1,5 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {NgClass, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
+import {NgClass, NgForOf, NgIf, NgOptimizedImage, NgStyle} from "@angular/common";
 import {Subscription} from "rxjs";
 import {SocketService} from "../../services/socket.service";
 import {CommonDataService} from "../../services/common-data.service";
@@ -18,7 +18,8 @@ import {FileService, FileType} from "../../services/file.service";
     SessionListComponent,
     NgIf,
     FormsModule,
-    NgClass
+    NgClass,
+    NgStyle
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
