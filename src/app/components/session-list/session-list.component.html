@@ -49,3 +49,4 @@
     </div>
   </div>
 </div>
+<app-invite-dialog [serverId]="serverId" *ngIf="inviteDialog" (close)="toggleInviteDialog()" ></app-invite-dialog>

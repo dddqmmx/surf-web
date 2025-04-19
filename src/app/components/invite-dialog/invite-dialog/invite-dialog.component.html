@@ -1,0 +1,14 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <button class="icon-close-btn" aria-label="关闭" (click)="onClose()" >&times;</button>
+    <h2>邀请好友</h2>
+    <p>选择一个好友发送邀请：</p>
+    <ul class="friend-list">
+      <li *ngFor="let friendId of commonData.friends" class="friend-item">
+        <img src="/images/avatar/default-avatar.png" alt="头像" class="avatar" />
+        <span class="nickname">{{ commonData.userInfoIndexById[friendId]?.data?.nickname || friendId }}</span>
+        <button class="invite-btn" (click)="invite(friendId)">邀请</button>
+      </li>
+    </ul>
+  </div>
+</div>

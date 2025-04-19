@@ -15,9 +15,10 @@ import {SearchUserComponent} from "./pages/main/contacts/search-user/search-user
 import {ChannelsComponent} from "./pages/main/channels/channels.component";
 import {GroupsComponent} from "./pages/main/groups/groups.component";
 import {ErrorComponent} from "./pages/error/error.component";
+import {InviteDialogComponent} from "./components/invite-dialog/invite-dialog/invite-dialog.component";
 export const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
-  {path: 'preview', component: MainComponent},
+  {path: 'preview', component: InviteDialogComponent},
   {path: 'login', component: LoginComponent},
   {path: "register", component: RegisterComponent},
   {

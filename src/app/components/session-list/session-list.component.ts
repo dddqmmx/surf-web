@@ -7,6 +7,7 @@ import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {SocketService} from "../../services/socket.service";
 import {Subscription} from "rxjs";
 import {FileService, FileType} from "../../services/file.service";
+import {InviteDialogComponent} from "../invite-dialog/invite-dialog/invite-dialog.component";
 
 @Component({
   selector: 'app-session-list',
@@ -14,7 +15,8 @@ import {FileService, FileType} from "../../services/file.service";
   imports: [
     NgIf,
     NgForOf,
-    NgOptimizedImage
+    NgOptimizedImage,
+    InviteDialogComponent
   ],
   templateUrl: './session-list.component.html',
   styleUrl: './session-list.component.css'
@@ -126,10 +128,15 @@ export class SessionListComponent implements OnInit, OnDestroy {
   handleMenuClick(action: string) {
     this.isMenuOpen = false;
     if (action == "invite"){
-
+      this.toggleInviteDialog()
     }
     // 处理不同菜单操作
     console.log('Selected action:', action);
+  }
+
+  inviteDialog = false
+  toggleInviteDialog() {
+    this.inviteDialog = !this.inviteDialog;
   }
 
 

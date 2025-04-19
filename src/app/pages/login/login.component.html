@@ -31,7 +31,7 @@
 
     <div class="login-tabs">
       <span class="login-title">欢迎登录Surf-KIWAMI</span>
-      <img class="user-avatar" alt="" src="/images/avatar/default-avatar.png">
+      <img (click)="router.navigate(['/preview'])" class="user-avatar" alt="" src="/images/avatar/default-avatar.png">
       <div class="input-container">
         <span>账号</span>
         <input class="input" [(ngModel)]="account" type="text">
