@@ -196,7 +196,8 @@ export class SocketService {
       const timeout = setTimeout(() => {
         this.pendingRequests.delete(request_id);
         reject(new Error('Request timed out'));
-      }, 5000);
+        console.log(path,command)
+      }, 10000);
 
       this.pendingRequests.set(request_id, {resolve, reject, timeout});
 
