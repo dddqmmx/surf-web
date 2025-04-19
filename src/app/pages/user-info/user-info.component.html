@@ -13,9 +13,14 @@
       </div>
     </div>
     <div class="option-button-container">
-      <button class="btn">分享</button>
-      <button class="btn">语音聊天</button>
-      <button class="btn">发消息</button>
+      <ng-template [ngIf]="user != commonDataService.clientUserId">
+        <button class="btn">分享</button>
+        <button class="btn">语音聊天</button>
+        <button class="btn">发消息</button>
+      </ng-template>
+      <ng-template [ngIf]="user == commonDataService.clientUserId">
+        <button class="btn">编辑资料</button>
+      </ng-template>
     </div>
   </div>
 </div>

@@ -17,6 +17,7 @@ import {GroupsComponent} from "./pages/main/groups/groups.component";
 import {ErrorComponent} from "./pages/error/error.component";
 export const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: 'preview', component: MainComponent},
   {path: 'login', component: LoginComponent},
   {path: "register", component: RegisterComponent},
   {

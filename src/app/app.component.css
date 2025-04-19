@@ -19,7 +19,6 @@ html, body {
 .loading-icon{
   border: 2px solid black;
   width: 10%;
-  border-radius: 50%;
 }
 
 .loading-text{
