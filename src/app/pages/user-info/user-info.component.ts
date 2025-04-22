@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {NgIf, NgOptimizedImage} from "@angular/common";
 import {CommonDataService} from "../../services/common-data.service";
 import {FileService, FileType} from "../../services/file.service";
 import {ActivatedRoute} from "@angular/router";
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-user-info',
@@ -14,17 +15,30 @@ import {ActivatedRoute} from "@angular/router";
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.css'
 })
-export class UserInfoComponent implements OnInit {
-  constructor(protected commonDataService: CommonDataService,protected router: ActivatedRoute,protected file: FileService) {
-  }
-
+export class UserInfoComponent implements OnInit, OnDestroy {
   protected readonly FileType = FileType;
-  protected user :string= ""
+  protected user: string = "";
+  private routeSub!: Subscription;
+
+  constructor(
+    protected commonDataService: CommonDataService,
+    protected router: ActivatedRoute,
+    protected file: FileService
+  ) {}
 
   ngOnInit(): void {
-    const userId = this.router.snapshot.queryParamMap.get('user_id');
-    if (userId){
-      this.user = userId
+    this.routeSub = this.router.queryParamMap.subscribe(params => {
+      const userId = params.get('user_id');
+      if (userId) {
+        this.user = userId;
+        // 你可以在这里调用某个方法加载数据
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.routeSub) {
+      this.routeSub.unsubscribe();
     }
   }
 }

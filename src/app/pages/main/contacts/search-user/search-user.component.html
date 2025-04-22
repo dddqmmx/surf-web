@@ -2,7 +2,7 @@
   <div class="search-bar">
     <p class="search-title">搜索用户</p>
     <div class="search-input">
-      <input type="text" [(ngModel)]="user_id" placeholder="输入用户Id查询">
+      <input type="text" [(ngModel)]="userId" placeholder="输入用户Id查询">
       <button (click)="searchUser()">搜索</button>
     </div>
   </div>
@@ -13,7 +13,7 @@
         <p class="username">{{ commonData.userInfoIndexById[userId]?.data?.nickname || userId }}</p>
         <p class="text">{{ commonData.userInfoIndexById[userId]?.data?.introduction || userId }}</p>
       </div>
-      <button class="agree-button">添加好友</button>
+      <button class="agree-button" (click)="sendFriendRequest(userId)" >添加好友</button>
     </div>
   </div>
 </div>

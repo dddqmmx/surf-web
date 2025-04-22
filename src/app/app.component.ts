@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     //加载程序
-    this.socket.initializeMainConnection(window.location.hostname + ':8000').then(() => {
+    this.socket.initializeMainConnection(  'nana7mi.asia:8000').then(() => {
       this.loadingFlag = false;
       // 初始化时加载存储的值
       const storedUsername = localStorage.getItem('username') || '';

@@ -224,4 +224,22 @@ export class RequestService {
     return response['user_ids'];
   }
 
+  public sendFriendRequest(user_id: string): Promise<boolean>{
+    return  this.socket.request("user", "send_friend_request", {"user_id": user_id})
+  }
+
+  public async getFriendRequests(){
+    const response =  await this.socket.request("user", "get_friend_requests")
+    return response['user_ids'];
+  }
+
+  public async requestAcceptFriendRequest(userId: string):Promise<boolean>{
+    this.commonData.friends.push(userId)
+    return await this.socket.request("user", "accept_friend_request", {"user_id": userId});
+  }
+
+  public async requestInviteUsers(serverId: string,userIds: string[]):Promise<boolean>{
+    return await this.socket.request("server", "invite_users", {"server_id": serverId, "user_ids": userIds});
+  }
+
 }

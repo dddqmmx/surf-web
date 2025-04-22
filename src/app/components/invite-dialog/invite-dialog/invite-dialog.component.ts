@@ -29,7 +29,13 @@ export class InviteDialogComponent implements OnInit{
 
   invite(friendId: string) {
     console.log(`邀请 ${friendId} 加入服务器 ${this.serverId}`);
-    // 可以在这里用 serverId 调接口
+    this.request.requestInviteUsers(this.serverId,[friendId]).then(response=>{
+      if (response){
+        alert("邀请成功，该用户成功加入服务器")
+      }else {
+        alert("邀请失败")
+      }
+    })
   }
 
   @Output() close = new EventEmitter<void>(); // ← 添加关闭事件
