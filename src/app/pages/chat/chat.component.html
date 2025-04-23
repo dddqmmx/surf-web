@@ -7,8 +7,9 @@
       <div *ngFor="let message of messageList"
            [ngClass]="message['user_id'] != commonDataService.clientUserId ? 'message-container' : 'message-right-container'">
         <img *ngIf="message['user_id'] != commonDataService.clientUserId" alt="user avatar" class="avatar"
-             height="40" ngSrc="/images/avatar/default-avatar.png"
-             width="40">
+             height="40"
+             width="40"
+             [src]="file.completedFiles[FileType.AVATAR][commonDataService.userInfoIndexById[message['user_id']]?.data?.avatar]?.url || '/images/avatar/default-avatar.png'">
         <div class="message-content">
           <ng-container *ngIf="message['user_id'] as userId">
               <span class="username">
@@ -16,7 +17,13 @@
               </span>
           </ng-container>
           <pre *ngIf="message['type'] == 'text'" class="message">{{ message['content'] }}</pre>
-          <img [ngStyle]="{ 'width': message['w']+'px', 'height': message['h']+'px' }" *ngIf="message['type'] == 'img'" class="message"  src="/images/src/majima-yakuza.gif" alt=""/>
+          <img
+            *ngIf="message['type'] == 'img'"
+            class="message img"
+            src="/images/src/majima-yakuza.gif"
+            [attr.width]="message['w']"
+            [attr.height]="message['h']"
+            alt=""/>
         </div>
         <img *ngIf="message['user_id'] == commonDataService.clientUserId" alt="user avatar" class="avatar"
              height="40"  [src]="file.completedFiles[FileType.AVATAR][commonDataService.userInfoIndexById[message['user_id']]?.data?.avatar]?.url || '/images/avatar/default-avatar.png'"

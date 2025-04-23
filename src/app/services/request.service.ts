@@ -137,6 +137,7 @@ export class RequestService {
 
       if (response['id']) {
         this.commonData.clientUserId = response['id'];
+        console.log(response['id'])
         return true;
       }
 

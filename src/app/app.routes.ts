@@ -16,13 +16,14 @@ import {ChannelsComponent} from "./pages/main/channels/channels.component";
 import {GroupsComponent} from "./pages/main/groups/groups.component";
 import {ErrorComponent} from "./pages/error/error.component";
 import {InviteDialogComponent} from "./components/invite-dialog/invite-dialog/invite-dialog.component";
+import {authGuard} from "./guard/auth.guard";
 export const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'preview', component: InviteDialogComponent},
   {path: 'login', component: LoginComponent},
   {path: "register", component: RegisterComponent},
   {
-    path: 'main', component: MainComponent, children: [
+    path: 'main', component: MainComponent,canActivate: [authGuard], children: [
       {
         path: "user_info", component: UserInfoComponent, children: []
       },

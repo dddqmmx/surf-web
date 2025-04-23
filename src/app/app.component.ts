@@ -17,9 +17,17 @@ export class AppComponent implements OnInit {
   constructor(private router: Router, protected socket: SocketService, private requestService: RequestService) {
   }
 
+  private setViewportHeight = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+
   ngOnInit(): void {
+    this.setViewportHeight();
+    window.addEventListener('resize', this.setViewportHeight);
+    window.addEventListener('orientationchange', this.setViewportHeight);
     //加载程序
-    this.socket.initializeMainConnection(  'nana7mi.asia:8000').then(() => {
+    this.socket.initializeMainConnection(window.location.hostname+':8000').then(() => {
       this.loadingFlag = false;
       // 初始化时加载存储的值
       const storedUsername = localStorage.getItem('username') || '';

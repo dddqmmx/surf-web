@@ -25,8 +25,8 @@
 
 /* 聊天内容区域 */
 .chat-content {
-    flex-grow: 1;
     overflow-y: auto;
+    flex-grow: 1;
     padding: 10px;
     background-color: #ffffff;
 }
@@ -72,8 +72,8 @@
 .message-content {
     display: flex;
     flex-direction: column;
-    max-width: 30%; /* 限制最大宽度 */
-      width: fit-content;
+    max-width: 75%; /* 限制最大宽度 */
+    width: fit-content;
     flex-grow: 0;
 }
 
@@ -85,6 +85,13 @@
     word-wrap: break-word; /* 允许长文本换行 */
     display: block; /* 避免 inline-block 影响 max-width */
     white-space: pre-wrap; /* 让 <pre> 自动换行 */
+    max-width: 100%; /* 限制最大宽度 */
+}
+.img {
+  height: auto;
+  display: block;          /* 避免与行内元素混排带来的空隙 */
+  object-fit: contain;     /* 保持图片比例，不拉伸 */
+  max-width: 100%;         /* 防止超出父容器 */
 }
 
 /* 左侧消息样式 */

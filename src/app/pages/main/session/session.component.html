@@ -1,5 +1,5 @@
 <div class="layout-container">
-  <div class="session-list">
+  <div *ngIf="showSessionList" class="session-list">
     <app-session-list></app-session-list>
     <div class="vc-container">
       <div class="vc-info-container" *ngIf="commonDataService.voiceChatting">
@@ -9,7 +9,6 @@
         </div>
         <div class="vc-opt">
           <img class="icon" src="/images/icon/phone_disabled.svg" (click)="stopVoiceChat()">
-<!--          <img class="icon" src="">-->
         </div>
       </div>
       <div class="vc-settings-container">
@@ -25,7 +24,7 @@
 
     </div>
   </div>
-  <div class="router-container">
+  <div id="chat" class="router-container">
     <router-outlet></router-outlet>
   </div>
 </div>

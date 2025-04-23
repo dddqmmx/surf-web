@@ -30,8 +30,8 @@ export class CommonDataService {
   micEnabled: boolean = true;
   speakerEnabled: boolean = true;
 
-  private micEnabledKey = 'micEnabled-'+this.clientUserId;
-  private speakerEnabledKey = 'speakerEnabled-'+this.clientUserId;
+  private micEnabledKey = `micEnabled-${this.clientUserId}`;
+  private speakerEnabledKey = `speakerEnabled-${this.clientUserId}`;
 
   // 切换麦克风状态
   toggleMic(): void {

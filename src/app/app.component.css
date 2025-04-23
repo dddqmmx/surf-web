@@ -1,9 +1,19 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
+:root {
+  --vh: 1vh;
 }
+
+html, body, app-root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: calc(var(--vh, 1vh) * 100);
+}
+
 .loading-background{
   height: 100%;
   display: flex;
@@ -34,11 +44,12 @@ html, body {
     height: 100vh; /* 让 app-container 占满整个视窗高度 */
 }
 
+.content {
+  height: calc(var(--vh, 1vh) * 100);
+}
+
 app-title-bar {
     flex-shrink: 0; /* 固定标题栏大小 */
 }
 
-.content {
-    flex-grow: 1; /* 占据剩余的高度 */
-    overflow-y: auto; /* 当内容过多时允许滚动 */
-}
+
