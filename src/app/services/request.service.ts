@@ -137,7 +137,8 @@ export class RequestService {
 
       if (response['id']) {
         this.commonData.clientUserId = response['id'];
-        console.log(response['id'])
+        this.commonData.initMicStatus()
+        this.commonData.initSpeakerStatus()
         return true;
       }
 

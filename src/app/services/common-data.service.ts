@@ -27,11 +27,20 @@ export class CommonDataService {
   currentServer:string ="";
   voiceChatting: boolean = false;
   voiceChannel: string= "";
-  micEnabled: boolean = true;
+  micEnabled: boolean = false;
   speakerEnabled: boolean = true;
 
   private micEnabledKey = `micEnabled-${this.clientUserId}`;
   private speakerEnabledKey = `speakerEnabled-${this.clientUserId}`;
+
+  initMicStatus() {
+    this.micEnabled = JSON.parse(localStorage.getItem(this.micEnabledKey) || 'false');
+  }
+
+  // 获取扬声器当前状态
+  initSpeakerStatus() {
+    this.speakerEnabled = JSON.parse(localStorage.getItem(this.speakerEnabledKey) || 'false');
+  }
 
   // 切换麦克风状态
   toggleMic(): void {
