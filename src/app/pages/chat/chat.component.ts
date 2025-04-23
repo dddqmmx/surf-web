@@ -54,6 +54,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.messageList = await this.requestService.getMessage(channelId);
       const userIds = Array.from(new Set(this.messageList.map((message: any) => message.user_id)));
       const userInfoMap = await this.requestService.getUserInfo(userIds);
+      const avatars = Array.from(userInfoMap.values())
+        .map(info => info.avatar)
+        .filter(avatar => avatar !== null); // 过滤掉 null 值
+      console.log(userInfoMap)
+      await this.requestService.getUserAvatars(avatars)
       this.scrollToBottomFlag = true;
       this.sessionName = this.commonDataService.getChannelInfoById(channelId)["channel_name"]
     }
@@ -109,7 +114,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   getMessageFromHistory() {
     if (this.sessionId) {
       this.requestService.getMessage(this.sessionId, this.messageList[0]).then(r => {
-        console.log(r)
         this.messageList = r.concat(this.messageList);
       })
     }
