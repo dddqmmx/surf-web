@@ -8,7 +8,7 @@
   </ng-container>
   <div *ngIf="serverInfo">
     <div class="channel-title">
-      <img (click)="backToSessionList()" alt="back" height="24" ngSrc="/images/icon/arrow_back.svg" width="24">
+      <img id="back" (click)="backToSessionList()" alt="back" height="24" ngSrc="/images/icon/arrow_back.svg" width="24">
       <span class="server-name" (click)="toggleMenu($event)">{{ serverInfo['name'] }}</span>
       <!-- 菜单容器 -->
       <div class="context-menu" [class.show]="isMenuOpen">

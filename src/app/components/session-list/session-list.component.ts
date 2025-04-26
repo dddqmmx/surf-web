@@ -106,6 +106,13 @@ export class SessionListComponent implements OnInit, OnDestroy {
   async toChat(channelId: any, channelType: any) {
     if (channelType == 'text') {
       this.router.navigate(['/main/session/chat'], {queryParams: {"channel_id": channelId}}).then();
+      if (this.commonDataService.uiState.isMobile){
+        this.commonDataService.uiState.persistent = false;
+        this.commonDataService.uiState.secondary = false;
+        this.commonDataService.uiState.primary = true;
+      }else {
+        this.commonDataService.uiState.primary = true;
+      }
     } else if (channelType == 'voice') {
       const connected = await this.requestService.requestConnectToVoiceChannel(channelId);
       if (connected) {

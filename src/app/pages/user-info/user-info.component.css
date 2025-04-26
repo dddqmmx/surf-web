@@ -18,7 +18,7 @@
 }
 
 .user-info-container {
-  width: 500px;
+  margin: 20px;
   padding: 15px;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 25px;
@@ -43,7 +43,9 @@
 
 .user_id {
   margin-top: 1rem;
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
 }
+
 
 .self-introduction-container {
     color: #ffffff;

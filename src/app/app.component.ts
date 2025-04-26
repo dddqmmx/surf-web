@@ -1,8 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, RouterOutlet} from '@angular/router';
+import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {SocketService} from "./services/socket.service";
 import {NgIf} from "@angular/common";
 import {RequestService} from "./services/request.service";
+import {CommonDataService} from "./services/common-data.service";
+import {filter} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -14,22 +16,45 @@ import {RequestService} from "./services/request.service";
 export class AppComponent implements OnInit {
   loadingFlag: boolean = true;
 
-  constructor(private router: Router, protected socket: SocketService, private requestService: RequestService) {
-  }
+  constructor(
+    private router: Router,
+    protected socket: SocketService,
+    private requestService: RequestService,
+    private commonData: CommonDataService
+  ) { }
 
   private setViewportHeight = () => {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
 
+  private setupMobileDetection() {
+    const mediaQuery = window.matchMedia('(max-aspect-ratio: 1/1)');
+
+    const updateIsMobile = () => {
+      this.commonData.uiState.isMobile = mediaQuery.matches;
+    };
+
+    // 初始判断一次
+    updateIsMobile();
+
+    // 监听变化
+    mediaQuery.addEventListener('change', updateIsMobile);
+  }
+
   ngOnInit(): void {
+    // 设置视口高度
     this.setViewportHeight();
     window.addEventListener('resize', this.setViewportHeight);
     window.addEventListener('orientationchange', this.setViewportHeight);
-    //加载程序
-    this.socket.initializeMainConnection(window.location.hostname+':8000').then(() => {
+
+    // 移动端检测
+    this.setupMobileDetection();
+
+    // 加载程序
+    this.socket.initializeMainConnection(window.location.hostname + ':8000').then(() => {
       this.loadingFlag = false;
-      // 初始化时加载存储的值
+
       const storedUsername = localStorage.getItem('username') || '';
       const storedPassword = localStorage.getItem('password') || '';
       const storedRememberMe = localStorage.getItem('rememberMe') || '';
@@ -39,10 +64,10 @@ export class AppComponent implements OnInit {
           if (r) {
             this.router.navigate(['/main/session']).then();
           }
-        })
+        });
       } else {
-        this.router.navigate(["login"]).then()
+        this.router.navigate(["login"]).then();
       }
-    })
+    });
   }
 }

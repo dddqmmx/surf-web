@@ -1,11 +1,11 @@
 <div class="layout-container">
-  <div *ngIf="showSessionList" class="session-list">
+  <div class="session-list" [ngStyle]="commonData.uiState.secondary ? {} : { 'display': 'none' }">
     <app-session-list></app-session-list>
     <div class="vc-container">
-      <div class="vc-info-container" *ngIf="commonDataService.voiceChatting">
+      <div class="vc-info-container" *ngIf="commonData.voiceChatting">
         <div class="vc-info">
           <p>通话中</p>
-          <p>{{commonDataService.getServerInfoById(commonDataService.currentServer)["name"]}} / {{commonDataService.getChannelInfoById(commonDataService.voiceChannel)["channel_name"]}}</p>
+          <p>{{commonData.getServerInfoById(commonData.currentServer)["name"]}} / {{commonData.getChannelInfoById(commonData.voiceChannel)["channel_name"]}}</p>
         </div>
         <div class="vc-opt">
           <img class="icon" src="/images/icon/phone_disabled.svg" (click)="stopVoiceChat()">
@@ -14,17 +14,17 @@
       <div class="vc-settings-container">
         <img class="icon"
              src="/images/icon/mic.svg"
-             (click)="commonDataService.toggleMic()"
-             [ngClass]="{'disabled': !commonDataService.micEnabled}">
+             (click)="commonData.toggleMic()"
+             [ngClass]="{'disabled': !commonData.micEnabled}">
         <img class="icon"
              src="/images/icon/volume.svg"
-             (click)="commonDataService.toggleSpeaker()"
-             [ngClass]="{'disabled': !commonDataService.speakerEnabled}">
+             (click)="commonData.toggleSpeaker()"
+             [ngClass]="{'disabled': !commonData.speakerEnabled}">
       </div>
 
     </div>
   </div>
-  <div id="chat" class="router-container">
+  <div *ngIf="commonData.uiState.primary" id="chat" class="router-container">
     <router-outlet></router-outlet>
   </div>
 </div>

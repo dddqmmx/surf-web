@@ -10,17 +10,34 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-    /*flex: 1;*/
     font-family: Arial, sans-serif;
 }
 
-/* 聊天头部 */
-.chat-header {    background-color: #3b96ff;
-    color: #ffffff;
-    padding: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
+@media (max-aspect-ratio: 1/1) {
+  #back {
+    display: block;
+  }
+}
+
+.chat-header {
+  background-color: #3b96ff;
+  color: #ffffff;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+  justify-content: space-between; /* 分散排列，左右两侧各自对齐 */
+}
+
+.session-name {
+  text-align: center;
+  flex-grow: 1; /* 让 session-name 在剩余空间中居中 */
+  margin: 0;
+}
+
+.chat-header img {
+  cursor: pointer; /* 增加指针悬停效果 */
 }
 
 /* 聊天内容区域 */

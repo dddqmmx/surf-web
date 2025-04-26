@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="sidebar">
+    <div *ngIf="commonData.uiState.persistent" class="sidebar">
         <div class="user-options">
           <img (click)="toUserInfo()" class="avatar" [src]="file.completedFiles[FileType.AVATAR][userAvatarId]?.url || '/images/avatar/default-avatar.png'">
             <ng-container *ngFor="let option of options">

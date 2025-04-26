@@ -1,19 +1,20 @@
 <div class="container">
   <div class="chat-header">
+    <img *ngIf="commonData.uiState.isMobile" (click)="back()" id="back" alt="back" height="24" ngSrc="/images/icon/arrow_back.svg" width="24">
     <span class="session-name" style="margin: 0;">{{ sessionName }}</span>
   </div>
   <div #chatContent (scroll)="onScroll($event)" class="chat-content">
     <div class="message-list">
       <div *ngFor="let message of messageList"
-           [ngClass]="message['user_id'] != commonDataService.clientUserId ? 'message-container' : 'message-right-container'">
-        <img *ngIf="message['user_id'] != commonDataService.clientUserId" alt="user avatar" class="avatar"
+           [ngClass]="message['user_id'] != commonData.clientUserId ? 'message-container' : 'message-right-container'">
+        <img *ngIf="message['user_id'] != commonData.clientUserId" alt="user avatar" class="avatar"
              height="40"
              width="40"
-             [src]="file.completedFiles[FileType.AVATAR][commonDataService.userInfoIndexById[message['user_id']]?.data?.avatar]?.url || '/images/avatar/default-avatar.png'">
+             [src]="file.completedFiles[FileType.AVATAR][commonData.userInfoIndexById[message['user_id']]?.data?.avatar]?.url || '/images/avatar/default-avatar.png'">
         <div class="message-content">
           <ng-container *ngIf="message['user_id'] as userId">
               <span class="username">
-                {{ commonDataService.userInfoIndexById[userId]?.data?.nickname || userId }}
+                {{ commonData.userInfoIndexById[userId]?.data?.nickname || userId }}
               </span>
           </ng-container>
           <pre *ngIf="message['type'] == 'text'" class="message">{{ message['content'] }}</pre>
@@ -25,8 +26,8 @@
             [attr.height]="message['h']"
             alt=""/>
         </div>
-        <img *ngIf="message['user_id'] == commonDataService.clientUserId" alt="user avatar" class="avatar"
-             height="40"  [src]="file.completedFiles[FileType.AVATAR][commonDataService.userInfoIndexById[message['user_id']]?.data?.avatar]?.url || '/images/avatar/default-avatar.png'"
+        <img *ngIf="message['user_id'] == commonData.clientUserId" alt="user avatar" class="avatar"
+             height="40" [src]="file.completedFiles[FileType.AVATAR][commonData.userInfoIndexById[message['user_id']]?.data?.avatar]?.url || '/images/avatar/default-avatar.png'"
              width="40">
       </div>
     </div>

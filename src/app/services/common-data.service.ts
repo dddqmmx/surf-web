@@ -5,14 +5,13 @@ import {Injectable} from '@angular/core';
 })
 export class CommonDataService {
 
-  constructor() {
-    // 如果之前存储过状态，初始化
-    if (localStorage.getItem(this.micEnabledKey) === 'false') {
-      this.micEnabled = false;
-    }
-    if (localStorage.getItem(this.speakerEnabledKey) === null) {
-      this.speakerEnabled = false;
-    }
+  constructor() {}
+
+  uiState= {
+    isMobile:false,
+    persistent: true,
+    secondary: true,
+    primary: true
   }
 
   clientUserId: string = "";

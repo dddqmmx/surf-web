@@ -3,11 +3,12 @@ import {NgClass, NgForOf, NgIf, NgOptimizedImage, NgStyle} from "@angular/common
 import {Subscription} from "rxjs";
 import {SocketService} from "../../services/socket.service";
 import {CommonDataService} from "../../services/common-data.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {RequestService} from "../../services/request.service";
 import {SessionListComponent} from "../../components/session-list/session-list.component";
 import {FormsModule} from "@angular/forms";
 import {FileService, FileType} from "../../services/file.service";
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-chat',
@@ -37,7 +38,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   scrollToBottomFlag: boolean = false;
   messageInputValue = "";
 
-  constructor(protected file: FileService,private requestService: RequestService, private socketService: SocketService, protected commonDataService: CommonDataService, private route: ActivatedRoute) {
+  constructor(
+    protected file: FileService,
+    private requestService: RequestService,
+    private socketService: SocketService,
+    protected commonData: CommonDataService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) {
   }
 
   async ngOnInit() {
@@ -48,7 +55,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.scrollToBottomFlag = true;
       })
     this.subscriptions.push(newMassageSubject);
-    const channelId = this.route.snapshot.queryParamMap.get('channel_id');
+    const channelId = this.activatedRoute.snapshot.queryParamMap.get('channel_id');
     if (channelId) {
       this.sessionId = channelId;
       this.messageList = await this.requestService.getMessage(channelId);
@@ -60,7 +67,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       console.log(userInfoMap)
       await this.requestService.getUserAvatars(avatars)
       this.scrollToBottomFlag = true;
-      this.sessionName = this.commonDataService.getChannelInfoById(channelId)["channel_name"]
+      this.sessionName = this.commonData.getChannelInfoById(channelId)["channel_name"]
     }
   }
 
@@ -89,7 +96,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
       reader.onload = () => {
         this.messageList.push({
-          "user_id": this.commonDataService.clientUserId,
+          "user_id": this.commonData.clientUserId,
           "type": "img",
           "content": "file_id"
         })
@@ -142,6 +149,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
+  back(){
+    this.commonData.uiState.persistent = true;
+    this.commonData.uiState.secondary = true
+    this.commonData.uiState.primary = false
+  }
 
   protected readonly FileType = FileType;
 }
