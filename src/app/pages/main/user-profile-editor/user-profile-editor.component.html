@@ -6,18 +6,16 @@
     <div class="user-profile-value">
       <div class="profile-item">
         <label class="profile-label">昵称</label>
-        <input class="profile-input" [value]="commonData.userInfoIndexById[commonData.clientUserId]?.data?.nickname">
+        <input class="profile-input" [(ngModel)]="userProfile.nickname">
       </div>
       <div class="profile-item">
         <label class="profile-label">自我介绍</label>
-        <textarea class="profile-input" placeholder="" [value]="commonData.userInfoIndexById[commonData.clientUserId]?.data?.introduction"></textarea>
+        <textarea class="profile-input" placeholder="" [(ngModel)]="userProfile.introduction"></textarea>
       </div>
     </div>
   </div>
   <div class="opt-button-container">
-    <div>
-      <button>保存</button>
-      <button>取消</button>
-    </div>
+    <button (click)="saveUserProfile()">保存</button>
+    <button>取消</button>
   </div>
 </div>

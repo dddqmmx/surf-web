@@ -280,4 +280,8 @@ export class RequestService {
 
     await Promise.all(Array(concurrency).fill(0).map(() => uploadNext()));
   }
+
+  public async requestUpdateUserProfile(userProfile: any):Promise<boolean>{
+    return await this.socket.request("user", "update_user_profile", userProfile);
+  }
 }
