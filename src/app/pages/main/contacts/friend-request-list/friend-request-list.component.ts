@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {RequestService} from "../../../../services/request.service";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {CommonDataService} from "../../../../services/common-data.service";
 
 @Component({
   selector: 'app-friend-request-list',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './friend-request-list.component.html',
   styleUrl: './friend-request-list.component.css'

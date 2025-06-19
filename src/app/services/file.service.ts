@@ -55,7 +55,7 @@ export class FileService implements OnDestroy {
       this.socket.getMessageSubject("user", "get_user_avatars").subscribe(
         (message) => {
           this.receiveChunk(
-            message["avatar_id"],
+            message["id"],
             FileType.AVATAR,
             message["index"],
             message["chunk"],

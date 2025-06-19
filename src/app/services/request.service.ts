@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {SocketService} from './socket.service'; // 假设您的 SocketService 是这个路径
 import {CommonDataService} from './common-data.service';
 import CryptoJS from 'crypto-js';
+import {v4 as uuidV4} from "uuid";
 
 @Injectable({
   providedIn: 'root'
@@ -217,7 +218,7 @@ export class RequestService {
   }
 
   public getUserAvatars(ids: string[]): any {
-    this.socket.send("user", "get_user_avatars", {"avatar_ids": ids})
+    this.socket.send("user", "get_user_avatars", {"user_ids": ids})
   }
 
   public async getUserFriends(): Promise<string[]>{
@@ -244,4 +245,39 @@ export class RequestService {
     return await this.socket.request("server", "invite_users", {"server_id": serverId, "user_ids": userIds});
   }
 
+  public async sendUserAvatar(file: File, {
+    chunkSize = 32 * 1024,  // 默认 256KB，比 64KB 高效
+    concurrency = 4          // 默认 4 并发，自测网络可调整
+  } = {}) {
+    const totalChunks = Math.ceil(file.size / chunkSize);
+    const id = uuidV4();
+
+    let index = 0;
+
+    const uploadNext = async () => {
+      while (index < totalChunks) {
+        const i = index++;
+        const start = i * chunkSize;
+        const end = Math.min(start + chunkSize, file.size);
+        const chunk = file.slice(start, end);
+        const buffer = await chunk.arrayBuffer();
+        const chunkBase64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+        let data:any = {
+          id,
+          index: i,
+          chunk: chunkBase64,
+        }
+        if (i == 0){
+          data.total = totalChunks
+          data.metadata = {
+            filename: file.name,
+            mimetype: file.type
+          }
+        }
+        this.socket.send("user", "upload_user_avatar",data);
+      }
+    };
+
+    await Promise.all(Array(concurrency).fill(0).map(() => uploadNext()));
+  }
 }

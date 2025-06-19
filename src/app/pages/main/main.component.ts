@@ -8,6 +8,7 @@ import {VoiceChatService} from "../../services/voice-chat.service";
 import {RequestService} from "../../services/request.service";
 import {ChatComponent} from "../chat/chat.component";
 import {FileService, FileType} from "../../services/file.service";
+import {AvatarComponent} from "../../components/avatar/avatar.component";
 
 @Component({
   selector: 'app-main',
@@ -18,7 +19,8 @@ import {FileService, FileType} from "../../services/file.service";
     NgForOf,
     NgIf,
     ChatComponent,
-    NgClass
+    NgClass,
+    AvatarComponent
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
@@ -79,9 +81,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.request.getUserInfo([this.commonData.clientUserId]).then(() => {
-      const avatar = this.commonData.getUserInfo(this.commonData.clientUserId)['avatar']
-      this.userAvatarId = avatar;
-      this.request.getUserAvatars([avatar])
+      this.request.getUserAvatars([this.commonData.clientUserId])
     })
   }
 

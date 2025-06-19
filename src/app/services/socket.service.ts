@@ -64,7 +64,7 @@ export class SocketService {
       }
 
       try {
-        const endpoint: string = 'ws://' + serverAddress;
+        const endpoint: string = serverAddress;
         this.socket = new WebSocket(endpoint);
 
         // 设置连接超时
@@ -133,40 +133,6 @@ export class SocketService {
         reject(error);
       }
     });
-  }
-
-  // 等待WebSocket初始化完成
-  waitForInitialization(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (this.isConnected()) {
-        resolve();
-      } else {
-        this.initializeMainConnection('localhost:8000').then(() => {
-          resolve();
-        }).catch((error) => {
-          reject(error);
-        });
-      }
-    });
-  }
-
-  public isConnected(): boolean {
-    return this.socket?.readyState === WebSocket.OPEN;
-  }
-
-
-  public disconnect() {
-    if (this.socket) {
-      for (const [path, commandMap] of this.pathMap.entries()) {
-        for (const [command, messageSubject] of commandMap.entries()) {
-          messageSubject.complete();
-        }
-        commandMap.clear();
-      }
-      this.pathMap.clear();
-      this.socket.close();
-      this.socket = null;
-    }
   }
 
   public send(path: string, command: string, data: any = {}) {

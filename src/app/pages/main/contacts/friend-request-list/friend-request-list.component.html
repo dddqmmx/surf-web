@@ -7,4 +7,7 @@
     </div>
     <button class="agree-button" (click)="acceptFriendRequest(userId)" >同意</button>
   </div>
+  <div *ngIf="friendRequests.length == 0"  class="contact-item" >
+    <p>没有</p>
+  </div>
 </div>

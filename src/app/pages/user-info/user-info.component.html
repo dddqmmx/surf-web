@@ -1,7 +1,7 @@
 <div class="container">
   <div class="user-info-container">
     <div class="user-info">
-      <img alt="avatar" class="avatar" height="64" width="64" [src]="file.completedFiles[FileType.AVATAR][commonDataService.userInfoIndexById[user].data['avatar']]?.url || '/images/avatar/default-avatar.png'">
+      <app-avatar [userId]="user"/>
       <div class="user-info-context">
         <span class="username">{{ commonDataService.userInfoIndexById[user].data["nickname"]}}</span>
         <span class="user_id">用户ID: {{ commonDataService.userInfoIndexById[user].data["user_id"]}}</span>
@@ -19,7 +19,7 @@
         <button class="btn">发消息</button>
       </ng-template>
       <ng-template [ngIf]="user == commonDataService.clientUserId">
-        <button class="btn">编辑资料</button>
+        <button class="btn" (click)="toUserProfileEditor()" >编辑资料</button>
       </ng-template>
     </div>
   </div>

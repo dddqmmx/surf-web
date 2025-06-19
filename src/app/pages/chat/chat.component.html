@@ -7,10 +7,7 @@
     <div class="message-list">
       <div *ngFor="let message of messageList"
            [ngClass]="message['user_id'] != commonData.clientUserId ? 'message-container' : 'message-right-container'">
-        <img *ngIf="message['user_id'] != commonData.clientUserId" alt="user avatar" class="avatar"
-             height="40"
-             width="40"
-             [src]="file.completedFiles[FileType.AVATAR][commonData.userInfoIndexById[message['user_id']]?.data?.avatar]?.url || '/images/avatar/default-avatar.png'">
+        <app-avatar *ngIf="message['user_id'] != commonData.clientUserId" [userId]="message['user_id']" class="avatar"/>
         <div class="message-content">
           <ng-container *ngIf="message['user_id'] as userId">
               <span class="username">
@@ -26,9 +23,7 @@
             [attr.height]="message['h']"
             alt=""/>
         </div>
-        <img *ngIf="message['user_id'] == commonData.clientUserId" alt="user avatar" class="avatar"
-             height="40" [src]="file.completedFiles[FileType.AVATAR][commonData.userInfoIndexById[message['user_id']]?.data?.avatar]?.url || '/images/avatar/default-avatar.png'"
-             width="40">
+        <app-avatar *ngIf="message['user_id'] == commonData.clientUserId" [userId]="message['user_id']" class="avatar"/>
       </div>
     </div>
   </div>

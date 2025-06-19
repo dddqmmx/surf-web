@@ -1,19 +1,19 @@
 <div class="container">
-    <div *ngIf="commonData.uiState.persistent" class="sidebar">
-        <div class="user-options">
-          <img (click)="toUserInfo()" class="avatar" [src]="file.completedFiles[FileType.AVATAR][userAvatarId]?.url || '/images/avatar/default-avatar.png'">
-            <ng-container *ngFor="let option of options">
-                <img (click)="onSelect(option)"
-                     [ngClass]="{'selected': selectedOption === option.name}"
-                     [alt]="option.name"
-                     class="icon"
-                     [src]="option.icon"
-                     [height]="option.height"
-                     [width]="option.width">
-            </ng-container>
-        </div>
+  <div *ngIf="commonData.uiState.persistent" class="sidebar">
+    <div class="user-options">
+      <app-avatar [userId]="commonData.clientUserId" (click)="toUserInfo()"/>
+      <ng-container *ngFor="let option of options">
+        <img (click)="onSelect(option)"
+             [ngClass]="{'selected': selectedOption === option.name}"
+             [alt]="option.name"
+             class="icon"
+             [src]="option.icon"
+             [height]="option.height"
+             [width]="option.width">
+      </ng-container>
     </div>
-    <div class="content">
-        <router-outlet></router-outlet>
-    </div>
+  </div>
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
 </div>

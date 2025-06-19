@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
     this.setupMobileDetection();
 
     // 加载程序
-    this.socket.initializeMainConnection(window.location.hostname + ':8000').then(() => {
+    this.socket.initializeMainConnection("ws://" + window.location.hostname + ':8000').then(() => {
       this.loadingFlag = false;
 
       const storedUsername = localStorage.getItem('username') || '';

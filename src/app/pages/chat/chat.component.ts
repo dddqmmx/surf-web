@@ -9,6 +9,7 @@ import {SessionListComponent} from "../../components/session-list/session-list.c
 import {FormsModule} from "@angular/forms";
 import {FileService, FileType} from "../../services/file.service";
 import { Location } from '@angular/common';
+import {AvatarComponent} from "../../components/avatar/avatar.component";
 
 @Component({
   selector: 'app-chat',
@@ -20,7 +21,8 @@ import { Location } from '@angular/common';
     NgIf,
     FormsModule,
     NgClass,
-    NgStyle
+    NgStyle,
+    AvatarComponent
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
@@ -60,12 +62,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.sessionId = channelId;
       this.messageList = await this.requestService.getMessage(channelId);
       const userIds = Array.from(new Set(this.messageList.map((message: any) => message.user_id)));
-      const userInfoMap = await this.requestService.getUserInfo(userIds);
-      const avatars = Array.from(userInfoMap.values())
-        .map(info => info.avatar)
-        .filter(avatar => avatar !== null); // 过滤掉 null 值
-      console.log(userInfoMap)
-      await this.requestService.getUserAvatars(avatars)
+      await this.requestService.getUserInfo(userIds);
+      await this.requestService.getUserAvatars(userIds)
       this.scrollToBottomFlag = true;
       this.sessionName = this.commonData.getChannelInfoById(channelId)["channel_name"]
     }
