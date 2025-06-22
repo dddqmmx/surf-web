@@ -1,4 +1,4 @@
 .avatar {
-  width: 48px;
+  max-width: 100%;
   border-radius: 10px;
 }

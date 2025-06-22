@@ -25,4 +25,9 @@ export class AvatarComponent {
   @Input() userId!: string; // 通过输入用户ID
 
   protected readonly FileType = FileType;
+
+  onAvatarError(event: Event) {
+    const img = event.target as HTMLImageElement;
+    img.src = '/images/avatar/default-avatar.png';
+  }
 }

@@ -13,7 +13,7 @@ export class CommonDataService {
     secondary: true,
     primary: true
   }
-
+  session: string = "";
   clientUserId: string = "";
   servers: any[] = []
   friends: any[] = []
@@ -28,6 +28,8 @@ export class CommonDataService {
   voiceChannel: string= "";
   micEnabled: boolean = false;
   speakerEnabled: boolean = true;
+
+  httpPrefix: string = "http://localhost:8080";
 
   private micEnabledKey = `micEnabled-${this.clientUserId}`;
   private speakerEnabledKey = `speakerEnabled-${this.clientUserId}`;

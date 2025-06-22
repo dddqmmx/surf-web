@@ -3,13 +3,15 @@ import {FormsModule} from "@angular/forms";
 import {RequestService} from "../../../../services/request.service";
 import {NgForOf} from "@angular/common";
 import {CommonDataService} from "../../../../services/common-data.service";
+import {AvatarComponent} from "../../../../components/avatar/avatar.component";
 
 @Component({
   selector: 'app-search-user',
   standalone: true,
   imports: [
     FormsModule,
-    NgForOf
+    NgForOf,
+    AvatarComponent
   ],
   templateUrl: './search-user.component.html',
   styleUrl: './search-user.component.css'

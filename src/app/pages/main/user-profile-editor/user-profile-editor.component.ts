@@ -28,10 +28,10 @@ export class UserProfileEditorComponent {
     private request: RequestService,
     protected file: FileService
   ) {
-    this.originProfile.nickname = commonData.userInfoIndexById[commonData.clientUserId]?.data?.nickname
-    this.originProfile.introduction = commonData.userInfoIndexById[commonData.clientUserId]?.introduction
-    this.userProfile.nickname = commonData.userInfoIndexById[commonData.clientUserId]?.data?.nickname
-    this.userProfile.introduction = commonData.userInfoIndexById[commonData.clientUserId]?.introduction
+    this.originProfile.nickname = commonData.userInfoIndexById[commonData.clientUserId].data["nickname"]
+    this.originProfile.introduction = commonData.userInfoIndexById[commonData.clientUserId].data["introduction"]
+    this.userProfile.nickname = commonData.userInfoIndexById[commonData.clientUserId].data["nickname"]
+    this.userProfile.introduction = commonData.userInfoIndexById[commonData.clientUserId].data["introduction"]
   }
   originProfile: UserProfile = {
     nickname: null,

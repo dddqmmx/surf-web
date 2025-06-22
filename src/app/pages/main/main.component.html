@@ -1,7 +1,7 @@
 <div class="container">
   <div *ngIf="commonData.uiState.persistent" class="sidebar">
     <div class="user-options">
-      <app-avatar [userId]="commonData.clientUserId" (click)="toUserInfo()"/>
+      <app-avatar class="avatar" [userId]="commonData.clientUserId" (click)="toUserInfo()"/>
       <ng-container *ngFor="let option of options">
         <img (click)="onSelect(option)"
              [ngClass]="{'selected': selectedOption === option.name}"

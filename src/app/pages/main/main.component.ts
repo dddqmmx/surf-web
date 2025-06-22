@@ -81,7 +81,6 @@ export class MainComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.request.getUserInfo([this.commonData.clientUserId]).then(() => {
-      this.request.getUserAvatars([this.commonData.clientUserId])
     })
   }
 

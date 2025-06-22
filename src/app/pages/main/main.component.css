@@ -9,6 +9,10 @@
     display: flex;
 }
 
+.avatar{
+  width: 48px;
+}
+
 .icon {
     margin-top: 1rem;
     background: #3b96ff;

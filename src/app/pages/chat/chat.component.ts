@@ -63,7 +63,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.messageList = await this.requestService.getMessage(channelId);
       const userIds = Array.from(new Set(this.messageList.map((message: any) => message.user_id)));
       await this.requestService.getUserInfo(userIds);
-      await this.requestService.getUserAvatars(userIds)
       this.scrollToBottomFlag = true;
       this.sessionName = this.commonData.getChannelInfoById(channelId)["channel_name"]
     }

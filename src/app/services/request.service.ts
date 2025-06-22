@@ -217,10 +217,6 @@ export class RequestService {
     })
   }
 
-  public getUserAvatars(ids: string[]): any {
-    this.socket.send("user", "get_user_avatars", {"user_ids": ids})
-  }
-
   public async getUserFriends(): Promise<string[]>{
     const response =  await this.socket.request("user", "get_user_friends")
     this.commonData.friends = response['user_ids'];

@@ -67,8 +67,7 @@ app-session-list {
   flex-grow: 1;
 }
 .vc-opt {
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 15px;
   align-items: center; /* 垂直居中 */
 }
 

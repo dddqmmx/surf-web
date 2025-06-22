@@ -8,7 +8,7 @@
   </div>
   <div>
     <div class="message" *ngFor="let userId of userList">
-      <img class="avatar" src="/images/avatar/default-avatar.png" alt="头像">
+      <app-avatar class="avatar" [userId]="userId"/>
       <div class="message-content">
         <p class="username">{{ commonData.userInfoIndexById[userId]?.data?.nickname || userId }}</p>
         <p class="text">{{ commonData.userInfoIndexById[userId]?.data?.introduction || userId }}</p>

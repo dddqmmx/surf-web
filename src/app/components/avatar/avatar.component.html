@@ -1,1 +1,4 @@
-<img class="avatar" [src]="file.completedFiles[FileType.AVATAR][userId]?.url || '/images/avatar/default-avatar.png'">
+<img class="avatar"
+     [src]="commonData.httpPrefix + '/user/avatar/' + userId"
+     (error)="onAvatarError($event)"
+     [attr.data-userid]="userId">

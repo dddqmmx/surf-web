@@ -3,6 +3,7 @@ import {NgForOf, NgOptimizedImage} from "@angular/common";
 import {Router, RouterOutlet} from "@angular/router";
 import {RequestService} from "../../../services/request.service";
 import {CommonDataService} from "../../../services/common-data.service";
+import {AvatarComponent} from "../../../components/avatar/avatar.component";
 
 @Component({
   selector: 'app-contacts',
@@ -10,13 +11,15 @@ import {CommonDataService} from "../../../services/common-data.service";
   imports: [
     NgOptimizedImage,
     RouterOutlet,
-    NgForOf
+    NgForOf,
+    AvatarComponent
   ],
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.css'
 })
 export class ContactsComponent implements OnInit {
   constructor(protected router: Router, protected request: RequestService, protected commonData: CommonDataService) {
+
   }
 
   viewContacts(userId: string) {
