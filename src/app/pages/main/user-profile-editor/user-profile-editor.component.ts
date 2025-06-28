@@ -5,6 +5,8 @@ import {FileService} from "../../../services/file.service";
 import {RequestService} from "../../../services/request.service";
 import {AvatarComponent} from "../../../components/avatar/avatar.component";
 import {FormsModule} from "@angular/forms";
+import {UserService} from "../../../services/api/user.service";
+import {AvatarService} from "../../../services/ui/avatar.service";
 
 type UserProfile = {
   nickname: string | null;
@@ -26,7 +28,9 @@ export class UserProfileEditorComponent {
   constructor(
     protected commonData: CommonDataService,
     private request: RequestService,
-    protected file: FileService
+    private userService: UserService,
+    protected file: FileService,
+    private avatarService: AvatarService
   ) {
     this.originProfile.nickname = commonData.userInfoIndexById[commonData.clientUserId].data["nickname"]
     this.originProfile.introduction = commonData.userInfoIndexById[commonData.clientUserId].data["introduction"]
@@ -73,7 +77,13 @@ export class UserProfileEditorComponent {
         multiple: false
       });
       const file = await fileHandle.getFile();
-      await this.request.sendUserAvatar(file);
+      this.userService.uploadAvatar(file).subscribe({
+        next: () => {
+          console.log('Upload successful');
+          this.avatarService.notifyAvatarChanged(this.commonData.clientUserId)
+        },
+        error: err => console.error('Upload failed', err)
+      })
     } catch (error) {
       console.log('文件选择已取消');
     }

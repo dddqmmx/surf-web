@@ -126,10 +126,10 @@ export class VoiceChatService {
 
   /** 处理并发送音频片段 */
   private processAudioSegment() {
-    const audioData = this.combineAudioFrames(this.audioQueue);
-    const base64String = this.float32ToBase64(audioData);
-    this.requestService.sendAudio(this.channelId, base64String);
-    this.audioQueue = [];
+    // const audioData = this.combineAudioFrames(this.audioQueue);
+    // const base64String = this.float32ToBase64(audioData);
+    this.requestService.sendAudio(this.channelId, "");
+    // this.audioQueue = [];
   }
 
   /** 播放 Base64 格式的音频 */

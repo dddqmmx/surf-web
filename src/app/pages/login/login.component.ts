@@ -6,6 +6,7 @@ import {SocketService} from "../../services/socket.service";
 import {connect, Subscription} from "rxjs";
 import {CommonDataService} from "../../services/common-data.service";
 import {RequestService} from "../../services/request.service";
+import {UserService} from "../../services/api/user.service";
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private requestService: RequestService,
     protected router: Router,
     private socket: SocketService,
+    private userService:UserService,
     private commonData: CommonDataService) {
   }
 
@@ -50,13 +52,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         localStorage.setItem('password', this.password);
       }
     }
-    this.requestService.requestLogin(this.account, this.password).then(
-      response => {
-        if (response){
-          this.router.navigate(['/main/session']).then();
-        }
+    const success = this.userService.login(this.account, this.password)
+    success.subscribe(value => {
+      if (value) {
+        this.router.navigate(['/main/session']).then();
+      }else{
+        alert("登录失败，账号或密码错误")
       }
-    )
+    })
   }
 
   toManageUsers() {

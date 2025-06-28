@@ -50,24 +50,9 @@ export class AppComponent implements OnInit {
 
     // 移动端检测
     this.setupMobileDetection();
-
     // 加载程序
-    this.socket.initializeMainConnection("ws://" + window.location.hostname + ':8080/ws').then(() => {
+    this.socket.initializeMainConnection("wss://" + this.commonData.host + ':8080/ws').then(() => {
       this.loadingFlag = false;
-
-      const storedUsername = localStorage.getItem('username') || '';
-      const storedPassword = localStorage.getItem('password') || '';
-      const storedRememberMe = localStorage.getItem('rememberMe') || '';
-
-      if (storedRememberMe === 'true') {
-        this.requestService.requestLogin(storedUsername, storedPassword).then(r => {
-          if (r) {
-            this.router.navigate(['/main/session']).then();
-          }
-        });
-      } else {
-        this.router.navigate(["login"]).then();
-      }
     });
   }
 }

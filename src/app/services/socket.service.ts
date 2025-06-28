@@ -139,12 +139,9 @@ export class SocketService {
     if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
       throw new Error('WebSocket is not connected');
     }
-
-    const request_id = uuidV4();  // 生成唯一的 request_id
     const message = {
       path,
       command,
-      request_id,
       data,
     };
     this.socket.send(JSON.stringify(message)); // 直接发送完整的数据

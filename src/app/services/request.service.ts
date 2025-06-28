@@ -130,7 +130,6 @@ export class RequestService {
         throw new Error('Account and password are required');
       }
       password = CryptoJS.MD5(password).toString()
-      console.log("password", password);
       const response = await this.socket.request('user', 'login', {
         account: account,
         password: password
