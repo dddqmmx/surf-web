@@ -31,7 +31,6 @@ export class SessionListComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
-
   constructor(protected file: FileService, private socket: SocketService, protected commonDataService: CommonDataService, private requestService: RequestService, private router: Router, private voiceChatService: VoiceChatService) {
   }
 
@@ -41,6 +40,9 @@ export class SessionListComponent implements OnInit, OnDestroy {
         if (message["type"] === "user_join_voice_channel") {
           const channelId = message["channel_id"];
           const userId = message["user_id"];
+          if (this.voiceChatService.isRecording){
+            this.voiceChatService.join(userId).then()
+          }
           // 如果该频道已存在成员列表，则添加；否则新建一个数组
           if (this.membersFromChannels[channelId]) {
             // 避免重复添加
@@ -99,7 +101,7 @@ export class SessionListComponent implements OnInit, OnDestroy {
   }
 
   backToSessionList() {
-    this.requestService.requestDisconnectToServerEventChannel(this.serverId);
+    this.requestService.requestDisconnectToServerEventChannel(this.serverId).then();
     this.serverInfo = undefined;
     this.router.navigate(['/main/session']).then();
     this.isMenuOpen = false;
@@ -118,9 +120,17 @@ export class SessionListComponent implements OnInit, OnDestroy {
     } else if (channelType == 'voice') {
       const connected = await this.requestService.requestConnectToVoiceChannel(channelId);
       if (connected) {
+        const ids = this.membersFromChannels[channelId];
+        console.log(ids); // 当前频道的所有用户ID
         this.voiceChatService.initializeRecorder(channelId).then(() => {
           this.commonDataService.voiceChatting = true;
           this.commonDataService.voiceChannel = channelId;
+          for (const id of ids) {
+            if (id == this.commonDataService.clientUserId){
+              continue;
+            }
+            this.voiceChatService.join(id)
+          }
         });
       }
     }

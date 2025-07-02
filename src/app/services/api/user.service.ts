@@ -24,6 +24,7 @@ export class UserService {
   }
 
   public login(account: string | undefined, password: string | undefined): Observable<boolean> {
+    console.log("login")
     if (!account || !password) {
       throw new Error('Account and password are required');
     }
@@ -82,9 +83,6 @@ export class UserService {
       })
     );
   }
-
-
-
 
   public async requestSetSession(session_id: string | undefined): Promise<boolean> {
     try {

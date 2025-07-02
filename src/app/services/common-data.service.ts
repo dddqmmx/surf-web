@@ -29,8 +29,16 @@ export class CommonDataService {
   micEnabled: boolean = false;
   speakerEnabled: boolean = true;
 
-  host: string = "nana7mi.asia";
-  httpPrefix: string = `https://${this.host}:8080`;
+  host: string = "localhost";
+  sslEnabled: boolean = false;
+
+  get httpPrefix(): string {
+    return this.sslEnabled ? `https://${this.host}:8080` : `http://${this.host}:8080`;
+  }
+
+  get websocketUrl(): string {
+    return this.sslEnabled ? `wss://${this.host}:8080/ws` : `ws://${this.host}:8080/ws`;
+  }
 
   private micEnabledKey = `micEnabled-${this.clientUserId}`;
   private speakerEnabledKey = `speakerEnabled-${this.clientUserId}`;

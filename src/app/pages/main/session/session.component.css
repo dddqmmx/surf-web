@@ -53,12 +53,14 @@ app-session-list {
   color: white;
   display: flex;
   flex-direction: column;
-  border-top: 0.1rem solid #1781ff;
   background-color: #5fa7ff;
 }
 
 .vc-info-container {
-  padding: 0.3rem;
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-top: 0.1rem solid #1781ff;
   display: flex;
   flex-direction: row;
   align-items: center; /* 垂直居中 */
