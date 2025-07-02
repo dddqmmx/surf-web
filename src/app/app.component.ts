@@ -1,32 +1,31 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {SocketService} from "./services/socket.service";
 import {NgIf} from "@angular/common";
 import {RequestService} from "./services/request.service";
 import {CommonDataService} from "./services/common-data.service";
 import {filter} from "rxjs";
+import {DevConsoleComponent} from "./components/dev-console/dev-console.component";
+import {VoiceChatService} from "./services/voice-chat.service";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterOutlet, NgIf],
+  imports: [RouterOutlet, RouterOutlet, NgIf, DevConsoleComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   loadingFlag: boolean = true;
+  @ViewChild('remoteAudio') remoteAudio!: ElementRef<HTMLAudioElement>;
 
   constructor(
     private router: Router,
     protected socket: SocketService,
     private requestService: RequestService,
+    public voiceChatService: VoiceChatService,
     private commonData: CommonDataService
   ) { }
-
-  private setViewportHeight = () => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }
 
   private setupMobileDetection() {
     const mediaQuery = window.matchMedia('(max-aspect-ratio: 1/1)');
@@ -43,16 +42,20 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // 设置视口高度
-    this.setViewportHeight();
-    window.addEventListener('resize', this.setViewportHeight);
-    window.addEventListener('orientationchange', this.setViewportHeight);
-
     // 移动端检测
     this.setupMobileDetection();
+    this.commonData.host = window.location.hostname;
+    this.commonData.sslEnabled = window.location.protocol === 'https:';
     // 加载程序
-    this.socket.initializeMainConnection("wss://" + this.commonData.host + ':8080/ws').then(() => {
+    this.socket.initializeMainConnection( this.commonData.websocketUrl).then(() => {
       this.loadingFlag = false;
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.voiceChatService.onRemoteStream.subscribe(stream => {
+      this.remoteAudio.nativeElement.srcObject = stream;
+      this.remoteAudio.nativeElement.play();
     });
   }
 }
