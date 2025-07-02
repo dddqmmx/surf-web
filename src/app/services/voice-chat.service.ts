@@ -46,7 +46,12 @@ export class VoiceChatService {
 
   async join(user_id: string) {
     this.pc = new RTCPeerConnection({
-      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+      iceServers: [
+        {urls: 'stun:stun.l.google.com:19302'},
+        {urls: 'stun:stun.miwifi.com'},
+        {urls: 'stun:stun.chat.bilibili.com'},
+        {urls: 'stun:turn.cloudflare.com'}
+      ]
     });
 
     // add local mic track
@@ -84,12 +89,39 @@ export class VoiceChatService {
   }
 
   private async handleOffer(sdp:any,from:string) {
-    if (!this.pc) return;
+    if (!this.pc) {
+      this.pc = new RTCPeerConnection({
+        iceServers: [
+          {urls: 'stun:stun.l.google.com:19302'},
+          {urls: 'stun:stun.miwifi.com'},
+          {urls: 'stun:stun.chat.bilibili.com'},
+          {urls: 'stun:turn.cloudflare.com'}
+        ]
+      });
+
+      // 这里要重复绑定 ontrack、onicecandidate
+      this.pc.ontrack = ev => {
+        ev.streams[0].getTracks().forEach(t => this.remoteStream.addTrack(t));
+        this.onRemoteStream.next(this.remoteStream);
+      };
+
+      this.pc.onicecandidate = ev => {
+        if (ev.candidate) {
+          this.chatService.sendIceCandidate(from, ev.candidate.toJSON());
+        }
+      };
+
+      // 加入 mic track
+      this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      this.localStream.getTracks().forEach(t => this.pc!.addTrack(t, this.localStream!));
+    }
+
     await this.pc.setRemoteDescription(new RTCSessionDescription(sdp));
     const answer = await this.pc.createAnswer();
     await this.pc.setLocalDescription(answer);
     await this.chatService.sendAnswer(from, answer);
   }
+
 
   private async handleAnswer(sdp:any) {
     if (!this.pc) return;
