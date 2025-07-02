@@ -40,9 +40,6 @@ export class SessionListComponent implements OnInit, OnDestroy {
         if (message["type"] === "user_join_voice_channel") {
           const channelId = message["channel_id"];
           const userId = message["user_id"];
-          if (this.voiceChatService.isRecording){
-            this.voiceChatService.join(userId).then()
-          }
           // 如果该频道已存在成员列表，则添加；否则新建一个数组
           if (this.membersFromChannels[channelId]) {
             // 避免重复添加
@@ -57,6 +54,7 @@ export class SessionListComponent implements OnInit, OnDestroy {
         if (message["type"] === "user_leave_voice_channel") {
           const channelId = message["channel_id"];
           const userId = message["user_id"];
+          this.voiceChatService.leave(userId)
           if (this.membersFromChannels[channelId]) {
             this.membersFromChannels[channelId] = this.membersFromChannels[channelId].filter((id: any) => id !== userId);
             if (this.membersFromChannels[channelId].length === 0) {

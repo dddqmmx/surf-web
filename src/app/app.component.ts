@@ -53,9 +53,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.voiceChatService.onRemoteStream.subscribe(stream => {
+    this.voiceChatService.onRemoteStream.subscribe(({ userId, stream }) => {
+      console.log(userId)
+      // 用 audio 标签
       this.remoteAudio.nativeElement.srcObject = stream;
-      this.remoteAudio.nativeElement.play();
+      this.remoteAudio.nativeElement.play().catch(err => {
+        console.warn('Autoplay failed, user interaction needed:', err);
+      });
     });
   }
 }

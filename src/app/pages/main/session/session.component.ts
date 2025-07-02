@@ -39,8 +39,8 @@ export class SessionComponent implements OnInit {
   }
 
   stopVoiceChat(): void {
-    this.voiceChatService.leave()
     this.commonData.voiceChatting = false;
     this.commonData.voiceChannel = "";
+    this.voiceChatService.stop();
   }
 }

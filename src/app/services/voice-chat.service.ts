@@ -2,103 +2,149 @@ import { Injectable } from "@angular/core";
 import { RequestService } from "./request.service";
 import { CommonDataService } from "./common-data.service";
 import { SocketService } from "./socket.service";
-import {Subject} from "rxjs";
-import {ChatService} from "./api/chat.service";
+import { Subject } from "rxjs";
+import { ChatService } from "./api/chat.service";
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class VoiceChatService {
-  private channelId: string | undefined;
+  private channelId?: string;
   private subject: any;
   public isRecording = false;
-  private pc?: RTCPeerConnection;
   private localStream?: MediaStream;
-  private remoteStream = new MediaStream();
+  private pcMap: Map<string, RTCPeerConnection> = new Map();
+  private remoteStreams: Map<string, MediaStream> = new Map();
 
-  onRemoteStream = new Subject<MediaStream>();
-
+  onRemoteStream = new Subject<{ userId: string; stream: MediaStream }>();
 
   constructor(
     private requestService: RequestService,
     private socketService: SocketService,
-    private chatService:ChatService,
+    private chatService: ChatService,
     private common: CommonDataService
-  ) {
-  }
+  ) {}
 
-  /** 初始化录音器 */
   async initializeRecorder(channelId: string) {
     this.channelId = channelId;
     this.isRecording = true;
-    this.subject = this.socketService.getMessageSubject("chat", "webrtc").subscribe(data => {
-      const type = data["type"]
-      const from = data["from"]
-      if (type == "offer") {
-        this.handleOffer(JSON.parse(data["sdp"]),from)
-      }else if (type == "answer") {
-        this.handleAnswer(JSON.parse(data["sdp"]))
-      }else if (type == "handleIce"){
-        this.handleIce(JSON.parse(data["candidate"]))
-      }
-    });
+    if (this.subject) return;
+    this.subject = this.socketService
+      .getMessageSubject("chat", "webrtc")
+      .subscribe(data => {
+        console.log(data)
+        const { type, from, sdp, candidate } = data;
+        if (type === 'offer') this.handleOffer(JSON.parse(sdp), from);
+        else if (type === 'answer') this.handleAnswer(JSON.parse(sdp), from);
+        else if (type === 'ice_candidate') this.handleIce(JSON.parse(candidate), from);
+      });
   }
 
-  async join(user_id: string) {
-    this.pc = new RTCPeerConnection({
-      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
-    });
-
-    // add local mic track
-    this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    this.localStream.getTracks().forEach(t => this.pc!.addTrack(t, this.localStream!));
-
-    // collect remote tracks
-    this.pc.ontrack = ev => {
-      ev.streams[0].getTracks().forEach(t => this.remoteStream.addTrack(t));
-      this.onRemoteStream.next(this.remoteStream);
-    };
-
-    // ICE candidates
-    this.pc.onicecandidate = ev => {
-      if (ev.candidate) {
-        this.chatService.sendIceCandidate(user_id, ev.candidate.toJSON())
-      }
-    };
-
-    // create & send offer
-    const offer = await this.pc.createOffer();
-    await this.pc.setLocalDescription(offer);
-    await this.chatService.sendOffer(user_id, offer);
+  async join(userId: string) {
+    if (!this.localStream) {
+      this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    }
+    const pc = this.createPeerConnection(userId);
+    this.localStream.getTracks().forEach(t => pc.addTrack(t, this.localStream!));
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    await this.chatService.sendOffer(userId, offer);
   }
 
-  leave() {
+  leave(userId: string) {
+    const pc = this.pcMap.get(userId);
+    if (pc) {
+      pc.close();
+      this.pcMap.delete(userId);
+    }
+    const stream = this.remoteStreams.get(userId);
+    stream?.getTracks().forEach(t => t.stop());
+    this.remoteStreams.delete(userId);
+    if (this.pcMap.size === 0) {
+      this.isRecording = false;
+      this.localStream?.getTracks().forEach(t => t.stop());
+      this.localStream = undefined;
+    }
+  }
+
+  stop() {
     this.requestService.requestDisconnectToVoiceChannel(this.channelId);
-    this.isRecording = false;
-    this.pc?.close();
-    this.remoteStream.getTracks().forEach(t => t.stop());
+    for (const [, pc] of this.pcMap) {
+      pc.close();
+    }
+    for (const stream of this.remoteStreams.values()) {
+      stream.getTracks().forEach(t => t.stop());
+    }
+    this.pcMap.clear();
+    this.remoteStreams.clear();
     this.localStream?.getTracks().forEach(t => t.stop());
-    this.pc = undefined;
     this.localStream = undefined;
-    this.remoteStream = new MediaStream();
+    this.isRecording = false;
   }
 
-  private async handleOffer(sdp:any,from:string) {
-    if (!this.pc) return;
-    await this.pc.setRemoteDescription(new RTCSessionDescription(sdp));
-    const answer = await this.pc.createAnswer();
-    await this.pc.setLocalDescription(answer);
+  private createPeerConnection(userId: string): RTCPeerConnection {
+    if (this.pcMap.has(userId)) return this.pcMap.get(userId)!;
+    const pc = new RTCPeerConnection({
+      iceServers: [
+        {urls: 'stun:stun.l.google.com:19302'},
+        {urls: 'stun:stun.miwifi.com'},
+        {urls: 'stun:stun.chat.bilibili.com'},
+        {urls: 'stun:turn.cloudflare.com'}
+      ]
+    });
+    pc.onicecandidate = ev => {
+      if (ev.candidate) this.chatService.sendIceCandidate(userId, ev.candidate.toJSON()).then();
+    };
+    pc.ontrack = ev => {
+      let stream = this.remoteStreams.get(userId);
+      if (!stream) {
+        stream = new MediaStream();
+        this.remoteStreams.set(userId, stream);
+      }
+      ev.streams[0].getTracks().forEach(t => stream!.addTrack(t));
+      this.onRemoteStream.next({ userId, stream });
+
+      // === 这里加 getStats 调试 ===
+      pc.getStats().then(stats => {
+        stats.forEach(report => {
+          if (report.type === 'inbound-rtp' && !report.isRemote) {
+            console.log(`[ontrack][${userId}] bytesReceived: ${report.bytesReceived}`);
+          }
+        });
+      });
+    };
+    pc.oniceconnectionstatechange = () => {
+      console.log(`[ICE] ${userId}: ${pc.iceConnectionState}`);
+    };
+
+    this.pcMap.set(userId, pc);
+    return pc;
+  }
+
+  private async handleOffer(sdp: any, from: string) {
+    const pc = this.createPeerConnection(from);
+
+    if (pc.signalingState === 'have-local-offer') {
+      await pc.setLocalDescription({ type: 'rollback' });
+    }
+
+    await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+
+    if (!this.localStream) {
+      this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    }
+    this.localStream.getTracks().forEach(t => pc.addTrack(t, this.localStream!));
+
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
     await this.chatService.sendAnswer(from, answer);
   }
 
-  private async handleAnswer(sdp:any) {
-    if (!this.pc) return;
-    await this.pc.setRemoteDescription(new RTCSessionDescription(sdp));
+  private async handleAnswer(sdp: any, from: string) {
+    const pc = this.pcMap.get(from);
+    if (pc) await pc.setRemoteDescription(new RTCSessionDescription(sdp));
   }
 
-  private async handleIce(candidate: any) {
-    if (!this.pc || !candidate) return;
-    await this.pc.addIceCandidate(new RTCIceCandidate(candidate));
+  private async handleIce(candidate: any, from: string) {
+    const pc = this.pcMap.get(from);
+    if (pc && candidate) await pc.addIceCandidate(new RTCIceCandidate(candidate));
   }
-
 }
