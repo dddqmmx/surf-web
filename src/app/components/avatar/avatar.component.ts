@@ -17,13 +17,9 @@ import {filter} from "rxjs";
 })
 export class AvatarComponent implements OnChanges,OnInit {
   constructor(
-    protected file: FileService,
     protected request: RequestService,
-    private router: Router,
-    private socketService: SocketService,
     protected commonData: CommonDataService,
-    private avatarService: AvatarService,
-    private voiceChatService: VoiceChatService) {
+    private avatarService: AvatarService,) {
     this.updateAvatar()
   }
   @Input() userId!: string; // 通过输入用户ID

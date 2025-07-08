@@ -15,13 +15,7 @@
               </span>
           </ng-container>
           <pre *ngIf="message['type'] == 'text'" class="message">{{ message['content'] }}</pre>
-          <img
-            *ngIf="message['type'] == 'img'"
-            class="message img"
-            src="/images/src/majima-yakuza.gif"
-            [attr.width]="message['w']"
-            [attr.height]="message['h']"
-            alt=""/>
+          <app-chat-image class="message" *ngIf="message['type'] == 'img'" [w]="message['w']" [h]="message['h']" [image]="message['content']" />
         </div>
         <app-avatar *ngIf="message['user_id'] == commonData.clientUserId" [userId]="message['user_id']" class="avatar"/>
       </div>

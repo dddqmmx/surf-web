@@ -89,7 +89,7 @@
 .message-content {
     display: flex;
     flex-direction: column;
-    max-width: 75%; /* 限制最大宽度 */
+    max-width: 50%; /* 限制最大宽度 */
     width: fit-content;
     flex-grow: 0;
 }

@@ -10,6 +10,8 @@ import {FormsModule} from "@angular/forms";
 import {FileService, FileType} from "../../services/file.service";
 import { Location } from '@angular/common';
 import {AvatarComponent} from "../../components/avatar/avatar.component";
+import {ChatImageComponent} from "../../components/chat-image/chat-image.component";
+import {ChatService} from "../../services/api/chat.service";
 
 @Component({
   selector: 'app-chat',
@@ -22,7 +24,8 @@ import {AvatarComponent} from "../../components/avatar/avatar.component";
     FormsModule,
     NgClass,
     NgStyle,
-    AvatarComponent
+    AvatarComponent,
+    ChatImageComponent
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
@@ -45,6 +48,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     private requestService: RequestService,
     private socketService: SocketService,
     protected commonData: CommonDataService,
+    protected chatService: ChatService,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
   }
@@ -89,20 +93,22 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
       // 获取文件内容
       const file = await fileHandle.getFile();
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        this.messageList.push({
-          "user_id": this.commonData.clientUserId,
-          "type": "img",
-          "content": "file_id"
-        })
-        this.scrollToBottomFlag = true;
-      };
-      reader.readAsDataURL(file);
+      const dimensions = await this.getImageSize(file);
+      this.sendImage(file, dimensions.width, dimensions.height)
     } catch (error) {
       console.error('文件选择已取消', error);
     }
+  }
+
+  getImageSize(file: File): Promise<{ width: number; height: number }> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve({ width: img.width, height: img.height });
+      };
+      img.onerror = reject;
+      img.src = URL.createObjectURL(file);
+    });
   }
 
   onScroll(event: any) {
@@ -121,6 +127,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.messageList = r.concat(this.messageList);
       })
     }
+  }
+  sendImage(imageFile:File, w: number, h: number) {
+    this.chatService.uploadImage(imageFile).then(hash =>{
+      if (hash){
+        this.chatService.sendImage(this.sessionId, hash, w, h).then()
+      }
+    })
   }
 
   sendMessage() {
