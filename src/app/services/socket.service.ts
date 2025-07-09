@@ -18,6 +18,7 @@ export class SocketService {
     string,
     { resolve: (data: any) => void; reject: (error: any) => void; timeout: any }
   >();
+  private heartbeatInterval: any; // 记录心跳定时器
 
   // 添加一个新的path和command
   addMessageSubject(path: string, command: string, subject: Subject<any>) {
@@ -79,6 +80,13 @@ export class SocketService {
         this.socket.onopen = () => {
           clearTimeout(timeout);
           resolve(true);
+
+          // 启动心跳，每 30 秒发一次 ping
+          this.heartbeatInterval = setInterval(() => {
+            if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+              this.send("system","ping"); // 客户端自定义心跳内容
+            }
+          }, 30000);
         };
 
         this.socket.onmessage = (event: MessageEvent<any>) => {
@@ -106,6 +114,8 @@ export class SocketService {
         };
 
         this.socket.onclose = (event: CloseEvent) => {
+          clearInterval(this.heartbeatInterval); // 停止心跳
+          this.heartbeatInterval = null;
           // 清理所有订阅
           this.pathMap.forEach((commandMap) => {
             commandMap.forEach((subject: { complete: () => any; }) => subject.complete());
@@ -122,6 +132,8 @@ export class SocketService {
         };
 
         this.socket.onerror = (error: Event) => {
+          clearInterval(this.heartbeatInterval); // 停止心跳
+          this.heartbeatInterval = null;
           clearTimeout(timeout);
           console.error('WebSocket error:', error);
           this.socket = null;

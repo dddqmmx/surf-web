@@ -40,7 +40,11 @@ export class VoiceChatService {
 
   async join(userId: string) {
     if (!this.localStream) {
-      this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      this.localStream = await navigator.mediaDevices.getUserMedia({  audio: {
+          noiseSuppression: true,    // 开启降噪
+          echoCancellation: true,    // 回声消除
+          autoGainControl: true      // 自动增益
+        } });
     }
     const pc = this.createPeerConnection(userId);
     this.localStream.getTracks().forEach(t => pc.addTrack(t, this.localStream!));
@@ -129,7 +133,11 @@ export class VoiceChatService {
     await pc.setRemoteDescription(new RTCSessionDescription(sdp));
 
     if (!this.localStream) {
-      this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      this.localStream = await navigator.mediaDevices.getUserMedia({   audio: {
+          noiseSuppression: true,    // 开启降噪
+          echoCancellation: true,    // 回声消除
+          autoGainControl: true      // 自动增益
+        } });
     }
     this.localStream.getTracks().forEach(t => pc.addTrack(t, this.localStream!));
 
