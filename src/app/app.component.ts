@@ -17,8 +17,7 @@ import {VoiceChatService} from "./services/voice-chat.service";
 })
 export class AppComponent implements OnInit, AfterViewInit {
   loadingFlag: boolean = true;
-  @ViewChild('remoteAudio') remoteAudio!: ElementRef<HTMLAudioElement>;
-
+  remoteAudios: Map<string, HTMLAudioElement> = new Map();
   constructor(
     private router: Router,
     protected socket: SocketService,
@@ -54,12 +53,24 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.voiceChatService.onRemoteStream.subscribe(({ userId, stream }) => {
-      console.log(userId)
-      // 用 audio 标签
-      this.remoteAudio.nativeElement.srcObject = stream;
-      this.remoteAudio.nativeElement.play().catch(err => {
-        console.warn('Autoplay failed, user interaction needed:', err);
-      });
+      let audio = this.remoteAudios.get(userId);
+      if (!audio) {
+        audio = document.createElement('audio');
+        audio.autoplay = true;
+        this.remoteAudios.set(userId, audio);
+        document.body.appendChild(audio);
+      }
+      audio.srcObject = stream;
+    });
+
+    this.voiceChatService.onRemoteLeave.subscribe(({userId}) => {
+      const audio = this.remoteAudios.get(userId);
+      if (audio) {
+        audio.pause();
+        audio.srcObject = null;
+        audio.remove();
+        this.remoteAudios.delete(userId);
+      }
     });
   }
 }

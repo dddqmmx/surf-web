@@ -15,6 +15,7 @@ export class VoiceChatService {
   private remoteStreams: Map<string, MediaStream> = new Map();
 
   onRemoteStream = new Subject<{ userId: string; stream: MediaStream }>();
+  onRemoteLeave = new Subject<{ userId: string }>();
 
   constructor(
     private requestService: RequestService,
@@ -67,6 +68,7 @@ export class VoiceChatService {
       this.localStream?.getTracks().forEach(t => t.stop());
       this.localStream = undefined;
     }
+    this.onRemoteLeave.next({ userId });
   }
 
   stop() {
