@@ -15,7 +15,7 @@ import {SearchUserComponent} from "./pages/main/contacts/search-user/search-user
 import {ChannelsComponent} from "./pages/main/channels/channels.component";
 import {GroupsComponent} from "./pages/main/groups/groups.component";
 import {ErrorComponent} from "./pages/error/error.component";
-import {InviteDialogComponent} from "./components/invite-dialog/invite-dialog/invite-dialog.component";
+import {InviteDialogComponent} from "./components/invite-dialog/invite-dialog.component";
 import {authGuard} from "./guard/auth.guard";
 import {UserProfileEditorComponent} from "./pages/main/user-profile-editor/user-profile-editor.component";
 export const routes: Routes = [

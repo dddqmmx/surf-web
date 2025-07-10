@@ -7,7 +7,7 @@ import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {SocketService} from "../../services/socket.service";
 import {Subscription} from "rxjs";
 import {FileService, FileType} from "../../services/file.service";
-import {InviteDialogComponent} from "../invite-dialog/invite-dialog/invite-dialog.component";
+import {InviteDialogComponent} from "../invite-dialog/invite-dialog.component";
 import {AvatarComponent} from "../avatar/avatar.component";
 
 @Component({

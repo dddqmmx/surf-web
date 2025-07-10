@@ -7,6 +7,7 @@ import {connect, Subscription} from "rxjs";
 import {CommonDataService} from "../../services/common-data.service";
 import {RequestService} from "../../services/request.service";
 import {UserService} from "../../services/api/user.service";
+import {CreateServerDialogComponent} from "../../components/create-server-dialog/create-server-dialog.component";
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,8 @@ import {UserService} from "../../services/api/user.service";
   imports: [
     NgOptimizedImage,
     NgForOf,
-    FormsModule
+    FormsModule,
+    CreateServerDialogComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'

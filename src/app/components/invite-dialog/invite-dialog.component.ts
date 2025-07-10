@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgForOf, NgOptimizedImage} from "@angular/common";
-import {CommonDataService} from "../../../services/common-data.service";
-import {RequestService} from "../../../services/request.service";
+import {CommonDataService} from "../../services/common-data.service";
+import {RequestService} from "../../services/request.service";
 
 @Component({
   selector: 'app-invite-dialog',

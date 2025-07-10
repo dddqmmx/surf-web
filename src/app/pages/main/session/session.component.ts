@@ -5,7 +5,7 @@ import {RequestService} from "../../../services/request.service";
 import {NgClass, NgIf, NgStyle} from "@angular/common";
 import {CommonDataService} from "../../../services/common-data.service";
 import {VoiceChatService} from "../../../services/voice-chat.service";
-import {InviteDialogComponent} from "../../../components/invite-dialog/invite-dialog/invite-dialog.component";
+import {InviteDialogComponent} from "../../../components/invite-dialog/invite-dialog.component";
 import {filter} from "rxjs";
 
 @Component({

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import {NgForOf, NgOptimizedImage} from "@angular/common";
+import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {RouterOutlet} from "@angular/router";
 import {CommonDataService} from "../../../services/common-data.service";
-import {InviteDialogComponent} from "../../../components/invite-dialog/invite-dialog/invite-dialog.component";
+import {InviteDialogComponent} from "../../../components/invite-dialog/invite-dialog.component";
+import {CreateServerDialogComponent} from "../../../components/create-server-dialog/create-server-dialog.component";
 
 @Component({
   selector: 'app-channels',
@@ -11,12 +12,19 @@ import {InviteDialogComponent} from "../../../components/invite-dialog/invite-di
     NgOptimizedImage,
     RouterOutlet,
     NgForOf,
-    InviteDialogComponent
+    InviteDialogComponent,
+    CreateServerDialogComponent,
+    NgIf
   ],
   templateUrl: './channels.component.html',
   styleUrl: './channels.component.css'
 })
 export class ChannelsComponent {
   constructor(protected commonDataService:CommonDataService) {
+  }
+  createServerDialog:boolean = false;
+
+  toggleCreateServerDialog() {
+    this.createServerDialog = !this.createServerDialog;
   }
 }

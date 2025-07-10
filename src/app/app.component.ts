@@ -1,10 +1,9 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Router, RouterOutlet} from '@angular/router';
 import {SocketService} from "./services/socket.service";
 import {NgIf} from "@angular/common";
 import {RequestService} from "./services/request.service";
 import {CommonDataService} from "./services/common-data.service";
-import {filter} from "rxjs";
 import {DevConsoleComponent} from "./components/dev-console/dev-console.component";
 import {VoiceChatService} from "./services/voice-chat.service";
 

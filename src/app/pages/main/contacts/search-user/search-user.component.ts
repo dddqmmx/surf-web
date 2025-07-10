@@ -19,7 +19,7 @@ import {AvatarComponent} from "../../../../components/avatar/avatar.component";
 export class SearchUserComponent {
   constructor(protected request: RequestService,protected commonData:CommonDataService) {
   }
-  userId:string = "900cf506-1255-40c6-b6ae-862f0da330a7"
+  userId:string = ""
   result:any
   userList: string[] = [];
 

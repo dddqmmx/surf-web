@@ -1,21 +1,20 @@
 <div class="contact-list">
-
-    <div class="sidebar">
-        <div class="search-bar">
-            <input type="text" placeholder="搜索服务器..." class="search-input">
-        </div>
-        <div class="action-buttons">
-            <button class="btn add-contact" >创建新频道</button>
-          <button class="btn friend-requests" >搜索</button>
-        </div>
-            <div class="contact-item" *ngFor="let serverId of commonDataService['servers']">
-                <img src="/images/avatar/default-avatar.png" height="32" width="32" class="avatar"/>
-                <span class="contact-name">{{ commonDataService.getServerInfoById(serverId)['name'] }}</span>
-            </div>
+  <div class="sidebar">
+    <div class="search-bar">
+      <input type="text" placeholder="搜索服务器..." class="search-input">
     </div>
-    <div class="main-content">
-        <router-outlet></router-outlet>
+    <div class="action-buttons">
+      <button class="btn add-contact" (click)="toggleCreateServerDialog()" >创建新频道</button>
+      <button class="btn friend-requests">搜索</button>
     </div>
+    <div class="contact-item" *ngFor="let serverId of commonDataService['servers']">
+      <img src="/images/avatar/default-avatar.png" height="32" width="32" class="avatar"/>
+      <span class="contact-name">{{ commonDataService.getServerInfoById(serverId)['name'] }}</span>
+    </div>
+  </div>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
 </div>
-
+<app-create-server-dialog *ngIf="createServerDialog" (close)="toggleCreateServerDialog()" />
 
