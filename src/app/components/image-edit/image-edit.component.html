@@ -1,0 +1,18 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <button class="icon-close-btn" aria-label="关闭" (click)="onClose()" >&times;</button>
+
+    <h2>图像编辑</h2>
+
+    <image-cropper
+      [imageFile]="file"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="1"
+      [resizeToWidth]="400"
+      format="png"
+      (imageCropped)="imageCropped($event)">
+    </image-cropper>
+
+    <button class="button" (click)="onConfirm()">确定</button>
+  </div>
+</div>

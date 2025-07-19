@@ -8,6 +8,7 @@ import {CommonDataService} from "../../services/common-data.service";
 import {RequestService} from "../../services/request.service";
 import {UserService} from "../../services/api/user.service";
 import {CreateServerDialogComponent} from "../../components/create-server-dialog/create-server-dialog.component";
+import {ImageEditComponent} from "../../components/image-edit/image-edit.component";
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ import {CreateServerDialogComponent} from "../../components/create-server-dialog
     NgOptimizedImage,
     NgForOf,
     FormsModule,
-    CreateServerDialogComponent
+    CreateServerDialogComponent,
+    ImageEditComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'

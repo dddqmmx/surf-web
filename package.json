@@ -24,6 +24,7 @@
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "js-base64": "^3.7.7",
+    "ngx-image-cropper": "^9.1.5",
     "opus-codec": "^0.0.86",
     "opus-decoder": "^0.7.7",
     "rxjs": "~7.8.0",
