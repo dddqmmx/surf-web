@@ -22,8 +22,7 @@ export class ImageEditComponent {
   }
 
   imageCropped(event: any) {
-    this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(event.objectUrl);
-    console.log(this.croppedImage);
+    this.croppedImage = event.blob;
   }
 
   onConfirm() {

@@ -9,10 +9,10 @@
 
     <div class="input-item">
       <label class="input-label">服务器名称</label>
-      <input class="input">
+      <input class="input" [(ngModel)]="serverName">
     </div>
 
-    <button class="button">创建</button>
+    <button class="button" (click)="createServer()">创建</button>
   </div>
 </div>
 <app-image-edit *ngIf="imageEditDialog" [file]="file" (close)="toggleImageEditDialog()" (confirm)="onConfirm($event)" ></app-image-edit>

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="user-info-container">
     <div class="user-info">
-      <app-avatar class="avatar" [userId]="user"/>
+      <app-avatar class="avatar" [id]="user" type="user"/>
       <div class="user-info-context">
         <span class="username">{{ commonDataService.userInfoIndexById[user].data["nickname"]}}</span>
         <span class="user_id">用户ID: {{ commonDataService.userInfoIndexById[user].data["user_id"]}}</span>

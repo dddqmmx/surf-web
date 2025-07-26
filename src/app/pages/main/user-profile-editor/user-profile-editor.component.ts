@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {CommonDataService} from "../../../services/common-data.service";
-import {ActivatedRoute, Router} from "@angular/router";
 import {FileService} from "../../../services/file.service";
 import {RequestService} from "../../../services/request.service";
 import {AvatarComponent} from "../../../components/avatar/avatar.component";
 import {FormsModule} from "@angular/forms";
 import {UserService} from "../../../services/api/user.service";
 import {AvatarService} from "../../../services/ui/avatar.service";
+import {ImageEditComponent} from "../../../components/image-edit/image-edit.component";
+import {NgIf} from "@angular/common";
 
 type UserProfile = {
   nickname: string | null;
@@ -18,7 +19,9 @@ type UserProfile = {
   standalone: true,
   imports: [
     AvatarComponent,
-    FormsModule
+    FormsModule,
+    ImageEditComponent,
+    NgIf
   ],
   templateUrl: './user-profile-editor.component.html',
   styleUrl: './user-profile-editor.component.css'
@@ -29,7 +32,7 @@ export class UserProfileEditorComponent {
     protected commonData: CommonDataService,
     private request: RequestService,
     private userService: UserService,
-    protected file: FileService,
+    protected fileService: FileService,
     private avatarService: AvatarService
   ) {
     this.originProfile.nickname = commonData.userInfoIndexById[commonData.clientUserId].data["nickname"]
@@ -37,6 +40,11 @@ export class UserProfileEditorComponent {
     this.userProfile.nickname = commonData.userInfoIndexById[commonData.clientUserId].data["nickname"]
     this.userProfile.introduction = commonData.userInfoIndexById[commonData.clientUserId].data["introduction"]
   }
+  @Output() close = new EventEmitter<void>(); // ← 添加关闭事件
+  imageEditDialog = false;
+  file!: File;
+  cropped!: string;
+
   originProfile: UserProfile = {
     nickname: null,
     introduction: null
@@ -76,17 +84,26 @@ export class UserProfileEditorComponent {
         ],
         multiple: false
       });
-      const file = await fileHandle.getFile();
-      this.userService.uploadAvatar(file).subscribe({
-        next: () => {
-          console.log('Upload successful');
-          this.avatarService.notifyAvatarChanged(this.commonData.clientUserId)
-        },
-        error: err => console.error('Upload failed', err)
-      })
+      this.file = await fileHandle.getFile();
+      this.toggleImageEditDialog()
     } catch (error) {
       console.log('文件选择已取消');
     }
   }
+
+  toggleImageEditDialog() {
+    this.imageEditDialog = !this.imageEditDialog;
+  }
+  onConfirm(cropped: any) {
+    this.userService.uploadAvatar(cropped).subscribe({
+      next: () => {
+        console.log('Upload successful');
+        this.avatarService.notifyAvatarChanged(this.commonData.clientUserId)
+      },
+      error: err => console.error('Upload failed', err)
+    })
+    this.toggleImageEditDialog();
+  }
+
 
 }

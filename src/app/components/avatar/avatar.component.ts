@@ -22,25 +22,30 @@ export class AvatarComponent implements OnChanges,OnInit {
     private avatarService: AvatarService,) {
     this.updateAvatar()
   }
-  @Input() userId!: string; // 通过输入用户ID
+  @Input() id!: string; // 用户ID或服务器ID
+  @Input() type: 'user' | 'server' = 'user'; // 类型，默认用户头像
   avatarUrl:string = '';
 
   protected readonly FileType = FileType;
 
   ngOnInit(): void {
     this.avatarService.avatarChanged$
-      .pipe(filter((id: string) => id === this.userId)) // 只处理自己
+      .pipe(filter((changedId: string) => changedId === this.id))
       .subscribe(() => this.updateAvatar());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['userId'] && this.userId) {
+    if (changes['id'] && this.id) {
       this.updateAvatar();
     }
   }
 
-  public updateAvatar(): void {
-    this.avatarUrl = `${this.commonData.httpPrefix}/user/avatar/${this.userId}?t=${Date.now()}`;
+  updateAvatar(): void {
+    if (this.type === 'user') {
+      this.avatarUrl = `${this.commonData.httpPrefix}/user/avatar/${this.id}?t=${Date.now()}`;
+    } else if (this.type === 'server') {
+      this.avatarUrl = `${this.commonData.httpPrefix}/server/icon/${this.id}?t=${Date.now()}`;
+    }
   }
 
   onAvatarError(event: any) {

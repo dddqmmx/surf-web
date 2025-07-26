@@ -7,7 +7,7 @@
     <div class="message-list">
       <div *ngFor="let message of messageList"
            [ngClass]="message['user_id'] != commonData.clientUserId ? 'message-container' : 'message-right-container'">
-        <app-avatar *ngIf="message['user_id'] != commonData.clientUserId" [userId]="message['user_id']" class="avatar"/>
+        <app-avatar *ngIf="message['user_id'] != commonData.clientUserId" [id]="message['user_id']" type="user" class="avatar"/>
         <div class="message-content">
           <ng-container *ngIf="message['user_id'] as userId">
               <span class="username">
@@ -17,7 +17,7 @@
           <pre *ngIf="message['type'] == 'text'" class="message">{{ message['content'] }}</pre>
           <app-chat-image class="message" *ngIf="message['type'] == 'img'" [w]="message['w']" [h]="message['h']" [image]="message['content']" />
         </div>
-        <app-avatar *ngIf="message['user_id'] == commonData.clientUserId" [userId]="message['user_id']" class="avatar"/>
+        <app-avatar *ngIf="message['user_id'] == commonData.clientUserId" [id]="message['user_id']" type="user" class="avatar"/>
       </div>
     </div>
   </div>

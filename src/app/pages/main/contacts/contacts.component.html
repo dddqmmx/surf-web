@@ -9,7 +9,7 @@
         </div>
         <div class="contact-items">
             <div *ngFor="let friendId of commonData.friends" class="contact-item" (click)="viewContacts(friendId)">
-                <app-avatar class="avatar" [userId]="friendId"/>
+                <app-avatar class="avatar" [id]="friendId" type="user"/>
                 <span class="contact-name">{{ commonData.userInfoIndexById[friendId]?.data?.nickname || friendId }}</span>
             </div>
         </div>

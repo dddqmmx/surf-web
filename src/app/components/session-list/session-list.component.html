@@ -1,11 +1,17 @@
 <div class="session-list">
+
+
   <ng-container *ngIf="!serverInfo">
     <div (click)="getServerChannels(serverId)" *ngFor="let serverId of commonDataService['servers']"
          class="session">
-      <img alt="" class="session-icon" src="/images/avatar/default-avatar.png">
+<!--      <img alt="" class="session-icon" src="/images/avatar/default-avatar.png">-->
+      <app-avatar class="session-icon" type="server" [id]="serverId"></app-avatar>
       <span>{{ commonDataService.getServerInfoById(serverId)?.name || 'loading' }}</span>
     </div>
   </ng-container>
+
+
+
   <div *ngIf="serverInfo">
     <div class="channel-title">
       <img id="back" (click)="backToSessionList()" alt="back" height="24" ngSrc="/images/icon/arrow_back.svg" width="24">
@@ -27,6 +33,9 @@
         </div>
       </div>
     </div>
+
+
+
     <div class="channel-list">
       <div *ngFor="let group of serverInfo['channels']" class="channel-group">
         <h3 class="channel-group-title">{{ group['group_name'] }}</h3>
@@ -39,7 +48,7 @@
             <!-- 如果是语音频道，则显示成员列表，放在频道下方 -->
             <ul *ngIf="channel['channel_type'] === 'voice'" class="voice-user-list">
               <li *ngFor="let user of membersFromChannels[channel['channel_id']]" class="voice-user">
-                <app-avatar class="user-avatar" [userId]="user"/>
+                <app-avatar class="user-avatar" [id]="user" type="user"/>
                 <span>{{ commonDataService.userInfoIndexById[user].data["nickname"]}}</span>
               </li>
             </ul>
@@ -47,6 +56,11 @@
         </ul>
       </div>
     </div>
+
+
+
   </div>
 </div>
+
+
 <app-invite-dialog [serverId]="serverId" *ngIf="inviteDialog" (close)="toggleInviteDialog()" ></app-invite-dialog>

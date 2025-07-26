@@ -1,7 +1,7 @@
 <div class="container">
   <div class="user-profile-container">
     <div class="user-avatar">
-      <app-avatar [userId]="commonData.clientUserId" (click)="selectImage()"/>
+      <app-avatar [id]="commonData.clientUserId" type="user" (click)="selectImage()"/>
     </div>
     <div class="user-profile-value">
       <div class="profile-item">
@@ -19,3 +19,5 @@
     <button>取消</button>
   </div>
 </div>
+<app-image-edit *ngIf="imageEditDialog" [file]="file" (close)="toggleImageEditDialog()" (confirm)="onConfirm($event)" ></app-image-edit>
+

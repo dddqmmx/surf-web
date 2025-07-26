@@ -50,7 +50,6 @@ export class UserService {
 
   uploadAvatar(file: File): Observable<boolean> {
     const url = `${this.commonData.httpPrefix}/user/get_avatar_upload_url`;
-
     return this.http.post<{ upload_url: string }>(url, {
       session_id: this.commonData.sessionId,
     }).pipe(
