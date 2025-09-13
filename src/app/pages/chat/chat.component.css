@@ -104,12 +104,6 @@
     white-space: pre-wrap; /* 让 <pre> 自动换行 */
     max-width: 100%; /* 限制最大宽度 */
 }
-.img {
-  height: auto;
-  display: block;          /* 避免与行内元素混排带来的空隙 */
-  object-fit: contain;     /* 保持图片比例，不拉伸 */
-  max-width: 100%;         /* 防止超出父容器 */
-}
 
 /* 左侧消息样式 */
 .message-container .message {

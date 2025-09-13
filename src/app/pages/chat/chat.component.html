@@ -15,7 +15,7 @@
               </span>
           </ng-container>
           <pre *ngIf="message['type'] == 'text'" class="message">{{ message['content'] }}</pre>
-          <app-chat-image class="message" *ngIf="message['type'] == 'img'" [w]="message['w']" [h]="message['h']" [image]="message['content']" />
+          <app-chat-image class="message img" *ngIf="message['type'] == 'img'" [w]="message['w']" [h]="message['h']" [image]="message['content']" />
         </div>
         <app-avatar *ngIf="message['user_id'] == commonData.clientUserId" [id]="message['user_id']" type="user" class="avatar"/>
       </div>

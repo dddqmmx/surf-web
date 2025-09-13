@@ -9,6 +9,7 @@ import {RequestService} from "../../services/request.service";
 import {UserService} from "../../services/api/user.service";
 import {CreateServerDialogComponent} from "../../components/create-server-dialog/create-server-dialog.component";
 import {ImageEditComponent} from "../../components/image-edit/image-edit.component";
+import {ServerSettingDialogComponent} from "../../components/server-setting-dialog/server-setting-dialog.component";
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ import {ImageEditComponent} from "../../components/image-edit/image-edit.compone
     NgForOf,
     FormsModule,
     CreateServerDialogComponent,
-    ImageEditComponent
+    ImageEditComponent,
+    ServerSettingDialogComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'

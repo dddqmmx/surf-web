@@ -65,6 +65,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (channelId) {
       this.sessionId = channelId;
       this.messageList = await this.requestService.getMessage(channelId);
+      console.log(this.messageList)
       const userIds = Array.from(new Set(this.messageList.map((message: any) => message.user_id)));
       await this.requestService.getUserInfo(userIds);
       this.scrollToBottomFlag = true;
@@ -124,6 +125,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   getMessageFromHistory() {
     if (this.sessionId) {
       this.requestService.getMessage(this.sessionId, this.messageList[0]).then(r => {
+        console.log(this.messageList[0])
         this.messageList = r.concat(this.messageList);
       })
     }

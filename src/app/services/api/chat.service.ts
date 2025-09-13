@@ -15,23 +15,26 @@ export class ChatService {
     private commonData: CommonDataService
   ) { }
 
-  public async sendOffer(target_user_id:string,sdp: any = {}){
+  public async sendOffer(target_user_id:string, target_client_id:string, sdp: any = {}){
     this.socket.send("chat","send_offer",{
       "target_user_id":target_user_id,
+      "target_client_id":target_client_id,
       "sdp":JSON.stringify(sdp)
     })
   }
 
-  public async sendAnswer(target_user_id:string,sdp: any = {}){
+  public async sendAnswer(target_user_id:string, target_client_id:string, sdp: any = {}){
     this.socket.send("chat","send_answer",{
       "target_user_id":target_user_id,
+      "target_client_id":target_client_id,
       "sdp":JSON.stringify(sdp)
     })
   }
 
-  public async sendIceCandidate(target_user_id:string,candidate: any = {}){
+  public async sendIceCandidate(target_user_id:string, target_client_id:string, candidate: any = {}){
     this.socket.send("chat","send_ice_candidate",{
       "target_user_id":target_user_id,
+      "target_client_id":target_client_id,
       "candidate":JSON.stringify(candidate)
     })
   }

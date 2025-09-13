@@ -33,13 +33,13 @@ export class VoiceChatService {
       .subscribe(data => {
         console.log(data)
         const { type, from, sdp, candidate } = data;
-        if (type === 'offer') this.handleOffer(JSON.parse(sdp), from);
-        else if (type === 'answer') this.handleAnswer(JSON.parse(sdp), from);
-        else if (type === 'ice_candidate') this.handleIce(JSON.parse(candidate), from);
+        if (type === 'offer') this.handleOffer(JSON.parse(sdp), from.user_id,from.client_id);
+        else if (type === 'answer') this.handleAnswer(JSON.parse(sdp),  from.user_id,from.client_id);
+        else if (type === 'ice_candidate') this.handleIce(JSON.parse(candidate),  from.user_id,from.client_id);
       });
   }
 
-  async join(userId: string) {
+  async join(userId: string,clientId: string) {
     if (!this.localStream) {
       this.localStream = await navigator.mediaDevices.getUserMedia({  audio: {
           noiseSuppression: true,    // 开启降噪
@@ -47,11 +47,11 @@ export class VoiceChatService {
           autoGainControl: true      // 自动增益
         } });
     }
-    const pc = this.createPeerConnection(userId);
+    const pc = this.createPeerConnection(userId,clientId);
     this.localStream.getTracks().forEach(t => pc.addTrack(t, this.localStream!));
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
-    await this.chatService.sendOffer(userId, offer);
+    await this.chatService.sendOffer(userId, clientId, offer);
   }
 
   leave(userId: string) {
@@ -86,7 +86,7 @@ export class VoiceChatService {
     this.isRecording = false;
   }
 
-  private createPeerConnection(userId: string): RTCPeerConnection {
+  private createPeerConnection(userId: string, clientId: string): RTCPeerConnection {
     if (this.pcMap.has(userId)) return this.pcMap.get(userId)!;
     const pc = new RTCPeerConnection({
       iceServers: [
@@ -97,7 +97,7 @@ export class VoiceChatService {
       ]
     });
     pc.onicecandidate = ev => {
-      if (ev.candidate) this.chatService.sendIceCandidate(userId, ev.candidate.toJSON()).then();
+      if (ev.candidate) this.chatService.sendIceCandidate(userId, clientId, ev.candidate.toJSON()).then();
     };
     pc.ontrack = ev => {
       let stream = this.remoteStreams.get(userId);
@@ -125,8 +125,8 @@ export class VoiceChatService {
     return pc;
   }
 
-  private async handleOffer(sdp: any, from: string) {
-    const pc = this.createPeerConnection(from);
+  private async handleOffer(sdp: any, user_id: string, client_id: string) {
+    const pc = this.createPeerConnection(user_id,client_id);
 
     if (pc.signalingState === 'have-local-offer') {
       await pc.setLocalDescription({ type: 'rollback' });
@@ -145,16 +145,18 @@ export class VoiceChatService {
 
     const answer = await pc.createAnswer();
     await pc.setLocalDescription(answer);
-    await this.chatService.sendAnswer(from, answer);
+    await this.chatService.sendAnswer(user_id,client_id, answer);
   }
 
-  private async handleAnswer(sdp: any, from: string) {
-    const pc = this.pcMap.get(from);
+  private async handleAnswer(sdp: any, user_id: string, client_id: string) {
+    console.log(user_id,client_id)
+    const pc = this.pcMap.get(user_id);
     if (pc) await pc.setRemoteDescription(new RTCSessionDescription(sdp));
   }
 
-  private async handleIce(candidate: any, from: string) {
-    const pc = this.pcMap.get(from);
+  private async handleIce(candidate: any, user_id: string, client_id: string) {
+    console.log(user_id,client_id)
+    const pc = this.pcMap.get(user_id);
     if (pc && candidate) await pc.addIceCandidate(new RTCIceCandidate(candidate));
   }
 }

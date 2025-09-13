@@ -1,0 +1,8 @@
+<app-avatar class="avatar" type="server" [id]="serverId" (click)="selectFile()"></app-avatar>
+
+<div class="input-item">
+  <label class="input-label">服务器名称</label>
+  <input class="input">
+</div>
+
+<app-image-edit *ngIf="imageEditDialog" [file]="file" (close)="toggleImageEditDialog()" (confirm)="onConfirm($event)" ></app-image-edit>

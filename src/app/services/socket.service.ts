@@ -81,12 +81,12 @@ export class SocketService {
           clearTimeout(timeout);
           resolve(true);
 
-          // 启动心跳，每 30 秒发一次 ping
+          // 启动心跳
           this.heartbeatInterval = setInterval(() => {
             if (this.socket && this.socket.readyState === WebSocket.OPEN) {
               this.send("system","ping"); // 客户端自定义心跳内容
             }
-          }, 30000);
+          }, 10000);
         };
 
         this.socket.onmessage = (event: MessageEvent<any>) => {

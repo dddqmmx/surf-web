@@ -9,6 +9,7 @@ import {Subscription} from "rxjs";
 import {FileService, FileType} from "../../services/file.service";
 import {InviteDialogComponent} from "../invite-dialog/invite-dialog.component";
 import {AvatarComponent} from "../avatar/avatar.component";
+import {ServerSettingDialogComponent} from "../server-setting-dialog/server-setting-dialog.component";
 
 @Component({
   selector: 'app-session-list',
@@ -18,7 +19,8 @@ import {AvatarComponent} from "../avatar/avatar.component";
     NgForOf,
     NgOptimizedImage,
     InviteDialogComponent,
-    AvatarComponent
+    AvatarComponent,
+    ServerSettingDialogComponent
   ],
   templateUrl: './session-list.component.html',
   styleUrl: './session-list.component.css'
@@ -40,14 +42,19 @@ export class SessionListComponent implements OnInit, OnDestroy {
         if (message["type"] === "user_join_voice_channel") {
           const channelId = message["channel_id"];
           const userId = message["user_id"];
+          const clientId = message["client_id"];
           // 如果该频道已存在成员列表，则添加；否则新建一个数组
           if (this.membersFromChannels[channelId]) {
             // 避免重复添加
-            if (!this.membersFromChannels[channelId].includes(userId)) {
-              this.membersFromChannels[channelId].push(userId);
+            const exists = this.membersFromChannels[channelId].some(
+              (m: { user_id: string; client_id: string }) =>
+                m.user_id === userId && m.client_id === clientId
+            );
+            if (!exists) {
+              this.membersFromChannels[channelId].push({ user_id: userId, client_id: clientId });
             }
           } else {
-            this.membersFromChannels[channelId] = [userId];
+            this.membersFromChannels[channelId] = [{"user_id":userId, "client_id":clientId}];
           }
           this.requestService.getUserInfo([userId]).then();
         }
@@ -56,7 +63,10 @@ export class SessionListComponent implements OnInit, OnDestroy {
           const userId = message["user_id"];
           this.voiceChatService.leave(userId)
           if (this.membersFromChannels[channelId]) {
-            this.membersFromChannels[channelId] = this.membersFromChannels[channelId].filter((id: any) => id !== userId);
+            this.membersFromChannels[channelId] = this.membersFromChannels[channelId].filter(
+              (m: { user_id: string; client_id: string }) =>
+                !(m.user_id === userId)
+            );
             if (this.membersFromChannels[channelId].length === 0) {
               delete this.membersFromChannels[channelId];
             }
@@ -79,13 +89,13 @@ export class SessionListComponent implements OnInit, OnDestroy {
     );
     this.requestService.requestConnectToServerEventChannel(serverId).then(r => {
       this.requestService.getMembersFromVoiceChannels(voiceChannelIds).then(r => {
+        console.log(r)
         for (const [channelId, members] of Object.entries(r)) {
           // 确保 members 是一个数组
           if (Array.isArray(members)) {
-            const ids: string[] = members.map(member =>
-              typeof member === "string" ? member : member.id
+            this.requestService.getUserInfo(
+              members.map((member: { user_id: string; client_id: string }) => member.user_id)
             );
-            this.requestService.getUserInfo(ids);
           } else {
             console.warn(`Invalid members data in channel ${channelId}:`, members);
           }
@@ -118,16 +128,16 @@ export class SessionListComponent implements OnInit, OnDestroy {
     } else if (channelType == 'voice') {
       const connected = await this.requestService.requestConnectToVoiceChannel(channelId);
       if (connected) {
-        const ids = this.membersFromChannels[channelId];
-        console.log(ids); // 当前频道的所有用户ID
+        const members = this.membersFromChannels[channelId];
+        console.log(members); // 当前频道的所有用户
         this.voiceChatService.initializeRecorder(channelId).then(() => {
           this.commonDataService.voiceChatting = true;
           this.commonDataService.voiceChannel = channelId;
-          for (const id of ids) {
-            if (id == this.commonDataService.clientUserId){
+          for (const member of members) {
+            if (member.user_id == this.commonDataService.clientUserId){
               continue;
             }
-            this.voiceChatService.join(id)
+            this.voiceChatService.join(member.user_id,member.client_id)
           }
         });
       }
@@ -146,14 +156,23 @@ export class SessionListComponent implements OnInit, OnDestroy {
     this.isMenuOpen = false;
     if (action == "invite"){
       this.toggleInviteDialog()
+      return
+    }
+    if (action == "settings"){
+      this.toggleServerSettingDialog()
+      return;
     }
     // 处理不同菜单操作
     console.log('Selected action:', action);
   }
 
   inviteDialog = false
+  serverSettingDialog = false
   toggleInviteDialog() {
     this.inviteDialog = !this.inviteDialog;
+  }
+  toggleServerSettingDialog() {
+    this.serverSettingDialog = !this.serverSettingDialog;
   }
 
 

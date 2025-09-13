@@ -2,9 +2,7 @@
 
 
   <ng-container *ngIf="!serverInfo">
-    <div (click)="getServerChannels(serverId)" *ngFor="let serverId of commonDataService['servers']"
-         class="session">
-<!--      <img alt="" class="session-icon" src="/images/avatar/default-avatar.png">-->
+    <div (click)="getServerChannels(serverId)" *ngFor="let serverId of commonDataService['servers']" class="session">
       <app-avatar class="session-icon" type="server" [id]="serverId"></app-avatar>
       <span>{{ commonDataService.getServerInfoById(serverId)?.name || 'loading' }}</span>
     </div>
@@ -47,9 +45,9 @@
             </li>
             <!-- 如果是语音频道，则显示成员列表，放在频道下方 -->
             <ul *ngIf="channel['channel_type'] === 'voice'" class="voice-user-list">
-              <li *ngFor="let user of membersFromChannels[channel['channel_id']]" class="voice-user">
-                <app-avatar class="user-avatar" [id]="user" type="user"/>
-                <span>{{ commonDataService.userInfoIndexById[user].data["nickname"]}}</span>
+              <li *ngFor="let member of membersFromChannels[channel['channel_id']]" class="voice-user">
+                <app-avatar class="user-avatar" [id]="member.user_id" type="user"/>
+                <span>{{ commonDataService.userInfoIndexById[member.user_id].data["nickname"]}}</span>
               </li>
             </ul>
           </ng-container>
@@ -63,4 +61,5 @@
 </div>
 
 
-<app-invite-dialog [serverId]="serverId" *ngIf="inviteDialog" (close)="toggleInviteDialog()" ></app-invite-dialog>
+<app-invite-dialog [serverId]="serverId" *ngIf="inviteDialog" (close)="toggleInviteDialog()"/>
+<app-server-setting-dialog  [serverId]="serverId" *ngIf="serverSettingDialog" (close)="toggleServerSettingDialog()"/>

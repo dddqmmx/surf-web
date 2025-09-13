@@ -2,13 +2,15 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgForOf, NgOptimizedImage} from "@angular/common";
 import {CommonDataService} from "../../services/common-data.service";
 import {RequestService} from "../../services/request.service";
+import {AvatarComponent} from "../avatar/avatar.component";
 
 @Component({
   selector: 'app-invite-dialog',
   standalone: true,
   imports: [
     NgForOf,
-    NgOptimizedImage
+    NgOptimizedImage,
+    AvatarComponent
   ],
   templateUrl: './invite-dialog.component.html',
   styleUrl: './invite-dialog.component.css'

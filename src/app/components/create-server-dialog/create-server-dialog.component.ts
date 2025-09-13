@@ -21,12 +21,13 @@ import {FormsModule} from "@angular/forms";
   styleUrl: './create-server-dialog.component.css'
 })
 export class CreateServerDialogComponent {
-  constructor(protected commonData:CommonDataService,protected request:RequestService,protected server:ServerService) {
+  constructor(protected commonData:CommonDataService,protected request:RequestService,protected serverService:ServerService) {
   }
   @Output() close = new EventEmitter<void>(); // ← 添加关闭事件
   imageEditDialog = false;
   file!: File;
-  cropped!: string;
+  croppedUrl!: string;
+  cropped: any;
   serverName: string | undefined;
 
   onClose() {
@@ -58,17 +59,25 @@ export class CreateServerDialogComponent {
   }
   onConfirm(cropped: any) {
     console.log('裁剪完成，结果是：', cropped);
-    this.cropped = URL.createObjectURL(cropped);
+    this.cropped = cropped;
+    this.croppedUrl = URL.createObjectURL(cropped);
     this.toggleImageEditDialog();
   }
 
   createServer(){
-    this.server.createServer(this.serverName).then(r => {
-      if (!r){
+    this.serverService.createServer(this.serverName).then(serverId => {
+      if (!serverId) {
         return
       }
-      console.log("server_id",r)
+      this.serverService.uploadIcon(this.cropped,serverId).subscribe({
+        next: () => {
+          console.log('Upload successful');
+        },
+        error: err => console.error('Upload failed', err)
+      })
     })
+    alert("服务器创建成功")
+    this.onClose()
   }
 
 

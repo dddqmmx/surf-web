@@ -91,6 +91,7 @@ export class RequestService {
   }
 
   public async getMessage(channelId: string | null, lastMsg?: any): Promise<any[]>{
+    console.log(channelId)
     const data: any = {
       "channel_id": channelId,
     };
@@ -197,9 +198,9 @@ export class RequestService {
     })
   }
 
-  public async getMembersFromVoiceChannels(voiceChannelsId: string[]) {
+  public async getMembersFromVoiceChannels(voiceChannelsIds: string[]) {
     const response = await this.socket.request("server", "get_members_from_voice_channels", {
-      "channels_id": voiceChannelsId
+      "channel_ids": voiceChannelsIds
     });
     return response['channels_member'];
   }
@@ -223,7 +224,7 @@ export class RequestService {
   }
 
   public sendFriendRequest(user_id: string): Promise<boolean>{
-    return  this.socket.request("user", "send_friend_request", {"user_id": user_id})
+    return  this.socket.request("user", "send_friend_request", {"target_user_id": user_id})
   }
 
   public async getFriendRequests(){
@@ -233,7 +234,7 @@ export class RequestService {
 
   public async requestAcceptFriendRequest(userId: string):Promise<boolean>{
     this.commonData.friends.push(userId)
-    return await this.socket.request("user", "accept_friend_request", {"user_id": userId});
+    return await this.socket.request("user", "accept_friend_request", {"target_user_id": userId});
   }
 
   public async requestInviteUsers(serverId: string,userIds: string[]):Promise<boolean>{
