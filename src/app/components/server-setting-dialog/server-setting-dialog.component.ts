@@ -5,6 +5,7 @@ import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {Router} from "@angular/router";
 import {ServerProfileSettingComponent} from "../server-profile-setting/server-profile-setting.component";
 import {ServerService} from "../../services/api/server.service";
+import {CommonDataService} from "../../services/common-data.service";
 
 @Component({
   selector: 'app-server-setting-dialog',
@@ -32,7 +33,7 @@ export class ServerSettingDialogComponent {
     {label: '解散服务器',action: () => this.dissolveServer(),button: true}
   ];
 
-  constructor(private router: Router,private serverServer:ServerService) {
+  constructor(private router: Router,private serverServer:ServerService,private commonDataService:CommonDataService) {
     this.selectItem(this.selectedIndex)
   }
 
@@ -52,8 +53,16 @@ export class ServerSettingDialogComponent {
     this.close.emit(); // ← 发出关闭事件
   }
 
-  dissolveServer(){
-    alert(this.serverId);
-    this.serverServer.deleteServer(this.serverId).then();
+  dissolveServer() {
+    if (!confirm("确认要解散该服务器吗？")) {
+      return;
+    }
+
+    this.serverServer.deleteServer(this.serverId).then(v => {
+      this.commonDataService.servers = this.commonDataService.servers.filter(item => item != this.serverId);
+      this.commonDataService.currentServer = "";
+      this.close.emit();
+    });
   }
+
 }

@@ -1,7 +1,7 @@
 <div class="session-list">
 
 
-  <ng-container *ngIf="!serverInfo">
+  <ng-container *ngIf="!commonDataService.currentServer">
     <div (click)="getServerChannels(serverId)" *ngFor="let serverId of commonDataService['servers']" class="session">
       <app-avatar class="session-icon" type="server" [id]="serverId"></app-avatar>
       <span>{{ commonDataService.getServerInfoById(serverId)?.name || 'loading' }}</span>
@@ -10,7 +10,7 @@
 
 
 
-  <div *ngIf="serverInfo">
+  <div *ngIf="commonDataService.currentServer">
     <div class="channel-title">
       <img id="back" (click)="backToSessionList()" alt="back" height="24" ngSrc="/images/icon/arrow_back.svg" width="24">
       <span class="server-name" (click)="toggleMenu($event)">{{ serverInfo['name'] }}</span>

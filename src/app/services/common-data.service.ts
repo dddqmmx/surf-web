@@ -23,9 +23,12 @@ export class CommonDataService {
   channelIndexById: Map<string, any> = new Map();
   // key: userInfoId, content: userInfo
   userInfoIndexById: { [key: string]: any } = {};
+
   currentServer:string ="";
+
   voiceChatting: boolean = false;
   voiceChannel: string= "";
+
   micEnabled: boolean = false;
   speakerEnabled: boolean = true;
 

@@ -90,6 +90,19 @@ export class RequestService {
     });
   }
 
+  public requestServerInfoByIds(ids:any[]) {
+    this.socket.request('server', 'get_server_info_by_ids', {
+      "server_ids": ids
+    }).then(response => {
+      response['servers_info'].forEach((info: any) => {
+        const [key, value] = Object.entries(info)[0];
+        this.commonData.serverIndexById.set(key, value);
+      })
+    }).catch(error => {
+      console.error('Request failed:', error);
+    });
+  }
+
   public async getMessage(channelId: string | null, lastMsg?: any): Promise<any[]>{
     console.log(channelId)
     const data: any = {
@@ -211,10 +224,8 @@ export class RequestService {
     });
   }
 
-  public requestDisconnectToVoiceChannel(channel_id: string | undefined) {
-    this.socket.request("server", "disconnect_to_voice_channel",{
-      "channel_id":channel_id
-    })
+  public requestDisconnectToVoiceChannel() {
+    this.socket.request("server", "disconnect_to_voice_channel").then()
   }
 
   public async getUserFriends(): Promise<string[]>{

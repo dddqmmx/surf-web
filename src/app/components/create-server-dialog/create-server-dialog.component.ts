@@ -69,12 +69,16 @@ export class CreateServerDialogComponent {
       if (!serverId) {
         return
       }
-      this.serverService.uploadIcon(this.cropped,serverId).subscribe({
-        next: () => {
-          console.log('Upload successful');
-        },
-        error: err => console.error('Upload failed', err)
-      })
+      if (this.cropped){
+        this.serverService.uploadIcon(this.cropped,serverId).subscribe({
+          next: () => {
+            console.log('Upload successful');
+          },
+          error: err => console.error('Upload failed', err)
+        })
+      }
+      this.request.requestServerInfoByIds([serverId]);
+      this.commonData.servers.push(serverId);
     })
     alert("服务器创建成功")
     this.onClose()

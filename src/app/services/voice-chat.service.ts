@@ -72,7 +72,7 @@ export class VoiceChatService {
   }
 
   stop() {
-    this.requestService.requestDisconnectToVoiceChannel(this.channelId);
+    this.requestService.requestDisconnectToVoiceChannel();
     for (const [, pc] of this.pcMap) {
       pc.close();
     }

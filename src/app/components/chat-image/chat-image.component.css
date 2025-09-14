@@ -1,6 +1,5 @@
-.img {
-  height: auto;
-  display: block;          /* 避免与行内元素混排带来的空隙 */
-  object-fit: contain;     /* 保持图片比例，不拉伸 */
-  max-width: 100%;         /* 防止超出父容器 */
+/* component.css */
+.message-img {
+  object-fit: contain;
+  border-radius: 8px;
 }

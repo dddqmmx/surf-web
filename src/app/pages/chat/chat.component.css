@@ -105,6 +105,9 @@
     max-width: 100%; /* 限制最大宽度 */
 }
 
+.image{
+}
+
 /* 左侧消息样式 */
 .message-container .message {
     background: #f0f0f0;

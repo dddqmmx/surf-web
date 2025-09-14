@@ -111,6 +111,7 @@ export class SessionListComponent implements OnInit, OnDestroy {
   backToSessionList() {
     this.requestService.requestDisconnectToServerEventChannel(this.serverId).then();
     this.serverInfo = undefined;
+    this.commonDataService.currentServer = "";
     this.router.navigate(['/main/session']).then();
     this.isMenuOpen = false;
   }
