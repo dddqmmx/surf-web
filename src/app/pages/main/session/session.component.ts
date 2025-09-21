@@ -2,11 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {SessionListComponent} from "../../../components/session-list/session-list.component";
 import {NavigationEnd, Router, RouterOutlet} from "@angular/router";
 import {RequestService} from "../../../services/request.service";
-import {NgClass, NgIf, NgStyle} from "@angular/common";
+import {NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {CommonDataService} from "../../../services/common-data.service";
 import {VoiceChatService} from "../../../services/voice-chat.service";
 import {InviteDialogComponent} from "../../../components/invite-dialog/invite-dialog.component";
 import {filter} from "rxjs";
+import {AvatarComponent} from "../../../components/avatar/avatar.component";
+import {MemberListComponent} from "../../../components/member-list/member-list.component";
 
 @Component({
   selector: 'app-session',
@@ -17,7 +19,8 @@ import {filter} from "rxjs";
     NgIf,
     NgClass,
     InviteDialogComponent,
-    NgStyle
+    NgStyle,
+    MemberListComponent,
   ],
   templateUrl: './session.component.html',
   styleUrl: './session.component.css'

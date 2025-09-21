@@ -12,6 +12,8 @@ import { Location } from '@angular/common';
 import {AvatarComponent} from "../../components/avatar/avatar.component";
 import {ChatImageComponent} from "../../components/chat-image/chat-image.component";
 import {ChatService} from "../../services/api/chat.service";
+import {MemberListComponent} from "../../components/member-list/member-list.component";
+import {ServerService} from "../../services/api/server.service";
 
 @Component({
   selector: 'app-chat',
@@ -25,7 +27,8 @@ import {ChatService} from "../../services/api/chat.service";
     NgClass,
     NgStyle,
     AvatarComponent,
-    ChatImageComponent
+    ChatImageComponent,
+    MemberListComponent
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
@@ -49,6 +52,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     private socketService: SocketService,
     protected commonData: CommonDataService,
     protected chatService: ChatService,
+    protected serverService: ServerService,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
   }

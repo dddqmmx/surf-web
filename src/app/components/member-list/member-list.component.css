@@ -1,0 +1,51 @@
+:host{
+  flex: 0 0 auto;         /* 不拉伸 */
+  width: auto;            /* 跟内容走 */
+  min-width: 200px;       /* 最小宽度，避免太窄 */
+  max-width: 300px;       /* 最大宽度，避免太宽 */
+  overflow: auto;         /* 超出时滚动 */
+  border-left: 0.1rem solid #acacac; /* 分隔线，更清晰 */
+  background-color: white;
+  color: #000000;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.role-section {
+  margin-top: 15px;
+}
+
+.role-header {
+  margin-bottom: 5px;
+}
+
+.member-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  padding: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.member-item:hover {
+  border-radius: 5px;
+  background-color: #b5b5b5;
+}
+
+.avatar {
+  height: 32px;
+  width: 32px;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.member-name {
+  font-size: 16px;
+  color: #9f9f9f;
+}

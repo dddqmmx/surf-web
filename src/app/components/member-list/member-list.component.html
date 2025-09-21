@@ -1,0 +1,13 @@
+<div class="member-list" *ngIf="membersByRole.length">
+  <div class="role-section" *ngFor="let role of membersByRole">
+    <div class="role-header">
+      <p>{{ role.roleName }}</p>
+    </div>
+    <div class="member-items">
+      <div class="member-item" *ngFor="let userId of role.userIds">
+        <app-avatar class="avatar" [id]="userId" type="user"/>
+        <span class="member-name">{{ commonData.userInfoIndexById[userId]?.data?.nickname || userId }}</span>
+      </div>
+    </div>
+  </div>
+</div>

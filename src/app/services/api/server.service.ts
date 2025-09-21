@@ -8,6 +8,25 @@ interface CreateServerResponse {
   server_id: string;
 }
 
+interface GetServerMemberIdsResponse {
+  user_ids: string[];
+}
+
+export interface Role {
+  name: string;
+  level: number;
+  permissions: number[];
+}
+
+interface GetServerRolesResponse {
+  role_map: Record<string, Role>
+}
+
+interface GetMembersRolesResponse {
+  members_roles_map: Record<string, string[]>
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -47,6 +66,55 @@ export class ServerService {
     } catch (error) {
       console.error("delete server failed:", error);
       return "";
+    }
+  }
+
+  public async getServerMemberIds(serverId: string): Promise<string[]> {
+    const url = `${this.commonData.httpPrefix}/server/get_server_member_ids`;
+    try {
+      const response = await firstValueFrom(
+        this.http.post<GetServerMemberIdsResponse>(url, {
+          session_id: this.commonData.sessionId,
+          server_id: serverId,
+        })
+      );
+      return response.user_ids ?? [];
+    } catch (error) {
+      console.error("failed:", error);
+      return [];
+    }
+  }
+
+  public async getServerRoles(serverId: string): Promise<Record<string, Role>> {
+    const url = `${this.commonData.httpPrefix}/server/get_server_roles`;
+    try {
+      const response = await firstValueFrom(
+        this.http.post<GetServerRolesResponse>(url, {
+          session_id: this.commonData.sessionId,
+          server_id: serverId,
+        })
+      );
+      console.log(response)
+      return response.role_map;
+    } catch (error) {
+      console.error("failed:", error);
+      return {};
+    }
+  }
+
+  public async getMembersRoles(serverId: string, user_ids: string[]): Promise<Record<string, string[]>> {
+    const url = `${this.commonData.httpPrefix}/server/get_members_roles`;
+    try {
+      const response = await firstValueFrom(
+        this.http.post<GetMembersRolesResponse>(url, {
+          server_id: serverId,
+          user_ids: user_ids
+        })
+      );
+      return response.members_roles_map;
+    } catch (error) {
+      console.error("delete server failed:", error);
+      return {};
     }
   }
 

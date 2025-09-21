@@ -3,36 +3,40 @@
     <img *ngIf="commonData.uiState.isMobile" (click)="back()" id="back" alt="back" height="24" ngSrc="/images/icon/arrow_back.svg" width="24">
     <span class="session-name" style="margin: 0;">{{ sessionName }}</span>
   </div>
-  <div #chatContent (scroll)="onScroll($event)" class="chat-content">
-    <div class="message-list">
-      <div *ngFor="let message of messageList"
-           [ngClass]="message['user_id'] != commonData.clientUserId ? 'message-container' : 'message-right-container'">
-        <app-avatar *ngIf="message['user_id'] != commonData.clientUserId" [id]="message['user_id']" type="user" class="avatar"/>
-        <div class="message-content">
-          <ng-container *ngIf="message['user_id'] as userId">
-              <span class="username">
-                {{ commonData.userInfoIndexById[userId]?.data?.nickname || userId }}
-              </span>
-          </ng-container>
-          <pre *ngIf="message['type'] == 'text'" class="message">{{ message['content'] }}</pre>
-          <app-chat-image class="message image" *ngIf="message['type'] == 'img'" [w]="message['w']" [h]="message['h']" [image]="message['content']" />
+  <div class="main">
+    <div class="chat-area">
+      <div #chatContent (scroll)="onScroll($event)" class="chat-content">
+        <div class="message-list">
+          <div *ngFor="let message of messageList"
+               [ngClass]="message['user_id'] != commonData.clientUserId ? 'message-container' : 'message-right-container'">
+            <app-avatar *ngIf="message['user_id'] != commonData.clientUserId" [id]="message['user_id']" type="user" class="avatar"/>
+            <div class="message-content">
+              <ng-container *ngIf="message['user_id'] as userId">
+                <span class="username">
+                  {{ commonData.userInfoIndexById[userId]?.data?.nickname || userId }}
+                </span>
+              </ng-container>
+              <pre *ngIf="message['type'] == 'text'" class="message">{{ message['content'] }}</pre>
+              <app-chat-image class="message image" *ngIf="message['type'] == 'img'" [w]="message['w']" [h]="message['h']" [image]="message['content']" />
+            </div>
+            <app-avatar *ngIf="message['user_id'] == commonData.clientUserId" [id]="message['user_id']" type="user" class="avatar"/>
+          </div>
         </div>
-        <app-avatar *ngIf="message['user_id'] == commonData.clientUserId" [id]="message['user_id']" type="user" class="avatar"/>
+      </div>
+      <div class="chat-input">
+        <div>
+          <img alt="" class="input-option" height="24" ngSrc="/images/icon/mic.svg" width="24"/>
+          <img (click)="selectImage()" alt="" class="input-option" height="24" ngSrc="/images/icon/photo_library.svg" width="24"/>
+          <img alt="" class="input-option" height="24" ngSrc="/images/icon/folder.svg" width="24"/>
+        </div>
+        <div style="display: flex">
+          <textarea (keyup.enter)="sendMessage()" [(ngModel)]="messageInputValue" id="message-input"
+                    placeholder="Type your message..."
+                    rows="5">
+          </textarea>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="chat-input">
-    <div>
-      <img alt="" class="input-option" height="24" ngSrc="/images/icon/mic.svg" width="24"/>
-      <img (click)="selectImage()" alt="" class="input-option" height="24" ngSrc="/images/icon/photo_library.svg"
-           width="24"/>
-      <img alt="" class="input-option" height="24" ngSrc="/images/icon/folder.svg" width="24"/>
-    </div>
-    <div style="display: flex">
-            <textarea (keyup.enter)="sendMessage()" [(ngModel)]="messageInputValue" id="message-input"
-                      placeholder="Type your message..."
-                      rows="5">
-            </textarea>
-    </div>
+    <app-member-list/>
   </div>
 </div>

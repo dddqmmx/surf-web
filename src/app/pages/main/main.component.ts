@@ -82,6 +82,19 @@ export class MainComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.request.getUserInfo([this.commonData.clientUserId]).then(() => {
     })
+    // 订阅各种服务器推送
+    let newServerSubject=  this.socketService.getMessageSubject("server","new_server").subscribe(message => {
+      let server_id = message['server_id'];
+      this.commonData.servers.push(server_id);
+      this.request.requestServerInfoByIds([server_id])
+    })
+    this.subscriptions.push(newServerSubject);
+    let newFriendSubject=  this.socketService.getMessageSubject("user","new_friend").subscribe(message => {
+      let user_id = message['user_id'];
+      this.commonData.friends.push(user_id);
+      this.request.getUserInfo([user_id]).then();
+    })
+    this.subscriptions.push(newFriendSubject);
   }
 
   toUserInfo(){

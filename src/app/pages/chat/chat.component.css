@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 :host {
     display: flex; /* 或 flex */
     width: 100%;
@@ -6,11 +10,12 @@
 
 /* 容器背景 */
 .container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
 }
 
 @media (max-aspect-ratio: 1/1) {
@@ -20,15 +25,18 @@
 }
 
 .chat-header {
-  background-color: #3b96ff;
-  color: #ffffff;
+  background-color: #5fa7ff;
+  border-bottom: #acacac 2px solid;
+  color: white;
   padding: 10px;
   font-size: 18px;
   font-weight: bold;
   display: flex;
-  align-items: center; /* 垂直居中对齐 */
-  justify-content: space-between; /* 分散排列，左右两侧各自对齐 */
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0; /* 防止被压缩 */
 }
+
 
 .session-name {
   text-align: center;
@@ -40,13 +48,60 @@
   cursor: pointer; /* 增加指针悬停效果 */
 }
 
-/* 聊天内容区域 */
-.chat-content {
-    overflow-y: auto;
-    flex-grow: 1;
-    padding: 10px;
-    background-color: #ffffff;
+.main {
+  display: flex;
+  flex-direction: row;
+  flex: 1; /* 占据除header外的剩余空间 */
+  min-height: 0; /* 重要：允许flex子项缩小 */
 }
+
+.chat-area {
+  flex: 1; /* 占据main中的主要空间 */
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.chat-content {
+  overflow-y: auto;
+  flex: 1;
+  padding: 10px;
+  background-color: #ffffff;
+}
+
+/* Webkit */
+.chat-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0); /* 平时透明 */
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+/* 滚动时显示滚动条 */
+.chat-content:hover::-webkit-scrollbar-thumb,
+.chat-content:active::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.3);
+}
+
+/* Firefox */
+.chat-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0) transparent; /* 平时透明 */
+}
+
+.chat-content:hover {
+  scrollbar-color: rgba(0,0,0,0.3) transparent; /* hover 时显示 */
+}
+
+
+
 
 /* 消息列表 */
 .message-list {
@@ -141,11 +196,12 @@
 
 /* 输入框和发送按钮 */
 .chat-input {
-    display: flex;
-    gap: 5px;
-    padding: 10px;
-    border-top: 1px solid #e0e0e0;
-    flex-direction: column;
+  display: flex;
+  gap: 5px;
+  padding: 10px;
+  border-top: 1px solid #e0e0e0;
+  flex-direction: column;
+  flex-shrink: 0; /* 防止输入框被压缩 */
 }
 
 #message-input {
