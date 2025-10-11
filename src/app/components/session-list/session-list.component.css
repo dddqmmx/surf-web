@@ -65,6 +65,9 @@
   margin-left: 1rem;
   font-size: 24px;
   margin-right: 1rem;
+  white-space: nowrap;      /* 不换行 */
+  overflow: hidden;         /* 超出部分隐藏 */
+  text-overflow: ellipsis;  /* 超出显示省略号 */
 }
 
 .channel-list {
@@ -81,6 +84,9 @@
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
+  white-space: nowrap;      /* 不换行 */
+  overflow: hidden;         /* 超出部分隐藏 */
+  text-overflow: ellipsis;  /* 超出显示省略号 */
 }
 
 .channel-group-list {
@@ -94,6 +100,9 @@
   border-radius: 5px;
   margin-bottom: 5px;
   transition: background-color 0.3s ease;
+  white-space: nowrap;      /* 不换行 */
+  overflow: hidden;         /* 超出部分隐藏 */
+  text-overflow: ellipsis;  /* 超出显示省略号 */
 }
 
 .session-list {
@@ -151,3 +160,11 @@
   border-radius: 50%;
   margin-right: 10px;
 }
+
+.channel .icon {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+

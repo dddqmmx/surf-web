@@ -99,6 +99,8 @@ export class MainComponent implements OnInit, OnDestroy {
 
   toUserInfo(){
     this.router.navigate(['/main/user_info'],{queryParams: {"user_id": this.commonData.clientUserId}}).then();
+    //在查看个人信息时补选中任何选项
+    this.selectedOption = "";
   }
 
 

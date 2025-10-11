@@ -8,7 +8,7 @@
       <button class="btn friend-requests">搜索</button>
     </div>
     <div class="contact-item" *ngFor="let serverId of commonDataService['servers']">
-      <img src="/images/avatar/default-avatar.png" height="32" width="32" class="avatar"/>
+      <app-avatar class="avatar" type="server" [id]="serverId"></app-avatar>
       <span class="contact-name">{{ commonDataService.getServerInfoById(serverId)['name'] }}</span>
     </div>
   </div>

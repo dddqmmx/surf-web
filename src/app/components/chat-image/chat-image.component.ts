@@ -5,79 +5,55 @@ import {CommonDataService} from "../../services/common-data.service";
 @Component({
   selector: 'app-chat-image',
   standalone: true,
-    imports: [
-        NgIf
-    ],
+  imports: [NgIf],
   templateUrl: './chat-image.component.html',
   styleUrl: './chat-image.component.css'
 })
 export class ChatImageComponent {
 
-  constructor(    protected commonData: CommonDataService ) {
-  }
+  constructor(protected commonData: CommonDataService) {}
+
   @Input() image!: string;
   @Input() h!: string;
   @Input() w!: string;
 
-  get displayWidth(): number {
+  get maxDisplayWidth(): number {
+    return Math.floor(window.innerWidth * 0.5);
+  }
+
+  get maxDisplayHeight(): number {
+    return Math.floor(window.innerHeight * 0.4);
+  }
+
+  private getScale(): number {
     const origW = Number(this.w);
     const origH = Number(this.h);
-    if (!origW || !origH) return 0;
 
-    const maxWidth = window.innerWidth * 0.6;
-    const maxHeight = window.innerHeight * 0.5;
-    const ratio = origW / origH;
+    if (!origW || !origH || origW <= 0 || origH <= 0) return 1;
 
-    let width: number, height: number;
+    const maxW = this.maxDisplayWidth;
+    const maxH = this.maxDisplayHeight;
 
-    if (ratio >= 1) { // 横图
-      width = Math.min(origW, maxWidth);
-      height = width / ratio;
-      if (height > maxHeight) {
-        height = maxHeight;
-        width = height * ratio;
-      }
-    } else { // 竖图或正方
-      height = Math.min(origH, maxHeight);
-      width = height * ratio;
-      if (width > maxWidth) {
-        width = maxWidth;
-        height = width / ratio;
-      }
-    }
+    // 计算缩放比例，取最小值确保不超出任何限制
+    const scaleW = maxW / origW;
+    const scaleH = maxH / origH;
 
-    return width;
+    return Math.min(scaleW, scaleH, 1); // 永远不放大，最多1:1
+  }
+
+  get displayWidth(): number {
+    const origW = Number(this.w);
+    if (!origW || origW <= 0) return 200; // 默认值
+
+    const scale = this.getScale();
+    return Math.floor(origW * scale);
   }
 
   get displayHeight(): number {
-    const origW = Number(this.w);
     const origH = Number(this.h);
-    if (!origW || !origH) return 0;
+    if (!origH || origH <= 0) return 200; // 默认值
 
-    const maxWidth = window.innerWidth * 0.6;
-    const maxHeight = window.innerHeight * 0.5;
-    const ratio = origW / origH;
-
-    let width: number, height: number;
-
-    if (ratio >= 1) {
-      width = Math.min(origW, maxWidth);
-      height = width / ratio;
-      if (height > maxHeight) {
-        height = maxHeight;
-        width = height * ratio;
-      }
-    } else {
-      height = Math.min(origH, maxHeight);
-      width = height * ratio;
-      if (width > maxWidth) {
-        width = maxWidth;
-        height = width / ratio;
-      }
-    }
-
-    return height;
+    const scale = this.getScale();
+    return Math.floor(origH * scale);
   }
-
-
 }

@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { CommonDataService } from '../../services/common-data.service';
 import { ServerService, Role } from '../../services/api/server.service';
+import {SocketService} from "../../services/socket.service";
+import {RequestService} from "../../services/request.service";
+import {Subscription} from "rxjs";
 
 interface MemberGroup {
   roleName: string;
@@ -20,12 +23,15 @@ interface MemberGroup {
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.css'
 })
-export class MemberListComponent implements OnInit {
+export class MemberListComponent implements OnInit, OnDestroy {
   public membersByRole: MemberGroup[] = [];
+  public subscriptions: Subscription[] = [];
 
   constructor(
     protected commonData: CommonDataService,
-    protected serverService: ServerService
+    protected serverService: ServerService,
+    protected socketService: SocketService,
+    protected request: RequestService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -33,43 +39,33 @@ export class MemberListComponent implements OnInit {
       return;
     }
 
-    try {
-      await this.loadAndGroupMembers();
-    } catch (error) {
-      console.error('加载成员列表失败:', error);
-    }
+    // 订阅数据变化，自动更新显示
+    const memberDataSub = this.serverService.memberData$.subscribe(data => {
+      if (data) {
+        this.loadAndGroupMembers(data);
+      }
+    });
+    this.subscriptions.push(memberDataSub);
   }
 
   /**
    * 加载并分组成员数据
    */
-  private async loadAndGroupMembers(): Promise<void> {
-    const [memberIds, memberRolesRecord, rolesRecord] = await Promise.all([
-      this.serverService.getServerMemberIds(this.commonData.currentServer!),
-      this.getMemberRoles(),
-      this.getServerRoles()
-    ]);
+  private loadAndGroupMembers(data: {
+    memberIds: string[];
+    memberRolesRecord: Record<string, string[]>;
+    rolesRecord: Record<string, Role>;
+  }): void {
+    // 获取用户信息
+    this.request.getUserInfo(data.memberIds).then();
 
-    const roleMap = this.createRoleMap(rolesRecord);
-
-    const memberGroups = this.groupMembersByHighestRole(memberIds, memberRolesRecord, roleMap);
-
+    const roleMap = this.createRoleMap(data.rolesRecord);
+    const memberGroups = this.groupMembersByHighestRole(
+      data.memberIds,
+      data.memberRolesRecord,
+      roleMap
+    );
     this.membersByRole = this.convertToTemplateFormat(memberGroups, roleMap);
-  }
-
-  /**
-   * 获取成员角色映射
-   */
-  private async getMemberRoles(): Promise<Record<string, string[]>> {
-    const memberIds = await this.serverService.getServerMemberIds(this.commonData.currentServer!);
-    return this.serverService.getMembersRoles(this.commonData.currentServer!, memberIds);
-  }
-
-  /**
-   * 获取服务器角色信息
-   */
-  private async getServerRoles(): Promise<Record<string, Role>> {
-    return this.serverService.getServerRoles(this.commonData.currentServer!);
   }
 
   /**
@@ -81,7 +77,6 @@ export class MemberListComponent implements OnInit {
     Object.entries(rolesRecord).forEach(([roleId, role]) => {
       roleMap.set(roleId, role);
     });
-
     return roleMap;
   }
 
@@ -104,7 +99,6 @@ export class MemberListComponent implements OnInit {
       const highestRole = this.findHighestRole(roleIds, roleMap);
       if (!highestRole) continue;
       console.log("name",highestRole.name,"level",highestRole.level)
-
       this.addUserToGroup(memberGroups, highestRole.name, userId);
     }
 
@@ -181,5 +175,9 @@ export class MemberListComponent implements OnInit {
     }
 
     return result;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

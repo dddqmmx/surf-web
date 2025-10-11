@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {catchError, firstValueFrom, from, map, Observable, of, switchMap, tap} from "rxjs";
+import {BehaviorSubject, catchError, firstValueFrom, from, map, Observable, of, switchMap, tap} from "rxjs";
 import CryptoJS from "crypto-js";
 import {CommonDataService} from "../common-data.service";
+import {SocketService} from "../socket.service";
 
 interface CreateServerResponse {
   server_id: string;
 }
+
+interface UpdatesServerProfileResponse {
+  success: boolean;
+}
+
 
 interface GetServerMemberIdsResponse {
   user_ids: string[];
@@ -26,15 +32,123 @@ interface GetMembersRolesResponse {
   members_roles_map: Record<string, string[]>
 }
 
+export interface MemberGroup {
+  roleName: string;
+  userIds: string[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServerService {
 
+  public serverInfo:any = null;
+
+
+  public currentRolePermissions: number[] = [];
+
+  private memberDataSubject = new BehaviorSubject<{
+    memberIds: string[];
+    memberRolesRecord: Record<string, string[]>;
+    rolesRecord: Record<string, Role>;
+  } | null>(null);
+
+  public memberData$ = this.memberDataSubject.asObservable();
+
+  async updatesServerProfile(server_id: string | null, servername: string | null, description: string | null): Promise<boolean> {
+    const url = `${this.commonData.httpPrefix}/server/update_server_profile`;
+    try {
+      const response = await firstValueFrom(
+        this.http.post<UpdatesServerProfileResponse>(url, {
+          server_id: server_id,
+          servername: servername,
+          description: description
+        })
+      );
+      return response.success
+    } catch (error) {
+      console.error("Create server failed:", error);
+      return false;
+    }
+  }
+
+  // 提供更新方法
+  updateMemberData(data: {
+    memberIds: string[];
+    memberRolesRecord: Record<string, string[]>;
+    rolesRecord: Record<string, Role>;
+  }) {
+    this.memberDataSubject.next(data);
+  }
+
+  // 保留原有属性供直接访问
+  get memberIds(): string[] {
+    return this.memberDataSubject.value?.memberIds || [];
+  }
+
+  get memberRolesRecord(): Record<string, string[]> {
+    return this.memberDataSubject.value?.memberRolesRecord || {};
+  }
+
+  get rolesRecord(): Record<string, Role> {
+    return this.memberDataSubject.value?.rolesRecord || {};
+  }
+
   constructor(
     private http: HttpClient,
-    private commonData: CommonDataService) {
+    private commonData: CommonDataService,
+    private socket: SocketService) {
+  }
+
+  // 添加新用户
+  addUsers(userIds: string[], memberRolesRecord: Record<string, string[]>) {
+    const current = this.memberDataSubject.value;
+    if (!current) return;
+
+    const newMemberIds = [...current.memberIds, ...userIds];
+    const newMemberRolesRecord = { ...current.memberRolesRecord, ...memberRolesRecord };
+
+    this.updateMemberData({
+      memberIds: newMemberIds,
+      memberRolesRecord: newMemberRolesRecord,
+      rolesRecord: current.rolesRecord
+    });
+  }
+
+  // 移除用户
+  removeUser(userId: string) {
+    const current = this.memberDataSubject.value;
+    if (!current) return;
+
+    const newMemberIds = current.memberIds.filter(id => id !== userId);
+    const newMemberRolesRecord = { ...current.memberRolesRecord };
+    delete newMemberRolesRecord[userId];
+
+    this.updateMemberData({
+      memberIds: newMemberIds,
+      memberRolesRecord: newMemberRolesRecord,
+      rolesRecord: current.rolesRecord
+    });
+  }
+
+  public leaveServer(serverId: string) {
+    this.socket.send("server","leave_server",{
+      "server_id":serverId,
+    })
+  }
+
+  public getUserPermissions(userId: string): number[] {
+    const roleIds = this.memberRolesRecord[userId] || [];
+    const permissionsSet = new Set<number>();
+    for (const roleId of roleIds) {
+      const role = this.rolesRecord[roleId];
+      if (role?.permissions) {
+        for (const perm of role.permissions) {
+          permissionsSet.add(perm);
+        }
+      }
+    }
+    return Array.from(permissionsSet);
   }
 
   public async createServer(servername: string | undefined): Promise<string> {

@@ -2,7 +2,7 @@
 
 
   <ng-container *ngIf="!commonDataService.currentServer">
-    <div (click)="getServerChannels(serverId)" *ngFor="let serverId of commonDataService['servers']" class="session">
+    <div (click)="selectServer(serverId)" *ngFor="let serverId of commonDataService['servers']" class="session">
       <app-avatar class="session-icon" type="server" [id]="serverId"></app-avatar>
       <span>{{ commonDataService.getServerInfoById(serverId)?.name || 'loading' }}</span>
     </div>
@@ -13,10 +13,10 @@
   <div *ngIf="commonDataService.currentServer">
     <div class="channel-title">
       <img id="back" (click)="backToSessionList()" alt="back" height="24" ngSrc="/images/icon/arrow_back.svg" width="24">
-      <span class="server-name" (click)="toggleMenu($event)">{{ serverInfo['name'] }}</span>
+      <span class="server-name" (click)="toggleMenu($event)">{{ serverService.serverInfo['name'] }}</span>
       <!-- 菜单容器 -->
       <div class="context-menu" [class.show]="isMenuOpen">
-        <div class="menu-item" (click)="handleMenuClick('settings')">
+        <div *ngIf="serverService.currentRolePermissions.includes(1)" class="menu-item" (click)="handleMenuClick('settings')">
           <span>服务器设置</span>
           <i class="icon-cog"></i>
         </div>
@@ -35,13 +35,15 @@
 
 
     <div class="channel-list">
-      <div *ngFor="let group of serverInfo['channels']" class="channel-group">
+      <div *ngFor="let group of serverService.serverInfo['channels']" class="channel-group">
         <h3 class="channel-group-title">{{ group['group_name'] }}</h3>
         <ul class="channel-group-list">
           <ng-container *ngFor="let channel of group['channels']">
             <!-- 频道条目 -->
             <li (click)="toChat(channel['channel_id'], channel['channel_type'])" class="channel">
-              {{ channel['channel_name'] }} - {{ channel['channel_type'] }}
+              <img *ngIf="channel['channel_type'] === 'text'" src="/images/icon/text_chat.svg" class="icon" alt="">
+              <img *ngIf="channel['channel_type'] === 'voice'" src="/images/icon/voice_chat.svg" class="icon" alt="">
+              {{ channel['channel_name'] }}
             </li>
             <!-- 如果是语音频道，则显示成员列表，放在频道下方 -->
             <ul *ngIf="channel['channel_type'] === 'voice'" class="voice-user-list">

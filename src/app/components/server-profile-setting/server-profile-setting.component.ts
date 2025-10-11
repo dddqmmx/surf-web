@@ -1,8 +1,18 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ImageEditComponent} from "../image-edit/image-edit.component";
 import {NgIf} from "@angular/common";
 import {ServerService} from "../../services/api/server.service";
 import {AvatarComponent} from "../avatar/avatar.component";
+import {FormsModule} from "@angular/forms";
+import {RequestService} from "../../services/request.service";
+import {CommonDataService} from "../../services/common-data.service";
+
+type serverInfo = {
+  serverName: string | null;
+  serverDescription: string | null;
+};
+
+
 
 @Component({
   selector: 'app-server-profile-setting',
@@ -10,20 +20,52 @@ import {AvatarComponent} from "../avatar/avatar.component";
   imports: [
     ImageEditComponent,
     NgIf,
-    AvatarComponent
+    AvatarComponent,
+    FormsModule
   ],
   templateUrl: './server-profile-setting.component.html',
   styleUrl: './server-profile-setting.component.css'
 })
-export class ServerProfileSettingComponent {
+export class ServerProfileSettingComponent implements OnInit{
   @Input() serverId!: string; // 通过输入属性接收服务器 ID
+  @ViewChild('serverIcon') serverIcon!: AvatarComponent;
 
   imageEditDialog = false;
   file!: File;
   cropped!: string;
 
-  constructor(private serverService:ServerService) {
+  originServerInfo: serverInfo = {
+    serverName: null,
+    serverDescription: null
+  };
+
+  serverInfo: serverInfo = {
+    serverName: null,
+    serverDescription: null
+  };
+
+  constructor(protected serverService:ServerService,protected  request: RequestService,protected commonDataService:CommonDataService) {
   }
+
+  async updateServerInfo() {
+    const success = await this.serverService.updatesServerProfile(
+      this.serverId,
+      this.serverInfo.serverName,
+      this.serverInfo.serverDescription
+    );
+    if (!success) return;
+
+    await this.request.requestServerInfoByIds([this.serverId]); // 等待最新数据
+
+    // 用 Object.assign 保留原对象引用，只更新字段
+    Object.assign(
+      this.serverService.serverInfo,
+      this.commonDataService.getServerInfoById(this.serverId)
+    );
+
+    alert("成功更改");
+  }
+
 
   async selectFile() {
     try {
@@ -51,6 +93,7 @@ export class ServerProfileSettingComponent {
     this.serverService.uploadIcon(cropped,this.serverId).subscribe({
       next: () => {
         console.log('Upload successful');
+        this.serverIcon.refreshAvatar();
       },
       error: err => console.error('Upload failed', err)
     })
@@ -59,4 +102,17 @@ export class ServerProfileSettingComponent {
   toggleImageEditDialog() {
     this.imageEditDialog = !this.imageEditDialog;
   }
+
+  ngOnInit(): void {
+    this.originServerInfo.serverName = this.serverService.serverInfo.name
+    this.originServerInfo.serverDescription = this.serverService.serverInfo.description
+    this.serverInfo.serverName = this.serverService.serverInfo.name
+    this.serverInfo.serverDescription = this.serverService.serverInfo.description
+  }
+
+  get hasChanges(): boolean {
+    return this.originServerInfo.serverName !== this.serverInfo.serverName ||
+      this.originServerInfo.serverDescription !== this.serverInfo.serverDescription;
+  }
+
 }

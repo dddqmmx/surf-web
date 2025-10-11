@@ -31,3 +31,34 @@
   outline: none;
   resize: none
 }
+
+.save-button {
+  margin-top: 1.2rem;
+  width: 150px;
+  height: 40px;
+  border-radius: 25px;
+  background: #057feb;
+  border: none;
+  color: white;
+  transition: background 0.3s ease, transform 0.5s ease; /* 过渡 */
+}
+
+.save-button-disable {
+  margin-top: 1.2rem;
+  width: 150px;
+  height: 40px;
+  border-radius: 25px;
+  background: #878787;
+  border: none;
+  color: white;
+  transition: background 0.3s ease, transform 0.5s ease; /* 过渡 */
+}
+
+
+.save-button:hover {
+  transform: scale(1.05); /* 鼠标悬停轻微放大 */
+}
+
+
+
+

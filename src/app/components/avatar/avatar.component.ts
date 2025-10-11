@@ -40,19 +40,30 @@ export class AvatarComponent implements OnChanges,OnInit {
     }
   }
 
-  updateAvatar(): void {
-    if (this.type === 'user') {
-      this.avatarUrl = `${this.commonData.httpPrefix}/user/avatar/${this.id}?t=${Date.now()}`;
-    } else if (this.type === 'server') {
-      this.avatarUrl = `${this.commonData.httpPrefix}/server/icon/${this.id}?t=${Date.now()}`;
-    }
-  }
-
   onAvatarError(event: any) {
     const img = event.target as HTMLImageElement;
     if (!img.src.includes('default-avatar.png')) {
       img.src = '/images/avatar/default-avatar.png';
     }
+  }
+  updateAvatar(noCache: boolean = false): void {
+    let url = '';
+    if (this.type === 'user') {
+      url = `${this.commonData.httpPrefix}/user/avatar/${this.id}`;
+    } else if (this.type === 'server') {
+      url = `${this.commonData.httpPrefix}/server/icon/${this.id}`;
+    }
+
+    if (noCache) {
+      const timestamp = new Date().getTime();
+      url += `?t=${timestamp}`;
+    }
+
+    this.avatarUrl = url;
+  }
+
+  refreshAvatar(): void {
+    this.updateAvatar(true);
   }
 
 

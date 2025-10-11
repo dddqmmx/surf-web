@@ -1,5 +1,9 @@
-/* component.css */
+/* 确保图片不会超出容器 */
 .message-img {
   object-fit: contain;
   border-radius: 8px;
+  display: block;
+  /* 防止图片被拉伸或变形 */
+  width: 100%;
+  height: 100%;
 }

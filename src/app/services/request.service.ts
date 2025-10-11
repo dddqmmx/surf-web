@@ -22,19 +22,17 @@ export class RequestService {
     })
   }
 
-  async getUserInfo(ids: string[]): Promise<Map<string, any>> {
+  async getUserInfo(ids: string[], forceRefresh = false): Promise<Map<string, any>> {
     const now = Date.now();
     const result = new Map<string, any>();
     const idsToFetch: string[] = [];
-    const CACHE_EXPIRY = 30 * 60 * 1000; // 30分钟，提取为常量
+    const CACHE_EXPIRY = 30 * 60 * 1000; // 30分钟
 
-    // 使用 Set 去重并转换为数组
     const uniqueIds = [...new Set(ids)];
 
-    // 分离缓存检查逻辑
     for (const id of uniqueIds) {
       const userInfo = this.commonData.userInfoIndexById[id];
-      const isValidCache = userInfo && (now - userInfo.timestamp < CACHE_EXPIRY);
+      const isValidCache = !forceRefresh && userInfo && (now - userInfo.timestamp < CACHE_EXPIRY);
 
       if (isValidCache) {
         result.set(id, userInfo.data);
@@ -43,7 +41,6 @@ export class RequestService {
       }
     }
 
-    // 批量获取新数据
     if (idsToFetch.length > 0) {
       try {
         const response = await this.socket.request('user', 'search_user', {
@@ -60,12 +57,12 @@ export class RequestService {
         });
       } catch (error) {
         console.error('Failed to fetch user info:', error);
-        // 根据需求决定是否抛出错误或返回部分结果
       }
     }
 
     return result;
   }
+
 
   public requestUserServers() {
     this.socket.request('user', 'get_user_servers').then(response => {
@@ -90,18 +87,20 @@ export class RequestService {
     });
   }
 
-  public requestServerInfoByIds(ids:any[]) {
-    this.socket.request('server', 'get_server_info_by_ids', {
-      "server_ids": ids
-    }).then(response => {
+  async requestServerInfoByIds(ids: any[]) {
+    try {
+      const response = await this.socket.request('server', 'get_server_info_by_ids', {
+        server_ids: ids
+      });
       response['servers_info'].forEach((info: any) => {
         const [key, value] = Object.entries(info)[0];
         this.commonData.serverIndexById.set(key, value);
-      })
-    }).catch(error => {
+      });
+    } catch (error) {
       console.error('Request failed:', error);
-    });
+    }
   }
+
 
   public async getMessage(channelId: string | null, lastMsg?: any): Promise<any[]>{
     console.log(channelId)

@@ -10,6 +10,7 @@ import {FileService, FileType} from "../../services/file.service";
 import {InviteDialogComponent} from "../invite-dialog/invite-dialog.component";
 import {AvatarComponent} from "../avatar/avatar.component";
 import {ServerSettingDialogComponent} from "../server-setting-dialog/server-setting-dialog.component";
+import {Role, ServerService} from "../../services/api/server.service";
 
 @Component({
   selector: 'app-session-list',
@@ -27,16 +28,15 @@ import {ServerSettingDialogComponent} from "../server-setting-dialog/server-sett
 })
 export class SessionListComponent implements OnInit, OnDestroy {
   @Output() sessionSelected = new EventEmitter<{ sessionId: string | null, sessionType: string | null }>();
-  serverInfo: any = null;
   protected serverId: string = "";
   protected membersFromChannels: any = {};  // 确保它是一个对象
 
   subscriptions: Subscription[] = [];
 
-  constructor(protected file: FileService, private socket: SocketService, protected commonDataService: CommonDataService, private requestService: RequestService, private router: Router, private voiceChatService: VoiceChatService) {
+  constructor(protected serverService: ServerService,protected file: FileService, private socket: SocketService, protected commonDataService: CommonDataService, private requestService: RequestService, private router: Router, private voiceChatService: VoiceChatService) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const serverEventSubject = this.socket.getMessageSubject("server", "server_event").subscribe(
       message => {
         if (message["type"] === "user_join_voice_channel") {
@@ -51,10 +51,10 @@ export class SessionListComponent implements OnInit, OnDestroy {
                 m.user_id === userId && m.client_id === clientId
             );
             if (!exists) {
-              this.membersFromChannels[channelId].push({ user_id: userId, client_id: clientId });
+              this.membersFromChannels[channelId].push({user_id: userId, client_id: clientId});
             }
           } else {
-            this.membersFromChannels[channelId] = [{"user_id":userId, "client_id":clientId}];
+            this.membersFromChannels[channelId] = [{"user_id": userId, "client_id": clientId}];
           }
           this.requestService.getUserInfo([userId]).then();
         }
@@ -78,11 +78,69 @@ export class SessionListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
+
+    //重置当前服务器选择
+    this.commonDataService.currentServer = "";
+  }
+
+  private subscribeToMemberEvents(serverId: string) {
+    // 用户加入事件
+    const userJoinSub = this.socket
+      .getMessageSubject("server", "user_join")
+      .subscribe(async (message) => {
+        const user_ids = message['user_ids'];
+
+        // 获取用户信息
+        this.requestService.getUserInfo(user_ids).then();
+
+        // 获取新用户的角色
+        const memberRolesRecord = await this.serverService.getMembersRoles(
+          serverId,
+          user_ids
+        );
+
+        // 更新 service 中的数据
+        this.serverService.addUsers(user_ids, memberRolesRecord);
+      });
+    this.subscriptions.push(userJoinSub);
+
+    // 用户离开事件
+    const userLeaveSub = this.socket
+      .getMessageSubject("server", "user_leave")
+      .subscribe((message) => {
+        const user_id = message['user_id'];
+        this.serverService.removeUser(user_id);
+      });
+    this.subscriptions.push(userLeaveSub);
+  }
+
+
+  /**
+   * 获取成员角色映射
+   */
+  private async getMemberRoles(serverId:string): Promise<Record<string, string[]>> {
+    const memberIds = await this.serverService.getServerMemberIds(serverId);
+    return this.serverService.getMembersRoles(serverId, memberIds);
+  }
+
+  /**
+   * 获取服务器角色信息
+   */
+  private async getServerRoles(serverId:string): Promise<Record<string, Role>> {
+    return this.serverService.getServerRoles(serverId);
+  }
+
+  public async selectServer(serverId:string){
+    this.serverId = serverId;
+    this.commonDataService.currentServer = serverId;
+    await this.getServerChannels(serverId);
+    await this.getMemberAndRoles(serverId);
+    // 在这里订阅 WebSocket 事件
+    this.subscribeToMemberEvents(serverId);
+
   }
 
   public async getServerChannels(serverId: string) {
-    this.serverId = serverId;
-    this.commonDataService.currentServer = serverId;
     let channelsData = await this.requestService.getServerChannels(serverId)
     const voiceChannelIds = channelsData.flatMap((group: { channels: any[]; }) =>
       group.channels.filter(channel => channel.channel_type === "voice").map(channel => channel.channel_id)
@@ -103,14 +161,32 @@ export class SessionListComponent implements OnInit, OnDestroy {
         this.membersFromChannels = r;
       })
     })
-    this.serverInfo = this.commonDataService.getServerInfoById(serverId)
-    if (this.serverInfo) {
-    }
+    this.serverService.serverInfo = this.commonDataService.getServerInfoById(serverId)
+  }
+
+
+
+  async getMemberAndRoles(serverId: string) {
+    const [memberIds, memberRolesRecord, rolesRecord] = await Promise.all([
+      this.serverService.getServerMemberIds(serverId),
+      this.getMemberRoles(serverId),
+      this.getServerRoles(serverId)
+    ]);
+
+    // 统一更新
+    this.serverService.updateMemberData({
+      memberIds,
+      memberRolesRecord,
+      rolesRecord
+    });
+
+    this.serverService.currentRolePermissions =
+      this.serverService.getUserPermissions(this.commonDataService.clientUserId);
   }
 
   backToSessionList() {
     this.requestService.requestDisconnectToServerEventChannel(this.serverId).then();
-    this.serverInfo = undefined;
+    this.serverService.serverInfo = undefined;
     this.commonDataService.currentServer = "";
     this.router.navigate(['/main/session']).then();
     this.isMenuOpen = false;
@@ -163,6 +239,10 @@ export class SessionListComponent implements OnInit, OnDestroy {
       this.toggleServerSettingDialog()
       return;
     }
+    if (action == "leave") {
+      this.leaveDialog()
+      return;
+    }
     // 处理不同菜单操作
     console.log('Selected action:', action);
   }
@@ -175,7 +255,13 @@ export class SessionListComponent implements OnInit, OnDestroy {
   toggleServerSettingDialog() {
     this.serverSettingDialog = !this.serverSettingDialog;
   }
-
-
-  protected readonly FileType = FileType;
+  leaveDialog() {
+    if (!confirm("确认要离开该服务器吗？")) {
+      return;
+    }
+    this.serverService.leaveServer(this.serverId);
+    this.commonDataService.servers = this.commonDataService.servers.filter(item => item != this.serverId);
+    this.commonDataService.currentServer = "";
+    this.router.navigate(['/main/session']).then();
+  }
 }

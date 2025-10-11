@@ -77,7 +77,7 @@ export class CreateServerDialogComponent {
           error: err => console.error('Upload failed', err)
         })
       }
-      this.request.requestServerInfoByIds([serverId]);
+      this.request.requestServerInfoByIds([serverId]).then();
       this.commonData.servers.push(serverId);
     })
     alert("服务器创建成功")

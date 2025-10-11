@@ -37,6 +37,8 @@
   flex-direction: column;
   height: 100%;
   background: #f4f4f4;
+  width: 15%;
+  min-width: 250px;
 }
 
 app-session-list {

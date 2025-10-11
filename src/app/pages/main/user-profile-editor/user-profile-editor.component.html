@@ -16,7 +16,7 @@
   </div>
   <div class="opt-button-container">
     <button (click)="saveUserProfile()">保存</button>
-    <button>取消</button>
+    <button (click)="backHome()">取消</button>
   </div>
 </div>
 <app-image-edit *ngIf="imageEditDialog" [file]="file" (close)="toggleImageEditDialog()" (confirm)="onConfirm($event)" ></app-image-edit>

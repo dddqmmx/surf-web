@@ -8,6 +8,7 @@ import {UserService} from "../../../services/api/user.service";
 import {AvatarService} from "../../../services/ui/avatar.service";
 import {ImageEditComponent} from "../../../components/image-edit/image-edit.component";
 import {NgIf} from "@angular/common";
+import {Router} from "@angular/router";
 
 type UserProfile = {
   nickname: string | null;
@@ -33,6 +34,7 @@ export class UserProfileEditorComponent {
     private request: RequestService,
     private userService: UserService,
     protected fileService: FileService,
+    protected router: Router,
     private avatarService: AvatarService
   ) {
     this.originProfile.nickname = commonData.userInfoIndexById[commonData.clientUserId].data["nickname"]
@@ -67,8 +69,18 @@ export class UserProfileEditorComponent {
     if (Object.keys(payload).length > 0) {
       this.request.requestUpdateUserProfile(payload).then(value => {
         console.log(value)
+        if (!value) {
+          return;
+        }
+        this.request.getUserInfo([this.commonData.clientUserId], true).then();
+        alert("成功更改")
+        this.router.navigate(['/main/session']).then();
       });
     }
+  }
+
+  backHome(){
+    this.router.navigate(['/main/session']).then();
   }
 
   async selectImage() {
