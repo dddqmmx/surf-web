@@ -34,7 +34,7 @@ import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Avatar from '@/components/Avatar.vue';
 import { authState, userStore } from '@/services/state';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 
 const route = useRoute();
 const router = useRouter();

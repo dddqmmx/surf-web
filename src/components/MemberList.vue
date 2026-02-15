@@ -20,7 +20,7 @@ import { Subscription } from 'rxjs';
 import Avatar from './Avatar.vue';
 import { serverStore, userStore } from '@/services/state';
 import { serverService, type Role } from '@/services/api/server';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 
 interface MemberGroup {
   roleName: string;

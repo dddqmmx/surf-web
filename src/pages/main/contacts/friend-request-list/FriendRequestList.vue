@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 import { userStore } from '@/services/state';
 
 const friendRequests = ref<string[]>([]);

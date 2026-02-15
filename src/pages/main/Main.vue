@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="layoutState.persistent" class="sidebar">
+    <div class="sidebar">
       <div class="user-options">
         <Avatar class="avatar" :id="authState.clientUserId" type="user" @click="toUserInfo" />
         <template v-for="option in options" :key="option.name">
@@ -27,9 +27,9 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { RouterView, useRouter } from 'vue-router';
 import { Subscription } from 'rxjs';
 import Avatar from '@/components/Avatar.vue';
-import { authState, layoutState, serverStore, userStore } from '@/services/state';
+import { authState, serverStore, userStore } from '@/services/state';
 import { socketService } from '@/services/socket';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 
 const router = useRouter();
 const subscriptions: Subscription[] = [];

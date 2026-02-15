@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { requestService } from './request';
+import { requestService } from './api/request';
 import { socketService } from './socket';
 import { chatService } from './api/chat';
 import { voiceState } from './state';

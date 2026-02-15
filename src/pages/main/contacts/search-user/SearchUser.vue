@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Avatar from '@/components/Avatar.vue';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 import { userStore } from '@/services/state';
 
 const userId = ref('');

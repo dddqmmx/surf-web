@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 
 const router = useRouter();
 const username = ref('');

@@ -14,7 +14,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { RouterView } from 'vue-router';
 import { Subscription } from 'rxjs';
-import { networkConfig, uiState } from '@/services/state';
+import { networkConfig } from '@/services/state';
 import { socketService } from '@/services/socket';
 import { voiceChatService } from '@/services/voice-chat';
 
@@ -26,17 +26,7 @@ let updateIsMobile: (() => void) | null = null;
 let remoteStreamSub: Subscription | null = null;
 let remoteLeaveSub: Subscription | null = null;
 
-const setupMobileDetection = () => {
-  mediaQuery = window.matchMedia('(max-aspect-ratio: 1/1)');
-  updateIsMobile = () => {
-    uiState.isMobile = mediaQuery?.matches ?? false;
-  };
-  updateIsMobile();
-  mediaQuery.addEventListener('change', updateIsMobile);
-};
-
 onMounted(() => {
-  setupMobileDetection();
   networkConfig.host = window.location.hostname;
   networkConfig.sslEnabled = window.location.protocol === 'https:';
 
@@ -72,9 +62,6 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  if (mediaQuery && updateIsMobile) {
-    mediaQuery.removeEventListener('change', updateIsMobile);
-  }
   remoteStreamSub?.unsubscribe();
   remoteLeaveSub?.unsubscribe();
   for (const audio of remoteAudios.values()) {

@@ -2,7 +2,6 @@
   <div class="container">
     <div class="chat-header">
       <img
-        v-if="uiState.isMobile"
         id="back"
         alt="back"
         height="24"
@@ -85,9 +84,9 @@ import { Subscription } from 'rxjs';
 import Avatar from '@/components/Avatar.vue';
 import ChatImage from '@/components/ChatImage.vue';
 import MemberList from '@/components/MemberList.vue';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 import { socketService } from '@/services/socket';
-import { authState, layoutState, serverStore, uiState, userStore } from '@/services/state';
+import { authState, serverStore, userStore } from '@/services/state';
 import { chatService } from '@/services/api/chat';
 
 const route = useRoute();
@@ -222,9 +221,6 @@ const scrollToBottom = () => {
 };
 
 const back = () => {
-  layoutState.persistent = true;
-  layoutState.secondary = true;
-  layoutState.primary = false;
   router.push('/main/session');
 };
 </script>

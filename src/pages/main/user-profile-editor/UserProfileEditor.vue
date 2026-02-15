@@ -32,7 +32,7 @@ import { useRouter } from 'vue-router';
 import Avatar from '@/components/Avatar.vue';
 import ImageEdit from '@/components/ImageEdit.vue';
 import { authState, userStore } from '@/services/state';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 import { userService } from '@/services/api/user';
 import { avatarService } from '@/services/ui/avatar';
 

@@ -25,7 +25,7 @@
 import { onMounted } from 'vue';
 import { RouterView, useRouter } from 'vue-router';
 import Avatar from '@/components/Avatar.vue';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 import { userStore } from '@/services/state';
 
 const router = useRouter();

@@ -19,7 +19,7 @@
 import { onMounted } from 'vue';
 import Avatar from './Avatar.vue';
 import { userStore } from '@/services/state';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 
 const props = defineProps<{
   serverId: string;

@@ -24,7 +24,7 @@
 import { ref } from 'vue';
 import ImageEdit from './ImageEdit.vue';
 import { serverStore } from '@/services/state';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 import { serverService } from '@/services/api/server';
 
 const emit = defineEmits<{

@@ -29,7 +29,7 @@ import { computed, onMounted, ref } from 'vue';
 import Avatar from './Avatar.vue';
 import ImageEdit from './ImageEdit.vue';
 import { serverService } from '@/services/api/server';
-import { requestService } from '@/services/request';
+import { requestService } from '@/services/api/request';
 import { serverStore } from '@/services/state';
 
 const props = defineProps<{

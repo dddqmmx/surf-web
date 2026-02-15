@@ -1,7 +1,7 @@
 <template>
   <div class="session-root">
     <div class="layout-container">
-      <div class="session-list" :style="layoutState.secondary ? {} : { display: 'none' }">
+      <div class="session-list">
         <SessionList />
         <div class="vc-container">
           <div v-if="voiceState.voiceChatting" class="vc-info-container">
@@ -32,7 +32,7 @@
           </div>
         </div>
       </div>
-      <div v-if="layoutState.primary" id="chat" class="router-container">
+      <div  id="chat" class="router-container">
         <RouterView />
       </div>
     </div>
@@ -43,24 +43,14 @@
 import { onMounted, watch } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
 import SessionList from '@/components/SessionList.vue';
-import { devicePreferences, layoutState, serverStore, uiState, voiceState } from '@/services/state';
-import { requestService } from '@/services/request';
+import { devicePreferences, serverStore, voiceState } from '@/services/state';
+import { requestService } from '@/services/api/request';
 import { voiceChatService } from '@/services/voice-chat';
 
 const route = useRoute();
 
 onMounted(() => {
   requestService.requestUserServers();
-  if (uiState.isMobile) {
-    watch(
-      () => route.path,
-      (path) => {
-        layoutState.secondary = !path.includes('/main/session/chat');
-        layoutState.primary = true;
-      },
-      { immediate: true }
-    );
-  }
 });
 
 const stopVoiceChat = () => {
