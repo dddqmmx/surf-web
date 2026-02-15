@@ -48,15 +48,15 @@ const acceptFriendRequest = (userId: string) => {
   width: 100%;
   height: 100%;
   background-size: cover;
-  background: #c7c7c7 center center;
+  background: var(--color-bg-panel-subtle) center center;
 }
 
 .chat-container {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-bg-panel-muted);
+  box-shadow: var(--shadow-sm);
 }
 
 .message {
@@ -65,7 +65,7 @@ const acceptFriendRequest = (userId: string) => {
   justify-content: space-between;
   margin-bottom: 20px;
   padding: 10px;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .message:last-child {
@@ -90,12 +90,12 @@ const acceptFriendRequest = (userId: string) => {
   font-weight: bold;
   font-size: 1.1em;
   margin: 0;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .text {
   margin: 5px 0 0 0;
-  color: #666;
+  color: var(--color-text-muted);
   font-size: 0.9em;
   max-width: 100%;
   white-space: nowrap;
@@ -105,8 +105,8 @@ const acceptFriendRequest = (userId: string) => {
 
 .agree-button {
   margin-left: 100px;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--color-chat-self-message);
+  color: var(--color-text-inverse);
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
@@ -116,10 +116,10 @@ const acceptFriendRequest = (userId: string) => {
 }
 
 .agree-button:hover {
-  background-color: #0056b3;
+  background-color: var(--color-chat-self-message-hover);
 }
 
 .agree-button:active {
-  background-color: #004080;
+  filter: brightness(0.92);
 }
 </style>

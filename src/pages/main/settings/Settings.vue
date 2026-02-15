@@ -61,17 +61,17 @@ onMounted(() => {
 }
 
 .sidebar {
-  background-color: #3b96ff;
-  color: #fff;
+  background-color: var(--color-bg-sidebar);
+  color: var(--color-text-inverse);
   display: flex;
   flex-direction: column;
   padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  border-right: 0.1rem solid #1781ff;
+  box-shadow: var(--shadow-sm);
+  border-right: 0.1rem solid var(--color-primary-strong);
 }
 
 .sidebar div {
-  background-color: #5fa7ff;
+  background-color: var(--color-bg-sidebar-elevated);
   display: flex;
   align-items: center;
   margin-bottom: 15px;
@@ -82,11 +82,11 @@ onMounted(() => {
 }
 
 .sidebar div:hover {
-  background-color: #1781ff;
+  background-color: var(--color-bg-sidebar-hover);
 }
 
 .sidebar div.selected {
-  background-color: #1781ff;
+  background-color: var(--color-bg-sidebar-hover);
   font-weight: bold;
 }
 
@@ -104,7 +104,7 @@ onMounted(() => {
 
 .content {
   flex-grow: 1;
-  background-color: white;
+  background-color: var(--color-bg-main);
   overflow-y: auto;
 }
 </style>

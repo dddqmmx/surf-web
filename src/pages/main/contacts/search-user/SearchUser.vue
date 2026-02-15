@@ -61,7 +61,7 @@ const sendFriendRequest = (targetUserId: string) => {
   background-image: url('/images/background/user_info.jpg');
   align-items: center;
   justify-content: center;
-  font-family: Arial, sans-serif;
+  font-family: var(--font-family-base);
   padding: 20px;
   box-sizing: border-box;
 }
@@ -69,9 +69,9 @@ const sendFriendRequest = (targetUserId: string) => {
 .search-container {
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: var(--color-bg-panel);
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   padding: 20px;
   width: 90%;
   max-width: 500px;
@@ -80,7 +80,7 @@ const sendFriendRequest = (targetUserId: string) => {
 .search-title {
   font-size: 1.5em;
   font-weight: bold;
-  color: #333;
+  color: var(--color-text-primary);
   margin-bottom: 20px;
   text-align: center;
 }
@@ -96,19 +96,21 @@ const sendFriendRequest = (targetUserId: string) => {
   flex: 1;
   padding: 10px;
   font-size: 1em;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-default);
   border-radius: 5px;
   transition: border-color 0.3s ease;
+  background: var(--color-bg-main);
+  color: var(--color-text-primary);
 }
 
 .search-input input[type='text']:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--color-chat-self-message);
 }
 
 .search-input button {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--color-chat-self-message);
+  color: var(--color-text-inverse);
   border: none;
   border-radius: 5px;
   padding: 10px 15px;
@@ -118,11 +120,11 @@ const sendFriendRequest = (targetUserId: string) => {
 }
 
 .search-input button:hover {
-  background-color: #0056b3;
+  background-color: var(--color-chat-self-message-hover);
 }
 
 .search-input button:active {
-  background-color: #004080;
+  filter: brightness(0.92);
 }
 
 .message {
@@ -132,12 +134,12 @@ const sendFriendRequest = (targetUserId: string) => {
   margin-bottom: 15px;
   padding: 10px;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-bg-panel-muted);
   transition: box-shadow 0.3s ease;
 }
 
 .message:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .avatar {
@@ -157,12 +159,12 @@ const sendFriendRequest = (targetUserId: string) => {
   font-weight: bold;
   font-size: 1.2em;
   margin: 0;
-  color: #007bff;
+  color: var(--color-chat-self-message);
 }
 
 .text {
   margin: 5px 0 0 0;
-  color: #666;
+  color: var(--color-text-muted);
   font-size: 0.9em;
   max-width: 100%;
   white-space: nowrap;
@@ -171,8 +173,8 @@ const sendFriendRequest = (targetUserId: string) => {
 }
 
 .agree-button {
-  background-color: #28a745;
-  color: white;
+  background-color: var(--color-success);
+  color: var(--color-text-inverse);
   border: none;
   border-radius: 5px;
   padding: 8px 15px;
@@ -182,10 +184,10 @@ const sendFriendRequest = (targetUserId: string) => {
 }
 
 .agree-button:hover {
-  background-color: #218838;
+  background-color: var(--color-success-hover);
 }
 
 .agree-button:active {
-  background-color: #1e7e34;
+  filter: brightness(0.92);
 }
 </style>

@@ -136,9 +136,9 @@ onBeforeUnmount(() => {
   min-width: 200px;
   max-width: 300px;
   overflow: auto;
-  border-left: 0.1rem solid #acacac;
-  background-color: white;
-  color: #000000;
+  border-left: 0.1rem solid var(--color-border-strong);
+  background-color: var(--color-bg-main);
+  color: var(--color-text-primary);
   padding-right: 10px;
   padding-left: 10px;
 }
@@ -168,7 +168,7 @@ onBeforeUnmount(() => {
 
 .member-item:hover {
   border-radius: 5px;
-  background-color: #b5b5b5;
+  background-color: var(--color-bg-panel-subtle);
 }
 
 .avatar {
@@ -180,7 +180,7 @@ onBeforeUnmount(() => {
 
 .member-name {
   font-size: 16px;
-  color: #3b96ff;
+  color: var(--color-primary);
   font-weight: bold;
 }
 </style>

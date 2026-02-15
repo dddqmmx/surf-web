@@ -58,12 +58,12 @@ const logout = () => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
+  background: var(--color-bg-main);
 }
 
 .settings-header {
-  background-color: #3b96ff;
-  color: white;
+  background-color: var(--color-bg-sidebar);
+  color: var(--color-text-inverse);
   padding: 10px;
   text-align: center;
   font-size: 1.5em;
@@ -72,7 +72,7 @@ const logout = () => {
 
 .settings-section {
   padding: 20px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-subtle);
   overflow-y: auto;
 }
 
@@ -83,7 +83,7 @@ const logout = () => {
 .settings-title {
   margin-bottom: 10px;
   font-size: 1.5em;
-  color: #555;
+  color: var(--color-text-secondary);
 }
 
 .settings-item {
@@ -99,14 +99,16 @@ const logout = () => {
 
 .settings-label {
   font-size: 1.2em;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .settings-input {
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border-default);
   border-radius: 5px;
   font-size: 1em;
+  background: var(--color-bg-main);
+  color: var(--color-text-primary);
 }
 
 .settings-toggle {
@@ -127,7 +129,7 @@ const logout = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--color-border-default);
   transition: 0.4s;
   border-radius: 20px;
 }
@@ -139,13 +141,13 @@ const logout = () => {
   width: 16px;
   left: 2px;
   bottom: 2px;
-  background-color: white;
+  background-color: var(--color-text-inverse);
   transition: 0.4s;
   border-radius: 50%;
 }
 
 input:checked + .slider {
-  background-color: #6b73ff;
+  background-color: var(--color-primary-strong);
 }
 
 input:checked + .slider:before {

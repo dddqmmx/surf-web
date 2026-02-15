@@ -97,7 +97,7 @@ const createServer = () => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--color-bg-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -109,14 +109,15 @@ const createServer = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: white;
+  background: var(--color-bg-panel);
   border-radius: 12px;
   padding: 24px 24px 16px;
   width: 400px;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
   text-align: center;
+  color: var(--color-text-primary);
 }
 
 .icon-close-btn {
@@ -126,13 +127,13 @@ const createServer = () => {
   background: transparent;
   border: none;
   font-size: 24px;
-  color: #666;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
 .icon-close-btn:hover {
-  color: #000;
+  color: var(--color-text-primary);
 }
 
 .input-item {
@@ -154,10 +155,12 @@ const createServer = () => {
 
 .input {
   padding: 8px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-default);
   border-radius: 6px;
   outline: none;
   resize: none;
+  background: var(--color-bg-main);
+  color: var(--color-text-primary);
 }
 
 .button {
@@ -165,9 +168,9 @@ const createServer = () => {
   width: 150px;
   height: 40px;
   border-radius: 25px;
-  background: #057feb;
+  background: var(--color-primary-strong);
   border: none;
-  color: white;
+  color: var(--color-text-inverse);
 }
 
 .avatar {
@@ -184,8 +187,8 @@ const createServer = () => {
 }
 
 .invite-btn {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--color-chat-self-message);
+  color: var(--color-text-inverse);
   border: none;
   padding: 6px 12px;
   border-radius: 6px;
@@ -193,6 +196,6 @@ const createServer = () => {
 }
 
 .invite-btn:hover {
-  background-color: #0056b3;
+  background-color: var(--color-chat-self-message-hover);
 }
 </style>

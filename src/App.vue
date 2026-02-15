@@ -83,20 +83,20 @@ onBeforeUnmount(() => {
   background-position: center center;
   background-size: cover;
   background-image: url('/images/background/user_info.jpg');
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--color-bg-overlay);
   background-blend-mode: darken;
 }
 
 .loading-icon {
-  border: 2px solid black;
+  border: 2px solid var(--color-border-strong);
   width: 10%;
 }
 
 .loading-text {
-  color: white;
+  color: var(--color-text-inverse);
   margin-top: 20px;
   font-size: 50px;
-  text-shadow: #000 2px 0 0, #000 0 2px 0, #000 -2px 0 0, #000 0 -2px 0;
+  text-shadow: 0 2px 4px var(--color-bg-overlay-strong);
 }
 
 .app-container {

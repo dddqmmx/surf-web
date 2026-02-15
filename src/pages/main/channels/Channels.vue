@@ -60,10 +60,10 @@ const toggleCreateServerDialog = () => {
 
 .sidebar {
   box-sizing: border-box;
-  background-color: #3b96ff;
-  color: #ecf0f1;
+  background-color: var(--color-bg-sidebar);
+  color: var(--color-text-inverse);
   padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
 }
@@ -71,7 +71,7 @@ const toggleCreateServerDialog = () => {
 .main-content {
   width: 100%;
   flex: 1;
-  background-color: #ffffff;
+  background-color: var(--color-bg-main);
 }
 
 .search-bar {
@@ -86,8 +86,8 @@ const toggleCreateServerDialog = () => {
   border: none;
   border-radius: 5px;
   font-size: 14px;
-  color: #2c3e50;
-  background-color: #ecf0f1;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-panel-subtle);
 }
 
 .action-buttons {
@@ -105,22 +105,22 @@ const toggleCreateServerDialog = () => {
 }
 
 .add-contact {
-  background-color: #3498db;
-  color: #ffffff;
+  background-color: var(--color-primary-strong);
+  color: var(--color-text-inverse);
 }
 
 .add-contact:hover {
-  background-color: #2980b9;
+  background-color: var(--color-primary-hover);
 }
 
 .friend-requests {
   margin-top: 5px;
-  background-color: #e67e22;
-  color: #ffffff;
+  background-color: var(--color-warning);
+  color: var(--color-text-inverse);
 }
 
 .friend-requests:hover {
-  background-color: #d35400;
+  background-color: var(--color-warning-hover);
 }
 
 .contact-items {
@@ -134,14 +134,14 @@ const toggleCreateServerDialog = () => {
   align-items: center;
   padding: 10px;
   margin-top: 10px;
-  background-color: #5fa7ff;
+  background-color: var(--color-bg-sidebar-elevated);
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .contact-item:hover {
-  background-color: #1781ff;
+  background-color: var(--color-bg-sidebar-hover);
 }
 
 .avatar {
@@ -153,6 +153,6 @@ const toggleCreateServerDialog = () => {
 
 .contact-name {
   font-size: 16px;
-  color: #ecf0f1;
+  color: var(--color-text-inverse);
 }
 </style>

@@ -1,7 +1,147 @@
-html, body, #app {
+:root {
+  color-scheme: light;
+  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  --color-primary: #3b96ff;
+  --color-primary-strong: #1781ff;
+  --color-primary-soft: #5fa7ff;
+  --color-primary-hover: #2a88ff;
+
+  --color-success: #28a745;
+  --color-success-hover: #218838;
+  --color-warning: #e67e22;
+  --color-warning-hover: #d35400;
+  --color-danger: #d32f2f;
+  --color-danger-hover: #b71c1c;
+  --color-danger-soft: #ffadad;
+
+  --color-text-primary: #1b2b43;
+  --color-text-secondary: #4d5f79;
+  --color-text-muted: #74849c;
+  --color-text-inverse: #ffffff;
+  --color-text-inverse-subtle: rgba(255, 255, 255, 0.6);
+  --color-text-inverse-muted: rgba(255, 255, 255, 0.75);
+  --color-text-inverse-emphasis: rgba(255, 255, 255, 0.85);
+  --color-text-inverse-strong: rgba(255, 255, 255, 0.9);
+
+  --color-bg-page: #f3f6fb;
+  --color-bg-main: #ffffff;
+  --color-bg-panel: #ffffff;
+  --color-bg-panel-muted: #f7f9fd;
+  --color-bg-panel-subtle: #eef3fb;
+  --color-bg-overlay: rgba(0, 0, 0, 0.5);
+  --color-bg-overlay-strong: rgba(0, 0, 0, 0.75);
+  --color-bg-overlay-soft: rgba(0, 0, 0, 0.1);
+
+  --color-bg-sidebar: #3b96ff;
+  --color-bg-sidebar-elevated: #5fa7ff;
+  --color-bg-sidebar-hover: #1781ff;
+  --color-bg-sidebar-gradient: linear-gradient(165deg, #3b96ff 0%, #1781ff 100%);
+  --color-bg-sidebar-header: rgba(0, 0, 0, 0.02);
+  --color-bg-sidebar-card: rgba(255, 255, 255, 0.08);
+  --color-bg-sidebar-card-hover: rgba(255, 255, 255, 0.2);
+  --color-bg-sidebar-row-hover: rgba(255, 255, 255, 0.15);
+  --color-bg-sidebar-row-active: rgba(255, 255, 255, 0.25);
+  --color-bg-sidebar-overlay: rgba(20, 60, 140, 0.85);
+
+  --color-border-default: #d7deea;
+  --color-border-subtle: #e8edf5;
+  --color-border-strong: #acacac;
+  --color-border-on-primary: rgba(255, 255, 255, 0.1);
+
+  --shadow-sm: 0 2px 6px rgba(15, 30, 56, 0.08);
+  --shadow-md: 0 4px 12px rgba(15, 30, 56, 0.12);
+  --shadow-lg: 0 10px 25px rgba(15, 30, 56, 0.2);
+  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.3);
+
+  --scrollbar-thumb: rgba(19, 40, 70, 0.2);
+  --scrollbar-thumb-hover: rgba(19, 40, 70, 0.4);
+  --scrollbar-thumb-on-primary: rgba(255, 255, 255, 0.2);
+  --scrollbar-thumb-on-primary-hover: rgba(255, 255, 255, 0.4);
+
+  --color-chat-self-message: #007bff;
+  --color-chat-self-message-hover: #0056b3;
+  --color-chat-other-message: #f0f0f0;
+  --color-button-disabled: #878787;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --color-primary: #6ba8ff;
+  --color-primary-strong: #4d95ff;
+  --color-primary-soft: #7db5ff;
+  --color-primary-hover: #5ba0ff;
+
+  --color-success: #3ebf60;
+  --color-success-hover: #35a553;
+  --color-warning: #f09a4a;
+  --color-warning-hover: #e4862e;
+  --color-danger: #ef5350;
+  --color-danger-hover: #e03b37;
+  --color-danger-soft: #ffb4b4;
+
+  --color-text-primary: #e6edf8;
+  --color-text-secondary: #bac7dc;
+  --color-text-muted: #97a7c1;
+  --color-text-inverse: #ffffff;
+  --color-text-inverse-subtle: rgba(255, 255, 255, 0.68);
+  --color-text-inverse-muted: rgba(255, 255, 255, 0.8);
+  --color-text-inverse-emphasis: rgba(255, 255, 255, 0.9);
+  --color-text-inverse-strong: rgba(255, 255, 255, 0.96);
+
+  --color-bg-page: #0f1623;
+  --color-bg-main: #131c2b;
+  --color-bg-panel: #1a2538;
+  --color-bg-panel-muted: #202d44;
+  --color-bg-panel-subtle: #24334d;
+  --color-bg-overlay: rgba(0, 0, 0, 0.6);
+  --color-bg-overlay-strong: rgba(0, 0, 0, 0.78);
+  --color-bg-overlay-soft: rgba(255, 255, 255, 0.1);
+
+  --color-bg-sidebar: #1f4d8c;
+  --color-bg-sidebar-elevated: #255a9f;
+  --color-bg-sidebar-hover: #2f6dbe;
+  --color-bg-sidebar-gradient: linear-gradient(165deg, #23508e 0%, #2f6dbe 100%);
+  --color-bg-sidebar-header: rgba(255, 255, 255, 0.03);
+  --color-bg-sidebar-card: rgba(255, 255, 255, 0.1);
+  --color-bg-sidebar-card-hover: rgba(255, 255, 255, 0.16);
+  --color-bg-sidebar-row-hover: rgba(255, 255, 255, 0.14);
+  --color-bg-sidebar-row-active: rgba(255, 255, 255, 0.22);
+  --color-bg-sidebar-overlay: rgba(15, 30, 64, 0.88);
+
+  --color-border-default: #334663;
+  --color-border-subtle: #2b3c57;
+  --color-border-strong: #3f5678;
+  --color-border-on-primary: rgba(255, 255, 255, 0.16);
+
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.28);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.35);
+  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.4);
+
+  --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.35);
+  --scrollbar-thumb-on-primary: rgba(255, 255, 255, 0.35);
+  --scrollbar-thumb-on-primary-hover: rgba(255, 255, 255, 0.5);
+
+  --color-chat-self-message: #2f85f6;
+  --color-chat-self-message-hover: #3d90ff;
+  --color-chat-other-message: #2a354a;
+  --color-button-disabled: #586174;
+}
+
+html,
+body,
+#app {
   margin: 0;
   padding: 0;
   height: 100%;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
 }
 
 #app {

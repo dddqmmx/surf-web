@@ -235,7 +235,7 @@ const back = () => {
   flex-direction: column;
   height: 100%;
   width: 100%;
-  font-family: Arial, sans-serif;
+  font-family: var(--font-family-base);
   box-sizing: border-box;
 }
 
@@ -246,9 +246,9 @@ const back = () => {
 }
 
 .chat-header {
-  background-color: #5fa7ff;
-  border-bottom: #acacac 2px solid;
-  color: white;
+  background-color: var(--color-bg-sidebar-elevated);
+  border-bottom: 2px solid var(--color-border-strong);
+  color: var(--color-text-inverse);
   padding: 10px;
   font-size: 18px;
   font-weight: bold;
@@ -286,7 +286,7 @@ const back = () => {
   overflow-y: auto;
   flex: 1;
   padding: 10px;
-  background-color: #ffffff;
+  background-color: var(--color-bg-main);
 }
 
 .chat-content::-webkit-scrollbar {
@@ -298,23 +298,23 @@ const back = () => {
 }
 
 .chat-content::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0);
+  background-color: transparent;
   border-radius: 4px;
   transition: background-color 0.3s;
 }
 
 .chat-content:hover::-webkit-scrollbar-thumb,
 .chat-content:active::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: var(--scrollbar-thumb);
 }
 
 .chat-content {
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0) transparent;
+  scrollbar-color: transparent transparent;
 }
 
 .chat-content:hover {
-  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
 .message-list {
@@ -369,7 +369,7 @@ const back = () => {
 }
 
 .message-container .message {
-  background: #f0f0f0;
+  background: var(--color-chat-other-message);
   align-self: flex-start;
   display: inline-block;
 }
@@ -383,8 +383,8 @@ const back = () => {
 }
 
 .message-right-container .message {
-  background: #007bff;
-  color: white;
+  background: var(--color-chat-self-message);
+  color: var(--color-text-inverse);
   align-self: flex-end;
   display: inline-block;
 }
@@ -392,14 +392,14 @@ const back = () => {
 .username {
   font-size: 12px;
   font-weight: bold;
-  color: #333333;
+  color: var(--color-text-primary);
 }
 
 .chat-input {
   display: flex;
   gap: 5px;
   padding: 10px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border-subtle);
   flex-direction: column;
   flex-shrink: 0;
 }
@@ -408,15 +408,17 @@ const back = () => {
   flex-grow: 1;
   padding: 8px;
   border-radius: 4px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-main);
+  color: var(--color-text-primary);
   outline: none;
   resize: none;
 }
 
 #send-button {
   padding: 8px 16px;
-  background-color: #007bff;
-  color: #ffffff;
+  background-color: var(--color-chat-self-message);
+  color: var(--color-text-inverse);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -424,7 +426,7 @@ const back = () => {
 }
 
 #send-button:hover {
-  background-color: #0056b3;
+  background-color: var(--color-chat-self-message-hover);
 }
 
 .input-option {

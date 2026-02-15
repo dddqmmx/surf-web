@@ -143,10 +143,12 @@ const hasChanges = computed(() => {
 
 .input {
   padding: 8px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-default);
   border-radius: 6px;
   outline: none;
   resize: none;
+  background: var(--color-bg-main);
+  color: var(--color-text-primary);
 }
 
 .save-button {
@@ -154,9 +156,9 @@ const hasChanges = computed(() => {
   width: 150px;
   height: 40px;
   border-radius: 25px;
-  background: #057feb;
+  background: var(--color-primary-strong);
   border: none;
-  color: white;
+  color: var(--color-text-inverse);
   transition: background 0.3s ease, transform 0.5s ease;
 }
 
@@ -165,9 +167,9 @@ const hasChanges = computed(() => {
   width: 150px;
   height: 40px;
   border-radius: 25px;
-  background: #878787;
+  background: var(--color-button-disabled);
   border: none;
-  color: white;
+  color: var(--color-text-inverse);
   transition: background 0.3s ease, transform 0.5s ease;
 }
 

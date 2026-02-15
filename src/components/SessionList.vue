@@ -101,13 +101,12 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  /* 使用微渐变代替纯色，增加质感 */
-  background: linear-gradient(165deg, #3b96ff 0%, #1781ff 100%);
-  color: #fff;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-sidebar-gradient);
+  color: var(--color-text-inverse);
+  border-right: 1px solid var(--color-border-on-primary);
   user-select: none;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-family-base);
 }
 
 /* 隐藏滚动条但保留功能 (现代化) */
@@ -116,17 +115,17 @@
   overflow-y: auto;
   padding: 12px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  scrollbar-color: var(--scrollbar-thumb-on-primary) transparent;
 }
 .hidden-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
 .hidden-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--scrollbar-thumb-on-primary);
   border-radius: 4px;
 }
 .hidden-scrollbar:hover::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--scrollbar-thumb-on-primary-hover);
 }
 
 /* ---------------- 服务器列表模式 ---------------- */
@@ -144,16 +143,16 @@
   padding: 10px;
   margin-bottom: 8px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08); /* 半透明背景 */
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--color-bg-sidebar-card);
+  border: 1px solid var(--color-border-on-primary);
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .session-card:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--color-bg-sidebar-card-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .session-card:active {
@@ -165,7 +164,7 @@
   width: 42px;
   border-radius: 10px;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: var(--shadow-sm);
 }
 
 .session-info {
@@ -197,8 +196,8 @@
   padding: 0 16px;
   display: flex;
   align-items: center;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.02);
+  box-shadow: 0 1px 0 var(--color-border-on-primary);
+  background: var(--color-bg-sidebar-header);
   z-index: 10;
 }
 
@@ -212,7 +211,7 @@
   transition: background 0.2s;
   margin-right: 4px;
 }
-.icon-btn:hover { background: rgba(255, 255, 255, 0.15); }
+.icon-btn:hover { background: var(--color-bg-sidebar-row-hover); }
 .icon-btn img { width: 20px; height: 20px; filter: brightness(100); }
 
 .server-selector {
@@ -228,7 +227,7 @@
 }
 
 .server-selector:hover, .server-selector.menu-active {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--color-bg-sidebar-row-hover);
 }
 
 .server-name {
@@ -254,12 +253,12 @@
   left: 12px;
   right: 12px;
   /* 使用深一点的蓝色背景 + 毛玻璃，保证文字可读性 */
-  background: rgba(20, 60, 140, 0.85);
+  background: var(--color-bg-sidebar-overlay);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border-on-primary);
   border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-xl);
   padding: 6px;
   opacity: 0;
   visibility: hidden;
@@ -282,16 +281,16 @@
   font-size: 14px;
 }
 
-.menu-item:hover { background: #3b96ff; }
+.menu-item:hover { background: var(--color-primary); }
 .menu-item:active { transform: scale(0.98); }
 
 .menu-item-content { display: flex; align-items: center; gap: 10px; }
 .menu-item i { font-size: 16px; opacity: 0.9; }
 
-.menu-item.danger { color: #ffadad; }
-.menu-item.danger:hover { background: #d32f2f; color: white; }
+.menu-item.danger { color: var(--color-danger-soft); }
+.menu-item.danger:hover { background: var(--color-danger); color: var(--color-text-inverse); }
 
-.menu-divider { height: 1px; background: rgba(255, 255, 255, 0.1); margin: 4px 6px; }
+.menu-divider { height: 1px; background: var(--color-border-on-primary); margin: 4px 6px; }
 
 /* ---------------- 频道列表 ---------------- */
 .channel-group { margin-bottom: 24px; }
@@ -301,14 +300,14 @@
   align-items: center;
   font-size: 11px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.6); /* 降低透明度，区分层级 */
+  color: var(--color-text-inverse-subtle);
   text-transform: uppercase;
   letter-spacing: 0.8px;
   margin-bottom: 4px;
   padding: 0 12px;
   transition: color 0.2s;
 }
-.channel-group-title:hover { color: rgba(255, 255, 255, 0.9); }
+.channel-group-title:hover { color: var(--color-text-inverse-strong); }
 
 .channel-link {
   display: flex;
@@ -317,22 +316,19 @@
   margin: 1px 0;
   border-radius: 6px;
   cursor: pointer;
-  /* 移除原本的深色背景，改为透明 */
   background: transparent;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--color-text-inverse-muted);
   transition: all 0.2s ease;
 }
 
-/* 悬停效果：更加柔和 */
 .channel-link:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
+  background: var(--color-bg-sidebar-row-hover);
+  color: var(--color-text-inverse);
 }
 
-/* 激活状态 (如果有的话，可以手动添加 active 类) */
 .channel-link.active {
-  background: rgba(255, 255, 255, 0.25);
-  color: #fff;
+  background: var(--color-bg-sidebar-row-active);
+  color: var(--color-text-inverse);
   font-weight: 500;
 }
 
@@ -378,7 +374,7 @@
 }
 
 .voice-user:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--color-bg-overlay-soft);
 }
 
 .user-avatar {
@@ -388,12 +384,11 @@
   margin-right: 8px;
   border: 2px solid transparent;
 }
-/* 说话时的高亮效果（如果 Avatar 支持 border） */
-.voice-user.speaking .user-avatar { border-color: #43b581; }
+.voice-user.speaking .user-avatar { border-color: var(--color-success); }
 
 .nickname {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-text-inverse-emphasis);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

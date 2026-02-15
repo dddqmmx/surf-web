@@ -85,7 +85,7 @@ const dissolveServer = () => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--color-bg-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,14 +97,15 @@ const dissolveServer = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: white;
+  background: var(--color-bg-panel);
   border-radius: 12px;
   padding: 24px 24px 16px;
   width: 400px;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
   text-align: center;
+  color: var(--color-text-primary);
 }
 
 .main-container {
@@ -120,17 +121,17 @@ const dissolveServer = () => {
   background: transparent;
   border: none;
   font-size: 24px;
-  color: #666;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
 .icon-close-btn:hover {
-  color: #000;
+  color: var(--color-text-primary);
 }
 
 .sidebar {
-  color: black;
+  color: var(--color-text-primary);
   display: flex;
   flex-direction: column;
   margin-right: 50px;
@@ -147,11 +148,11 @@ const dissolveServer = () => {
 }
 
 .sidebar div:hover {
-  background-color: #e4e4e4;
+  background-color: var(--color-bg-panel-subtle);
 }
 
 .sidebar div.selected {
-  background-color: #cccccc;
+  background-color: var(--color-border-default);
   font-weight: bold;
 }
 

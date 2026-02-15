@@ -57,7 +57,7 @@ const onClose = () => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--color-bg-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,14 +69,15 @@ const onClose = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: white;
+  background: var(--color-bg-panel);
   border-radius: 12px;
   padding: 24px 24px 16px;
   width: 400px;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
   text-align: center;
+  color: var(--color-text-primary);
 }
 
 .icon-close-btn {
@@ -86,13 +87,13 @@ const onClose = () => {
   background: transparent;
   border: none;
   font-size: 24px;
-  color: #666;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
 .icon-close-btn:hover {
-  color: #000;
+  color: var(--color-text-primary);
 }
 
 .friend-list {
@@ -108,7 +109,7 @@ const onClose = () => {
   align-items: center;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .friend-item .avatar {
@@ -124,8 +125,8 @@ const onClose = () => {
 }
 
 .friend-item .invite-btn {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--color-chat-self-message);
+  color: var(--color-text-inverse);
   border: none;
   padding: 6px 12px;
   border-radius: 6px;
@@ -133,6 +134,6 @@ const onClose = () => {
 }
 
 .friend-item .invite-btn:hover {
-  background-color: #0056b3;
+  background-color: var(--color-chat-self-message-hover);
 }
 </style>

@@ -168,7 +168,7 @@ const onConfirm = (croppedBlob: Blob) => {
 
 .avatar {
   border-radius: 10px;
-  border: 2px solid #ccc;
+  border: 2px solid var(--color-border-default);
 }
 
 .user-profile-value {
@@ -186,15 +186,17 @@ const onConfirm = (croppedBlob: Blob) => {
 .profile-label {
   font-size: 14px;
   margin-bottom: 4px;
-  color: #555;
+  color: var(--color-text-secondary);
 }
 
 .profile-input {
   padding: 8px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-default);
   border-radius: 6px;
   outline: none;
   resize: none;
+  background: var(--color-bg-main);
+  color: var(--color-text-primary);
 }
 
 .opt-button-container {
@@ -210,21 +212,21 @@ const onConfirm = (croppedBlob: Blob) => {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--color-chat-self-message);
+  color: var(--color-text-inverse);
   transition: background-color 0.2s;
 }
 
 .opt-button-container button:hover {
-  background-color: #0056b3;
+  background-color: var(--color-chat-self-message-hover);
 }
 
 .opt-button-container button:last-child {
   margin-left: 20px;
-  background-color: #6c757d;
+  background-color: var(--color-button-disabled);
 }
 
 .opt-button-container button:last-child:hover {
-  background-color: #545b62;
+  filter: brightness(0.92);
 }
 </style>

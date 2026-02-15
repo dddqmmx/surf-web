@@ -97,7 +97,7 @@ const stopVoiceChat = () => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #f4f4f4;
+  background: var(--color-bg-panel-muted);
   width: 15%;
   min-width: 250px;
 }
@@ -108,17 +108,17 @@ const stopVoiceChat = () => {
 }
 
 .vc-container {
-  color: white;
+  color: var(--color-text-inverse);
   display: flex;
   flex-direction: column;
-  background-color: #5fa7ff;
+  background-color: var(--color-bg-sidebar-elevated);
 }
 
 .vc-info-container {
   box-sizing: border-box;
   padding-left: 10px;
   padding-right: 10px;
-  border-top: 0.1rem solid #1781ff;
+  border-top: 0.1rem solid var(--color-primary-strong);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -135,7 +135,7 @@ const stopVoiceChat = () => {
 
 .vc-settings-container {
   padding: 0.3rem;
-  border-top: 0.1rem solid #1781ff;
+  border-top: 0.1rem solid var(--color-primary-strong);
   display: flex;
   justify-content: flex-end;
 }
@@ -145,7 +145,7 @@ const stopVoiceChat = () => {
 }
 
 .icon.disabled {
-  filter: brightness(0) saturate(100%) invert(29%) sepia(83%) saturate(1441%) hue-rotate(355deg)
-    brightness(98%) contrast(97%);
+  opacity: 0.45;
+  filter: grayscale(1);
 }
 </style>

@@ -18,12 +18,27 @@
             <option>日本語</option>
           </select>
         </div>
+        <div class="settings-item">
+          <label class="settings-label">主题</label>
+          <select v-model="themeMode" class="settings-input">
+            <option value="light">浅色</option>
+            <option value="dark">深色</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed } from 'vue';
+import { themeState, type ThemeMode } from '@/services/state/theme-state';
+
+const themeMode = computed({
+  get: () => themeState.mode,
+  set: (value) => themeState.setTheme(value as ThemeMode),
+});
+</script>
 
 <style scoped>
 .general-root {
@@ -37,12 +52,12 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
+  background: var(--color-bg-main);
 }
 
 .settings-header {
-  background-color: #3b96ff;
-  color: white;
+  background-color: var(--color-bg-sidebar);
+  color: var(--color-text-inverse);
   padding: 10px;
   text-align: center;
   font-size: 1.5em;
@@ -51,7 +66,7 @@
 
 .settings-section {
   padding: 20px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-subtle);
   overflow-y: auto;
 }
 
@@ -62,7 +77,7 @@
 .settings-title {
   margin-bottom: 10px;
   font-size: 1.5em;
-  color: #555;
+  color: var(--color-text-secondary);
 }
 
 .settings-item {
@@ -78,13 +93,15 @@
 
 .settings-label {
   font-size: 1.2em;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .settings-input {
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border-default);
   border-radius: 5px;
   font-size: 1em;
+  background: var(--color-bg-main);
+  color: var(--color-text-primary);
 }
 </style>

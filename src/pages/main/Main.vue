@@ -113,20 +113,20 @@ const toUserInfo = () => {
 
 .icon {
   margin-top: 1rem;
-  background: #3b96ff;
+  background: var(--color-bg-sidebar);
   border-radius: 10px;
   padding: 5px;
 }
 
 .selected {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: var(--color-bg-sidebar-row-active);
   transform: scale(1.1);
 }
 
 .user-options {
   overflow-y: scroll;
   padding: 0.5rem;
-  background-color: #007bff;
+  background-color: var(--color-primary-strong);
   display: flex;
   flex-direction: column;
 }
@@ -136,12 +136,12 @@ const toUserInfo = () => {
 }
 
 .content {
-  background: white;
+  background: var(--color-bg-main);
   flex: 1;
   display: flex;
 }
 
 .channel:hover {
-  background-color: #e65c00;
+  background-color: var(--color-warning-hover);
 }
 </style>

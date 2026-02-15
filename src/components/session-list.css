@@ -1,7 +1,7 @@
 .channel-title {
   position: relative;
   padding: 5px;
-  border-bottom: 0.1rem solid #1781ff;
+  border-bottom: 0.1rem solid var(--color-primary-strong);
   display: flex;
   align-items: center;
 }
@@ -12,9 +12,9 @@
   left: 50%;
   transform: translateX(-50%);
   min-width: 180px;
-  background: #5fa7ff;
+  background: var(--color-bg-sidebar-elevated);
   border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-md);
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease;
@@ -32,16 +32,16 @@
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  color: #fff;
+  color: var(--color-text-inverse);
   transition: background 0.2s ease;
 }
 
 .channel-title .context-menu .menu-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-sidebar-row-hover);
 }
 
 .channel-title .context-menu .menu-item.danger {
-  color: #ff6b6b;
+  color: var(--color-danger-soft);
 }
 
 .channel-title .context-menu .menu-item i {
@@ -51,7 +51,7 @@
 
 .channel-title .context-menu .menu-divider {
   height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-border-on-primary);
   margin: 8px 0;
 }
 
@@ -80,7 +80,7 @@
 
 .channel-group-title {
   font-size: 0.8rem;
-  color: white;
+  color: var(--color-text-inverse);
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
@@ -95,7 +95,7 @@
 }
 
 .channel {
-  background-color: #5fa7ff;
+  background-color: var(--color-bg-sidebar-elevated);
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 5px;
@@ -110,10 +110,10 @@
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  background-color: #3b96ff;
-  color: #fff;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  border-right: 0.1rem solid #1781ff;
+  background-color: var(--color-bg-sidebar);
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-sm);
+  border-right: 0.1rem solid var(--color-primary-strong);
 }
 
 ::-webkit-scrollbar {
@@ -130,7 +130,7 @@
 }
 
 .session:hover {
-  background-color: #1781ff;
+  background-color: var(--color-bg-sidebar-hover);
 }
 
 .voice-user-list {
@@ -149,7 +149,7 @@
 }
 
 .voice-user:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--color-bg-sidebar-row-hover);
 }
 
 .user-avatar {
